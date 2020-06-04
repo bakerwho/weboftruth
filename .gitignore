@@ -1,2 +1,4 @@
 datasources/SVO-tensor-dataset
+datasources/ClaimsKG
+datasources/interim
 docs/planning
