@@ -1,4 +1,4 @@
 datasources/SVO-tensor-dataset
 datasources/ClaimsKG
-datasources/interim
+saved_obj/interim
 docs/planning
