@@ -20,7 +20,7 @@ import argparse
 parser = argparse.ArgumentParser()
 
 ## pathnames-adarshm
-#-p path -e epochs -m model_type -size 20
+#-p wot_path -e epochs -m model_type -small False
 parser.add_argument("-p", "--path", dest="path",
                         default="/project2/jevans/aabir/weboftruth/",
                         help="path to weboftruth")
@@ -30,7 +30,7 @@ parser.add_argument("-e", "--epochs", dest="epochs",
 parser.add_argument("-m", "--model", dest='model_type',
                         default='TransE',
                         help="model type")
-parser.add_argument("-s", "--small", dest='small', default=True,
+parser.add_argument("-s", "--small", dest='small', default=False,
                         help="train small dataset", type=bool)
 
 args = parser.parse_args()
