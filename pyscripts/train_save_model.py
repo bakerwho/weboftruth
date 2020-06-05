@@ -85,7 +85,7 @@ class CustomModel(TransEModel):
             self.optimizer.step()
             running_loss += loss.item()
         self.normalize_parameters()
-        self.epoch += 1
+        self.epochs += 1
         epoch_loss = running_loss/i
         self.tr_losses.append(epoch_loss)
         return epoch_loss
@@ -107,7 +107,7 @@ class CustomModel(TransEModel):
             mean_epoch_loss = self.one_epoch()
             if (epoch+1%100)==0 or epoch==0:
                 torch.save(model.state_dict(), join(model_path,
-                                                    'transe_model.pt'))
+                                                    f'epoch_{self.epochs}_transe_model.pt'))
                 val_loss = validate(val_kg)
                 if not val_losses or val_loss < min(val_losses):
                     self.best_epoch = epoch
