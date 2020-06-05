@@ -39,10 +39,6 @@ def read_data(tr_fp, val_fp, test_fp):
 
 class CustomModel(TransEModel):
     def __init__(self, kg, **kwargs):
-        if cuda.is_available():
-            cuda.empty_cache()
-            model.cuda()
-            criterion.cuda()
         self.kg = kg
         self.emb_dim = kwargs.pop('emb_dim', 250)
         self.lr = kwargs.pop('lr', 0.0004)
@@ -51,7 +47,13 @@ class CustomModel(TransEModel):
         self.diss_type = kwargs.pop('diss_type', 'L2')
         super(CustomModel, self).__init__(self.emb_dim, kg.n_ent, kg.n_rel,
                             dissimilarity_type=self.diss_type)
-        self.dataloader = DataLoader(kg, batch_size=self.b_size, use_cuda='all')
+        if cuda.is_available():
+            cuda.empty_cache()
+            self.cuda()
+        try:
+            self.dataloader = DataLoader(kg, batch_size=self.b_size, use_cuda='all')
+        except AssertionError:
+            self.dataloader = DataLoader(kg, batch_size=self.b_size)
 
     def set_optimizer(self, optClass=Adam, **kwargs):
         self.optimizer = optClass(self.parameters(), lr=self.lr,
@@ -62,6 +64,10 @@ class CustomModel(TransEModel):
 
     def set_loss(self, lossClass=MarginLoss, **kwargs):
         self.loss_fn = lossClass(**kwargs)
+        try:
+            self.loss_fn.cuda()
+        except:
+            pass
 
     def one_epoch(self):
         running_loss = 0.0
@@ -74,11 +80,11 @@ class CustomModel(TransEModel):
             loss.backward()
             self.optimizer.step()
             running_loss += loss.item()
-        model.normalize_parameters()
+        self.normalize_parameters()
         return running_loss/i
 
     def train_model(self, n_epochs):
-        self.model.normalize_parameters()
+        self.normalize_parameters()
         epochs = tqdm(range(n_epochs), unit='epoch')
         for epoch in epochs:
             mean_epoch_loss = self.one_epoch()
@@ -95,5 +101,6 @@ if __name__ == '__main__':
                                             sizes=sizes)
     te_mod = CustomModel(full_kg)
     te_mod.set_sampler(samplerClass=BernoulliNegativeSampler, kg=tr_kg)
+    te_mod.set_optimizer(optClass=Adam)
     te_mod.set_loss(lossClass=MarginLoss, margin=0.5)
     te_mod.train_model(100)
