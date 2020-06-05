@@ -51,7 +51,7 @@ class CustomModel(TransEModel):
         self.diss_type = kwargs.pop('diss_type', 'L2')
         super(CustomModel, self).__init__(self.emb_dim, kg.n_ent, kg.n_rel,
                             dissimilarity_type=self.diss_type)
-        self.dataloader = DataLoader(data, batch_size=bs, use_cuda='all')
+        self.dataloader = DataLoader(kg, batch_size=self.b_size, use_cuda='all')
 
     def set_optimizer(self, optClass=Adam, **kwargs):
         self.optimizer = optClass(self.parameters(), lr=self.lr,
@@ -84,8 +84,6 @@ class CustomModel(TransEModel):
             mean_epoch_loss = self.one_epoch()
             iterator.set_description(
                 'Epoch {} | mean loss: {:.5f}'.format(epoch + 1, mean_epoch_loss))
-
-
 
 
 if __name__ == '__main__':
