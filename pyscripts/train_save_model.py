@@ -136,11 +136,11 @@ class CustomTransModel(torchkge.models.interfaces.TranslationModel):
                                                     'transe_model.pt'))
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
-                    self.best_epoch = epoch
+                    self.best_epoch = self.epochs
                     torch.save(self.model.state_dict(), join(model_path,
                                 'best_', self.model_type,'_model.pt'))
             epochs.set_description(
-                'Epoch {} | mean loss: {:.5f}'.format(epoch + 1, mean_epoch_loss))
+                'Epoch {} | mean loss: {:.5f}'.format(self.epochs + 1, mean_epoch_loss))
 
 class CustomBilinearModel(torchkge.models.interfaces.BilinearModel):
     def __init__(self, kg, model_type, **kwargs):
