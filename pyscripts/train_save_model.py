@@ -42,9 +42,9 @@ args = parser.parse_args()
 
 svo_data_path = join(args.path, 'data/SVO-tensor-dataset')
 
-model_path = join(args.path, 'models')
+models_path = join(args.path, 'models')
 
-os.makedirs(model_path, exist_ok=True)
+os.makedirs(models_path, exist_ok=True)
 
 for f in os.listdir(svo_data_path):
     if 'train' in f: tr_fp = f
@@ -81,7 +81,11 @@ class CustomTransModel(torchkge.models.interfaces.TranslationModel):
                                 )(emb_dim=self.emb_dim, n_entities=kg.n_ent,
                                     n_relations=kg.n_rel,
                                     dissimilarity_type=self.diss_type)
-
+        i = len([d for d in os.listdir(models_path
+                                ) if os.path.isdir(join(models_path, d))
+                                    and 'trial_' in d])
+        self.model_path = join(models_path, f'trial_{str(i+1).zfill(2)}')
+        os.makedirs(self.model_path, exist_ok=True)
         ## Hyperparameters
         self.lr = kwargs.pop('lr', 0.0004)
         self.n_epochs = kwargs.pop('n_epochs', 100)
@@ -151,12 +155,12 @@ class CustomTransModel(torchkge.models.interfaces.TranslationModel):
         for epoch in epochs:
             mean_epoch_loss = self.one_epoch()
             if (epoch+1%100)==0 or epoch==0:
-                torch.save(self.model.state_dict(), join(model_path,
+                torch.save(self.model.state_dict(), join(self.model_path,
                                                     'transe_model.pt'))
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
                     self.best_epoch = self.epochs
-                    torch.save(self.model.state_dict(), join(model_path,
+                    torch.save(self.model.state_dict(), join(self.model_path,
                                 f'best_{self.model_type}_model.pt'))
             epochs.set_description(
                 'Epoch {} | mean loss: {:.5f}'.format(self.epochs + 1, mean_epoch_loss))
@@ -234,12 +238,12 @@ class CustomBilinearModel(torchkge.models.interfaces.BilinearModel):
             mean_epoch_loss = self.one_epoch()
             print(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
             if (epoch+1%100)==0 or epoch==0:
-                torch.save(self.state_dict(), join(model_path,
+                torch.save(self.state_dict(), join(self.model_path,
                                     f'epoch_{self.epochs}_{self.model_type}_model.pt'))
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
                     self.best_epoch = epoch
-                    torch.save(self.state_dict(), join(model_path,
+                    torch.save(self.state_dict(), join(self.model_path,
                                 f'best_{self.model_type}_model.pt'))
                 print(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 self.val_losses.append(val_loss)
