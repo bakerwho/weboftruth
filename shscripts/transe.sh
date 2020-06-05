@@ -1,7 +1,7 @@
 #!/bin/sh
 #SBATCH --job-name=aabir-transe
-#SBATCH --output=/project2/jevans/aabir/weboftruth/logs/transe-full.out
-#SBATCH --error=/project2/jevans/aabir/weboftruth/logs/transe-full.err
+#SBATCH --output=/project2/jevans/aabir/weboftruth/logs/transe-small-gpu.out
+#SBATCH --error=/project2/jevans/aabir/weboftruth/logs/transe-small-gpu.err
 #SBATCH --mem=31GB
 #SBATCH --time=32:00:00
 #SBATCH --partition=gpu2
