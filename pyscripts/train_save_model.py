@@ -79,10 +79,10 @@ class CustomTransModel():
                                 )(emb_dim=self.emb_dim, n_entities=kg.n_ent,
                                     n_relations=kg.n_rel,
                                     dissimilarity_type=self.diss_type)
-        is = [int(d.split('_')[0]) for d in os.listdir(models_path
+        all_is = [int(d.split('_')[0]) for d in os.listdir(models_path
                                 ) if os.path.isdir(join(models_path, d))
                                     and 'trial_' in d]
-        i = [x for x in range(len(is)+1) if x not in is][0]
+        i = [x for x in range(len(all_is)+1) if x not in is][0]
         self.model_path = join(models_path, f'trial_{str(i+1).zfill(2)}')
         os.makedirs(self.model_path, exist_ok=True)
         self.logfile = join(self.model_path, 'log.txt')
