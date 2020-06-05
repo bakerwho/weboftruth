@@ -92,15 +92,18 @@ class CustomTransModel():
                                 )(emb_dim=self.emb_dim, n_entities=kg.n_ent,
                                     n_relations=kg.n_rel,
                                     dissimilarity_type=self.diss_type)
-        i = len([d for d in os.listdir(models_path
+        is = [int(d.split('_')[0]) for d in os.listdir(models_path
                                 ) if os.path.isdir(join(models_path, d))
-                                    and 'trial_' in d])
+                                    and 'trial_' in d]
+        i = [x for x in range(len(is)+1) if x not in is][0]
         self.model_path = join(models_path, f'trial_{str(i+1).zfill(2)}')
         os.makedirs(self.model_path, exist_ok=True)
+        self.logfile = join(self.model_path, 'log.txt')
         ## Hyperparameters
         self.lr = kwargs.pop('lr', 0.0004)
         self.n_epochs = kwargs.pop('n_epochs', 100)
         self.b_size = kwargs.pop('b_size', 32)
+        self.logline(vars(self))
 
         # Legacy code
         # super(CustomTransModel, self).__init__(self.emb_dim, kg.n_ent, kg.n_rel,
@@ -118,6 +121,11 @@ class CustomTransModel():
         self.best_epoch=-1
         self.val_losses=[]
         self.val_epochs=[]
+
+    def logline(self, line):
+        with open(self.logfile, 'a+') as f:
+            f.write(line)
+            f.write('\n')
 
     def set_optimizer(self, optClass=Adam, **kwargs):
         self.optimizer = optClass(self.model.parameters(), lr=self.lr,
@@ -276,7 +284,7 @@ if __name__ == '__main__':
         else:
             mod = CustomTransModel(tr_kg, model_type = args.model_type)
     except:
-        mod = CustomBilinearModel(tr_kg, model_type = arg.model_type)
+        mod = CustomBilinearModel(tr_kg, model_type = args.model_type)
     mod.set_sampler(samplerClass=BernoulliNegativeSampler, kg=tr_kg)
     mod.set_optimizer(optClass=Adam)
     mod.set_loss(lossClass=MarginLoss, margin=0.5)

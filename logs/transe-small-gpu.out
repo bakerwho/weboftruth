@@ -1,0 +1,6 @@
+run started at  Fri Jun 5 13:18:45 CDT 2020
+Path: /project2/jevans/aabir/weboftruth/
+Model Type: TransE
+Epochs: 200
+Small: True
+echo run ended at  Fri Jun 5 13:19:30 CDT 2020
