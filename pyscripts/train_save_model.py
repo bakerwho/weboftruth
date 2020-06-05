@@ -84,10 +84,12 @@ class CustomTransModel():
                                     and 'trial_' in d])
         self.model_path = join(models_path, f'trial_{str(i+1).zfill(2)}')
         os.makedirs(self.model_path, exist_ok=True)
+        self.logfile = join(self.model_path, 'log.txt')
         ## Hyperparameters
         self.lr = kwargs.pop('lr', 0.0004)
         self.n_epochs = kwargs.pop('n_epochs', 100)
         self.b_size = kwargs.pop('b_size', 32)
+        self.logline(vars(self))
 
         # Legacy code
         # super(CustomTransModel, self).__init__(self.emb_dim, kg.n_ent, kg.n_rel,
@@ -105,6 +107,11 @@ class CustomTransModel():
         self.best_epoch=-1
         self.val_losses=[]
         self.val_epochs=[]
+
+    def logline(self, line):
+        with open(self.logfile, 'a+') as f:
+            f.write(line)
+            f.write('\n')
 
     def set_optimizer(self, optClass=Adam, **kwargs):
         self.optimizer = optClass(self.model.parameters(), lr=self.lr,
