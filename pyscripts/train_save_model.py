@@ -16,7 +16,8 @@ from tqdm.autonotebook import tqdm
 
 # fix this
 #wot_path = "~/weboftruth"
-wot_path = "/Users/aabir/Documents/research/weboftruth"
+wot_path = "/project2/jevans/aabir/weboftruth/"
+#wot_path = "/Users/aabir/Documents/research/weboftruth"
 svo_data_path = join(wot_path, 'SVO-tensor-dataset')
 model_path = join(wot_path, 'models')
 
@@ -54,6 +55,9 @@ class CustomModel(TransEModel):
             self.dataloader = DataLoader(kg, batch_size=self.b_size, use_cuda='all')
         except AssertionError:
             self.dataloader = DataLoader(kg, batch_size=self.b_size)
+        self.epochs=0
+        self.tr_losses=[]
+        self.best_epoch=-1
 
     def set_optimizer(self, optClass=Adam, **kwargs):
         self.optimizer = optClass(self.parameters(), lr=self.lr,
@@ -81,13 +85,34 @@ class CustomModel(TransEModel):
             self.optimizer.step()
             running_loss += loss.item()
         self.normalize_parameters()
-        return running_loss/i
+        self.epoch += 1
+        epoch_loss = running_loss/i
+        self.tr_losses.append(epoch_loss)
+        return epoch_loss
 
-    def train_model(self, n_epochs):
+    def validate(self, val_kg):
+        losses = []
+        for i, batch in enumerate(DataLoader(val_kg), batch_size=self.b_size):
+            h, t, r = batch
+            n_h, n_t = self.sampler.corrupt_batch(h, t, r)
+            pos, neg = self.forward(h, t, n_h, n_t, r)
+            loss = self.loss_fn(pos, neg)
+            losses.append(loss.item())
+        return np.mean(losses)
+
+    def train_model(self, n_epochs, val_kg):
         self.normalize_parameters()
         epochs = tqdm(range(n_epochs), unit='epoch')
         for epoch in epochs:
             mean_epoch_loss = self.one_epoch()
+            if (epoch+1%100)==0 or epoch==0:
+                torch.save(model.state_dict(), join(model_path,
+                                                    'transe_model.pt'))
+                val_loss = validate(val_kg)
+                if not val_losses or val_loss < min(val_losses):
+                    self.best_epoch = epoch
+                    torch.save(model.state_dict(), join(model_path,
+                                                    'best_transe_model.pt'))
             iterator.set_description(
                 'Epoch {} | mean loss: {:.5f}'.format(epoch + 1, mean_epoch_loss))
 
@@ -103,4 +128,4 @@ if __name__ == '__main__':
     te_mod.set_sampler(samplerClass=BernoulliNegativeSampler, kg=tr_kg)
     te_mod.set_optimizer(optClass=Adam)
     te_mod.set_loss(lossClass=MarginLoss, margin=0.5)
-    te_mod.train_model(100)
+    te_mod.train_model(100, val_kg)
