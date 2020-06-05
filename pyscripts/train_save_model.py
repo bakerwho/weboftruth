@@ -60,13 +60,11 @@ def read_data(tr_fp, val_fp, test_fp):
                        sep='\t', header=None, names=['from', 'rel', 'to'])
     return tr_df, val_df, test_df
 
-class CustomTransModel(torchkge.models.interfaces.TranslationModel):
+class CustomTransModel():
     def __init__(self, kg, model_type, **kwargs):
         self.kg = kg
         self.model_type = model_type
         self.diss_type = kwargs.pop('diss_type', 'L2')
-        super().__init__(self.kg.n_ent, self.kg.n_rel, self.diss_type)
-
         if model_type in ['TransR', 'TransD', 'TorusE']:
             self.ent_emb_dim = kwargs.pop('ent_emb_dim', 250)
             self.rel_emb_dim = kwargs.pop('rel_emb_dim', 250)
@@ -128,7 +126,7 @@ class CustomTransModel(torchkge.models.interfaces.TranslationModel):
             h, t, r = batch
             n_h, n_t = self.sampler.corrupt_batch(h, t, r)
             self.optimizer.zero_grad()
-            pos, neg = self.model(h, t, n_h, n_t, r)
+            pos, neg = self.model.forward(h, t, n_h, n_t, r)
             loss = self.loss_fn(pos, neg)
             loss.backward()
             self.optimizer.step()
