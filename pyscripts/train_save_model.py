@@ -15,20 +15,35 @@ from torchkge.utils import MarginLoss, DataLoader
 
 from tqdm.autonotebook import tqdm
 
+import sys
+import argparse
+parser = argparse.ArgumentParser()
+
 ## pathnames-adarshm
-wot_path = './'
-svo_data_path = join(wot_path, 'data/SVO-tensor-dataset')
+#-p path -e epochs -m model_type -size 20
+parser.add_argument("-p", "--path", dest="path",
+                        default="/project2/jevans/aabir/weboftruth/",
+                        help="path to weboftruth")
+parser.add_argument("-e", "--epochs", dest="epochs",
+                        default=100,
+                        help="no. of training epochs", type=int)
+parser.add_argument("-m", "--model", dest='model_type',
+                        default='TransE',
+                        help="model type")
+parser.add_argument("-s", "--small", dest='small', default=True,
+                        help="train small dataset", type=bool)
+
+args = parser.parse_args()
+
+svo_data_path = join(args.path, 'data/SVO-tensor-dataset')
 
 ## pathnames-aabir
-
-# fix this
-#wot_path = "~/weboftruth"
-##wot_path = "/project2/jevans/aabir/weboftruth/"
-#wot_path = "/Users/aabir/Documents/research/weboftruth"
-##svo_data_path = join(wot_path, 'SVO-tensor-dataset')
+# args.path = "~/weboftruth"
+# args.path = "/project2/jevans/aabir/weboftruth/"
+# args.path = "/Users/aabir/Documents/research/weboftruth"
 ################################################################
 
-model_path = join(wot_path, 'models')
+model_path = join(args.path, 'models')
 
 os.makedirs(model_path, exist_ok=True)
 
@@ -192,11 +207,7 @@ class CustomBilinearModel(torchkge.models.interfaces.BilinearModel):
             loss.backward()
             self.optimizer.step()
             running_loss += loss.item()
-<<<<<<< HEAD
         self.normalize_parameters()
-=======
-        self.model.normalize_parameters()
->>>>>>> 12c0a976135ba658ad84c5b9fcf442122bab2980
         self.epochs += 1
         epoch_loss = running_loss/i
         self.tr_losses.append(epoch_loss)
@@ -218,17 +229,10 @@ class CustomBilinearModel(torchkge.models.interfaces.BilinearModel):
         for epoch in epochs:
             mean_epoch_loss = self.one_epoch()
             if (epoch+1%100)==0 or epoch==0:
-<<<<<<< HEAD
                 torch.save(model.state_dict(), join(model_path,
-                                                    f'epoch_{self.epochs}_transe_model.pt'))
-                val_loss = validate(val_kg)
-                if not val_losses or val_loss < min(val_losses):
-=======
-                torch.save(self.model.state_dict(), join(model_path,
-                                                    'transe_model.pt'))
+                                    f'epoch_{self.epochs}_transe_model.pt'))
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
->>>>>>> 12c0a976135ba658ad84c5b9fcf442122bab2980
                     self.best_epoch = epoch
                     torch.save(self.model.state_dict(), join(model_path,
                                 'best_', self.model_type,'_model.pt'))
@@ -237,20 +241,27 @@ class CustomBilinearModel(torchkge.models.interfaces.BilinearModel):
 
 
 if __name__ == '__main__':
+    print(f"Path: {args.path}\nModel Type: {args.model_type}")
+    print(f"Epochs: {args.epochs}\nSmall: {args.small}")
     tr_df, val_df, test_df = read_data(tr_fp, val_fp, test_fp)
     sizes = [df.shape[0] for df in (tr_df, val_df, test_df)]
     full_df = pd.concat([tr_df, val_df, test_df])
     full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
     tr_kg, val_kg, test_kg = full_kg.split_kg(sizes=sizes)
-    te_mod = CustomTransModel(tr_kg, model_type = 'TransH')
-    # he_mod = CustomBilinearModel(tr_kg, model_type = 'HolE')
-    te_mod.set_sampler(samplerClass=BernoulliNegativeSampler, kg=tr_kg)
-    te_mod.set_optimizer(optClass=Adam)
-    te_mod.set_loss(lossClass=MarginLoss, margin=0.5)
+    try:
+        if args.small:
+            mod = CustomTransModel(test_kg, model_type = args.model_type)
+        else:
+            mod = CustomTransModel(tr_kg, model_type = args.model_type)
+    except:
+        mod = CustomBilinearModel(tr_kg, model_type = arg.model_type)
+    mod.set_sampler(samplerClass=BernoulliNegativeSampler, kg=tr_kg)
+    mod.set_optimizer(optClass=Adam)
+    mod.set_loss(lossClass=MarginLoss, margin=0.5)
     # Move everything to CUDA if available
     if cuda.is_available():
         print("Using cuda.")
         cuda.empty_cache()
-        te_mod.model.cuda()
-        te_mod.loss_fn.cuda()
-    te_mod.train_model(2, val_kg)
+        mod.model.cuda()
+        mod.loss_fn.cuda()
+    mod.train_model(args.epochs, val_kg)
