@@ -128,4 +128,4 @@ if __name__ == '__main__':
     te_mod.set_sampler(samplerClass=BernoulliNegativeSampler, kg=tr_kg)
     te_mod.set_optimizer(optClass=Adam)
     te_mod.set_loss(lossClass=MarginLoss, margin=0.5)
-    te_mod.train_model(100, val_kg)
+    te_mod.train_model(10000, val_kg)
