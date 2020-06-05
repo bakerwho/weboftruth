@@ -8,6 +8,6 @@
 
 module load Anaconda3/5.3.0
 
-echo 'run started at $(date)'
+echo 'run started at ' $(date)
 python /project2/jevans/aabir/weboftruth/pyscripts/train_save_model.py
-echo echo 'run ended at $(date)'
+echo echo 'run ended at ' $(date)
