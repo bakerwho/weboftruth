@@ -230,12 +230,12 @@ class CustomBilinearModel(torchkge.models.interfaces.BilinearModel):
             mean_epoch_loss = self.one_epoch()
             if (epoch+1%100)==0 or epoch==0:
                 torch.save(model.state_dict(), join(model_path,
-                                    f'epoch_{self.epochs}_transe_model.pt'))
+                                    f'epoch_{self.epochs}_{self.model_type}_model.pt'))
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
                     self.best_epoch = epoch
                     torch.save(self.model.state_dict(), join(model_path,
-                                'best_', self.model_type,'_model.pt'))
+                                f'best_{self.model_type}_model.pt'))
             epochs.set_description(
                 'Epoch {} | mean loss: {:.5f}'.format(epoch + 1, mean_epoch_loss))
 
