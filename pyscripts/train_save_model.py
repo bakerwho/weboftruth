@@ -19,7 +19,12 @@ import sys
 import argparse
 parser = argparse.ArgumentParser()
 
-## pathnames-adarshm
+## pathnames
+# args.path = "~/weboftruth"
+# args.path = "/project2/jevans/aabir/weboftruth/"
+# args.path = "/Users/aabir/Documents/research/weboftruth"
+################################################################
+
 #-p wot_path -e epochs -m model_type -small False
 parser.add_argument("-p", "--path", dest="path",
                         default="/project2/jevans/aabir/weboftruth/",
@@ -37,18 +42,11 @@ args = parser.parse_args()
 
 svo_data_path = join(args.path, 'data/SVO-tensor-dataset')
 
-## pathnames-aabir
-# args.path = "~/weboftruth"
-# args.path = "/project2/jevans/aabir/weboftruth/"
-# args.path = "/Users/aabir/Documents/research/weboftruth"
-################################################################
-
 model_path = join(args.path, 'models')
 
 os.makedirs(model_path, exist_ok=True)
 
-files = os.listdir(svo_data_path)
-for f in files:
+for f in os.listdir(svo_data_path):
     if 'train' in f: tr_fp = f
     if 'valid' in f: val_fp = f
     if 'test' in f: test_fp = f
@@ -72,12 +70,17 @@ class CustomTransModel(torchkge.models.interfaces.TranslationModel):
         if model_type in ['TransR', 'TransD', 'TorusE']:
             self.ent_emb_dim = kwargs.pop('ent_emb_dim', 250)
             self.rel_emb_dim = kwargs.pop('rel_emb_dim', 250)
-            self.model = getattr(torchkge.models, model_type + 'Model')(self.ent_emb_dim,
-                                    self.rel_emb_dim, n_entities = self.kg.n_ent, n_relations = self.kg.n_rel)
+            self.model = getattr(torchkge.models, model_type + 'Model'
+                                    )(ent_emb_dim=self.ent_emb_dim,
+                                        rel_emb_dim=self.rel_emb_dim,
+                                        n_entities=self.kg.n_ent,
+                                        n_relations=self.kg.n_rel)
         else:
             self.emb_dim = kwargs.pop('emb_dim', 250)
-            self.model = getattr(torchkge.models, f'{model_type}Model')(self.emb_dim, n_entities = self.kg.n_ent,
-                                    n_relations = self.kg.n_rel)
+            self.model = getattr(torchkge.models, f'{model_type}Model'
+                                )(emb_dim=self.emb_dim, n_entities=kg.n_ent,
+                                    n_relations=kg.n_rel,
+                                    dissimilarity_type=self.diss_type)
 
         ## Hyperparameters
         self.lr = kwargs.pop('lr', 0.0004)
@@ -153,7 +156,7 @@ class CustomTransModel(torchkge.models.interfaces.TranslationModel):
                 if not self.val_losses or val_loss < min(self.val_losses):
                     self.best_epoch = self.epochs
                     torch.save(self.model.state_dict(), join(model_path,
-                                'best_', self.model_type,'_model.pt'))
+                                f'best_{self.model_type}_model.pt'))
             epochs.set_description(
                 'Epoch {} | mean loss: {:.5f}'.format(self.epochs + 1, mean_epoch_loss))
 
@@ -229,15 +232,15 @@ class CustomBilinearModel(torchkge.models.interfaces.BilinearModel):
         for epoch in epochs:
             mean_epoch_loss = self.one_epoch()
             if (epoch+1%100)==0 or epoch==0:
-                torch.save(model.state_dict(), join(model_path,
+                torch.save(self.state_dict(), join(model_path,
                                     f'epoch_{self.epochs}_{self.model_type}_model.pt'))
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
                     self.best_epoch = epoch
-                    torch.save(self.model.state_dict(), join(model_path,
+                    torch.save(self.state_dict(), join(model_path,
                                 f'best_{self.model_type}_model.pt'))
-            epochs.set_description(
-                'Epoch {} | mean loss: {:.5f}'.format(epoch + 1, mean_epoch_loss))
+            print(f'Epoch {self.epochs} | mean loss: {mean_epoch_loss}')
+        print(f"best epoch: {self.best_epoch}")
 
 
 if __name__ == '__main__':
