@@ -1,3 +1,4 @@
+keys/
 datasources/SVO-tensor-dataset
 datasources/ClaimsKG
 saved_obj/interim
