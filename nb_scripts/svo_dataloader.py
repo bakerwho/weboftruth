@@ -47,6 +47,7 @@ b_size = 64
 margin = 0.5
 
 model = TransEModel(emb_dim, svo_kg_train.n_ent, svo_kg_train.n_rel, dissimilarity_type='L2')
+
 criterion = MarginLoss(margin)
 
 if cuda.is_available():
