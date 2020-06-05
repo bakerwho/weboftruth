@@ -102,6 +102,7 @@ class CustomTransModel(torchkge.models.interfaces.TranslationModel):
         self.tr_losses=[]
         self.best_epoch=-1
         self.val_losses=[]
+        self.val_epochs=[]
 
     def set_optimizer(self, optClass=Adam, **kwargs):
         self.optimizer = optClass(self.model.parameters(), lr=self.lr,
@@ -231,6 +232,7 @@ class CustomBilinearModel(torchkge.models.interfaces.BilinearModel):
         epochs = tqdm(range(n_epochs), unit='epoch')
         for epoch in epochs:
             mean_epoch_loss = self.one_epoch()
+            print(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
             if (epoch+1%100)==0 or epoch==0:
                 torch.save(self.state_dict(), join(model_path,
                                     f'epoch_{self.epochs}_{self.model_type}_model.pt'))
@@ -239,7 +241,9 @@ class CustomBilinearModel(torchkge.models.interfaces.BilinearModel):
                     self.best_epoch = epoch
                     torch.save(self.state_dict(), join(model_path,
                                 f'best_{self.model_type}_model.pt'))
-            print(f'Epoch {self.epochs} | mean loss: {mean_epoch_loss}')
+                print(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
+                self.val_losses.append(val_loss)
+                self.val_epochs.append(self.epochs)
         print(f"best epoch: {self.best_epoch}")
 
 
