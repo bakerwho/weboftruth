@@ -9,5 +9,5 @@
 module load Anaconda3/5.3.0
 
 echo 'run started at ' $(date)
-python /project2/jevans/aabir/weboftruth/pyscripts/train_save_model.py
+python /project2/jevans/aabir/weboftruth/pyscripts/train_save_model.py -e 200 -m 'TransE'
 echo echo 'run ended at ' $(date)

@@ -74,9 +74,9 @@ class CustomTransModel(torchkge.models.interfaces.TranslationModel):
             self.rel_emb_dim = kwargs.pop('rel_emb_dim', 250)
             self.model = getattr(torchkge.models, model_type + 'Model')(self.ent_emb_dim,
                                     self.rel_emb_dim, n_entities = self.kg.n_ent, n_relations = self.kg.n_rel)
-        else:
+        elif model_type=='TransE':
             self.emb_dim = kwargs.pop('emb_dim', 250)
-            self.model = getattr(torchkge.models, model_type + 'Model')(self.emb_dim, n_entities = self.kg.n_ent,
+            self.model = getattr(torchkge.models, f'{model_type}Model')(self.emb_dim, n_entities = self.kg.n_ent,
                                     n_relations = self.kg.n_rel)
 
         ## Hyperparameters
