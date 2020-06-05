@@ -1,4 +1,5 @@
-#BATCH --job-name=aabir-transe
+#!/bin/sh
+#SBATCH --job-name=aabir-transe
 #SBATCH --output=/project2/jevans/aabir/weboftruth/logs/transe.out
 #SBATCH --error=/project2/jevans/aabir/weboftruth/logs/transe.err
 #SBATCH --partition=broadwl
