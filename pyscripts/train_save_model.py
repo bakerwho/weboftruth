@@ -95,7 +95,7 @@ class CustomTransModel():
         all_is = [int(d.split('_')[0]) for d in os.listdir(models_path
                                 ) if os.path.isdir(join(models_path, d))
                                     and 'trial_' in d]
-        i = [x for x in range(len(all_is)+1) if x not in is][0]
+        i = [x for x in range(len(all_is)+1) if x not in all_is][0]
         self.model_path = join(models_path, f'trial_{str(i+1).zfill(2)}')
         os.makedirs(self.model_path, exist_ok=True)
         self.logfile = join(self.model_path, 'log.txt')
@@ -184,14 +184,15 @@ class CustomTransModel():
             epochs.set_description(
                 'Epoch {} | mean loss: {:.5f}'.format(self.epochs + 1, mean_epoch_loss))
 
-class CustomBilinearModel(torchkge.models.interfaces.BilinearModel):
+class CustomBilinearModel():
     def __init__(self, kg, model_type, **kwargs):
         self.kg = kg
         self.emb_dim = kwargs.pop('emb_dim', 250)
         self.model_type = model_type
-        super().__init__(self.emb_dim, self.kg.n_ent, self.kg.n_rel)
-        self.model = getattr(torchkge.models, self.model_type + 'Model')(self.emb_dim, n_entities = self.kg.n_ent,
-                            n_relations = self.kg.n_rel)
+        self.model = getattr(torchkge.models, self.model_type + 'Model'
+                            )(emb_dim=self.emb_dim,
+                                n_entities = self.kg.n_ent,
+                                n_relations = self.kg.n_rel)
 
         ## Hyperparameters
         self.lr = kwargs.pop('lr', 0.0004)
