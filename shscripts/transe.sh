@@ -1,7 +1,7 @@
 #!/bin/sh
 #SBATCH --job-name=aabir-transe
-#SBATCH --output=/project2/jevans/aabir/weboftruth/logs/transe.out
-#SBATCH --error=/project2/jevans/aabir/weboftruth/logs/transe.err
+#SBATCH --output=/project2/jevans/aabir/weboftruth/logs/transe-2.out
+#SBATCH --error=/project2/jevans/aabir/weboftruth/logs/transe-2.err
 #SBATCH --partition=broadwl
 #SBATCH --mem=31GB
 #SBATCH --time=32:00:00
