@@ -233,6 +233,11 @@ class CustomBilinearModel():
         self.val_losses=[]
         self.val_epochs=[]
 
+    def logline(self, line):
+        with open(self.logfile, 'a+') as f:
+            f.write(line)
+            f.write('\n')
+
     def set_optimizer(self, optClass=Adam, **kwargs):
         self.optimizer = optClass(self.model.parameters(), lr=self.lr,
                                     **kwargs)
