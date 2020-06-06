@@ -15,6 +15,7 @@ from torchkge.utils import MarginLoss, DataLoader
 
 from tqdm.autonotebook import tqdm
 from datetime import datetime
+from tabulate import tabulate
 
 import sys
 import argparse
@@ -107,7 +108,8 @@ class CustomTransModel():
         self.lr = kwargs.pop('lr', 0.0004)
         self.n_epochs = kwargs.pop('n_epochs', 100)
         self.b_size = kwargs.pop('b_size', 32)
-        self.logline(vars(self))
+        self.logline(tabulate([(k,v) for k, v in vars(self).items()],
+                                    headers=['variable', 'value']))
 
         # Legacy code
         # super(CustomTransModel, self).__init__(self.emb_dim, kg.n_ent, kg.n_rel,
