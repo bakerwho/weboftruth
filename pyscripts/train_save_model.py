@@ -88,13 +88,16 @@ class CustomTransModel():
                                         n_relations=self.kg.n_rel)
         else:
             self.emb_dim = kwargs.pop('emb_dim', 250)
-            self.model = getattr(torchkge.models, f'{model_type}Model'
+            if model_type is 'TransE':
+                self.model = getattr(torchkge.models, f'{model_type}Model'
                                 )(emb_dim=self.emb_dim, n_entities=kg.n_ent,
                                     n_relations=kg.n_rel,
                                     dissimilarity_type=self.diss_type)
-        all_is = [int(d.split('_')[0]) for d in os.listdir(models_path
-                                ) if os.path.isdir(join(models_path, d))
-                                    and 'trial_' in d]
+            else:
+                self.model = getattr(torchkge.models, f'{model_type}Model'
+                                )(emb_dim=self.emb_dim, n_entities=kg.n_ent,
+                                    n_relations=kg.n_rel)
+        all_is = [int(d.split('_')[1]) for d in os.listdir(models_path) if os.path.isdir(join(models_path, d)) and 'trial_' in d]
         i = [x for x in range(len(all_is)+1) if x not in all_is][0]
         self.model_path = join(models_path, f'trial_{str(i+1).zfill(2)}')
         os.makedirs(self.model_path, exist_ok=True)
@@ -124,8 +127,10 @@ class CustomTransModel():
 
     def logline(self, line):
         with open(self.logfile, 'a+') as f:
-            f.write(line)
-            f.write('\n')
+            # Since `line` is a dict
+            for (k,v) in line.items():
+                f.write(f"{k}:{v}")
+                f.write('\n')
 
     def set_optimizer(self, optClass=Adam, **kwargs):
         self.optimizer = optClass(self.model.parameters(), lr=self.lr,
@@ -160,7 +165,12 @@ class CustomTransModel():
 
     def validate(self, val_kg):
         losses = []
-        for batch in DataLoader(val_kg, batch_size=self.b_size):
+        try:
+            dataloader = DataLoader(val_kg, batch_size=self.b_size, use_cuda='all')
+        except AssertionError:
+            dataloader = DataLoader(val_kg, batch_size=self.b_size)        
+        
+        for batch in dataloader:
             h, t, r = batch
             n_h, n_t = self.sampler.corrupt_batch(h, t, r)
             pos, neg = self.model(h, t, n_h, n_t, r)
@@ -193,6 +203,13 @@ class CustomBilinearModel():
                             )(emb_dim=self.emb_dim,
                                 n_entities = self.kg.n_ent,
                                 n_relations = self.kg.n_rel)
+        all_is = [int(d.split('_')[1]) for d in os.listdir(models_path
+                                ) if os.path.isdir(join(models_path, d))
+                                    and 'trial_' in d]
+        i = [x for x in range(len(all_is)+1) if x not in all_is][0]
+        self.model_path = join(models_path, f'trial_{str(i+1).zfill(2)}')
+        os.makedirs(self.model_path, exist_ok=True)
+        self.logfile = join(self.model_path, 'log.txt')
 
         ## Hyperparameters
         self.lr = kwargs.pop('lr', 0.0004)
@@ -209,6 +226,7 @@ class CustomBilinearModel():
         self.tr_losses=[]
         self.best_epoch=-1
         self.val_losses=[]
+        self.val_epochs=[]
 
     def set_optimizer(self, optClass=Adam, **kwargs):
         self.optimizer = optClass(self.model.parameters(), lr=self.lr,
@@ -243,7 +261,12 @@ class CustomBilinearModel():
 
     def validate(self, val_kg):
         losses = []
-        for batch in DataLoader(val_kg, batch_size=self.b_size):
+        try:
+            dataloader = DataLoader(val_kg, batch_size=self.b_size, use_cuda='all')
+        except AssertionError:
+            dataloader = DataLoader(val_kg, batch_size=self.b_size)        
+        
+        for batch in dataloader:
             h, t, r = batch
             n_h, n_t = self.sampler.corrupt_batch(h, t, r)
             pos, neg = self.model(h, t, n_h, n_t, r)
@@ -268,6 +291,7 @@ class CustomBilinearModel():
                 self.val_losses.append(val_loss)
                 self.val_epochs.append(self.epochs)
         print(f"best epoch: {self.best_epoch}")
+        self.model.normalize_parameters()
 
 
 if __name__ == '__main__':
