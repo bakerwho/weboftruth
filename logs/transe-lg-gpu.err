@@ -1,0 +1,7 @@
+  0%|          | 0/200 [00:00<?, ?epoch/s]Traceback (most recent call last):
+  File "/project2/jevans/aabir/weboftruth/pyscripts/train_save_model.py", line 296, in <module>
+    mod.train_model(args.epochs, val_kg)
+  File "/project2/jevans/aabir/weboftruth/pyscripts/train_save_model.py", line 259, in train_model
+    torch.save(self.state_dict(), join(self.model_path,
+AttributeError: 'CustomBilinearModel' object has no attribute 'state_dict'
+
