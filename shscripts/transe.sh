@@ -5,7 +5,7 @@
 #SBATCH --mem=31GB
 #SBATCH --time=32:00:00
 #SBATCH --partition=gpu2
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:3
 
 module load Anaconda3/5.3.0
 module load cuda/9.1
