@@ -184,7 +184,7 @@ class CustomTransModel():
         for epoch in epochs:
             mean_epoch_loss = self.one_epoch()
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
-            if (epoch+1%100)==0 or epoch==0:
+            if (epoch+1%(n_epochs//10))==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
                                 f'best_{self.model_type}_model.pt'))
                 val_loss = self.validate(val_kg)
@@ -219,6 +219,8 @@ class CustomBilinearModel():
         self.lr = kwargs.pop('lr', 0.0004)
         self.n_epochs = kwargs.pop('n_epochs', 100)
         self.b_size = kwargs.pop('b_size', 32)
+        self.logline(tabulate([(k,v) for k, v in vars(self).items()],
+                                    headers=['variable', 'value']))
 
         try:
             self.dataloader = DataLoader(self.kg, batch_size=self.b_size, use_cuda='all')
@@ -291,7 +293,7 @@ class CustomBilinearModel():
                 self.logline(f'Training started at {dt}\n')
             mean_epoch_loss = self.one_epoch()
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
-            if (epoch+1%100)==0 or epoch==0:
+            if (epoch+1%(n_epochs//10))==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
                                     f'epoch_{self.epochs}_{self.model_type}_model.pt'))
                 val_loss = self.validate(val_kg)
