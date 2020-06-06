@@ -189,7 +189,7 @@ class CustomBilinearModel():
         self.kg = kg
         self.emb_dim = kwargs.pop('emb_dim', 250)
         self.model_type = model_type
-        self.model = getattr(torchkge.models, self.model_type + 'Model'
+        self.model = getattr(torchkge.models.bilinear, self.model_type + 'Model'
                             )(emb_dim=self.emb_dim,
                                 n_entities = self.kg.n_ent,
                                 n_relations = self.kg.n_rel)
@@ -235,6 +235,7 @@ class CustomBilinearModel():
             loss.backward()
             self.optimizer.step()
             running_loss += loss.item()
+        self.model.normalize_parameters()
         self.epochs += 1
         epoch_loss = running_loss/i
         self.tr_losses.append(epoch_loss)
@@ -256,12 +257,12 @@ class CustomBilinearModel():
             mean_epoch_loss = self.one_epoch()
             print(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
             if (epoch+1%100)==0 or epoch==0:
-                torch.save(self.state_dict(), join(self.model_path,
+                torch.save(self.model.state_dict(), join(self.model_path,
                                     f'epoch_{self.epochs}_{self.model_type}_model.pt'))
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
                     self.best_epoch = epoch
-                    torch.save(self.state_dict(), join(self.model_path,
+                    torch.save(self.model.state_dict(), join(self.model_path,
                                 f'best_{self.model_type}_model.pt'))
                 print(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 self.val_losses.append(val_loss)
