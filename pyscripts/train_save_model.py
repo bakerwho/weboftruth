@@ -81,7 +81,7 @@ class CustomTransModel():
         if model_type in ['TransR', 'TransD', 'TorusE']:
             self.ent_emb_dim = kwargs.pop('ent_emb_dim', 250)
             self.rel_emb_dim = kwargs.pop('rel_emb_dim', 250)
-            self.model = getattr(torchkge.models, model_type + 'Model'
+            self.model = getattr(torchkge.models.translation, model_type + 'Model'
                                     )(ent_emb_dim=self.ent_emb_dim,
                                         rel_emb_dim=self.rel_emb_dim,
                                         n_entities=self.kg.n_ent,
@@ -168,8 +168,8 @@ class CustomTransModel():
         try:
             dataloader = DataLoader(val_kg, batch_size=self.b_size, use_cuda='all')
         except AssertionError:
-            dataloader = DataLoader(val_kg, batch_size=self.b_size)        
-        
+            dataloader = DataLoader(val_kg, batch_size=self.b_size)
+
         for batch in dataloader:
             h, t, r = batch
             n_h, n_t = self.sampler.corrupt_batch(h, t, r)
@@ -264,8 +264,8 @@ class CustomBilinearModel():
         try:
             dataloader = DataLoader(val_kg, batch_size=self.b_size, use_cuda='all')
         except AssertionError:
-            dataloader = DataLoader(val_kg, batch_size=self.b_size)        
-        
+            dataloader = DataLoader(val_kg, batch_size=self.b_size)
+
         for batch in dataloader:
             h, t, r = batch
             n_h, n_t = self.sampler.corrupt_batch(h, t, r)
@@ -293,6 +293,9 @@ class CustomBilinearModel():
         print(f"best epoch: {self.best_epoch}")
         self.model.normalize_parameters()
 
+def modelslist(module):
+    return [x for x in dir(module) if 'model' in x.lower()]
+
 
 if __name__ == '__main__':
     print(f"Path: {args.path}\nModel Type: {args.model_type}")
@@ -302,13 +305,16 @@ if __name__ == '__main__':
     full_df = pd.concat([tr_df, val_df, test_df])
     full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
     tr_kg, val_kg, test_kg = full_kg.split_kg(sizes=sizes)
-    try:
+    if args.model_type+'Model' in modelslist(torchkge.models.translation):
         if args.small:
             mod = CustomTransModel(test_kg, model_type = args.model_type)
         else:
             mod = CustomTransModel(tr_kg, model_type = args.model_type)
-    except:
-        mod = CustomBilinearModel(tr_kg, model_type = args.model_type)
+    elif args.model_type+'Model' in modelslist(torchkge.models.bilinear):
+        if args.small:
+            mod = CustomBilinearModel(tr_kg, model_type = args.model_type)
+        else:
+            mod = CustomBilinearModel(tr_kg, model_type = args.model_type)
     mod.set_sampler(samplerClass=BernoulliNegativeSampler, kg=tr_kg)
     mod.set_optimizer(optClass=Adam)
     mod.set_loss(lossClass=MarginLoss, margin=0.5)
