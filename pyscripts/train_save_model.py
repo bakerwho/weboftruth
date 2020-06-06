@@ -14,6 +14,7 @@ from torchkge.sampling import BernoulliNegativeSampler
 from torchkge.utils import MarginLoss, DataLoader
 
 from tqdm.autonotebook import tqdm
+from datetime import datetime
 
 import sys
 import argparse
@@ -97,9 +98,9 @@ class CustomTransModel():
                 self.model = getattr(torchkge.models, f'{model_type}Model'
                                 )(emb_dim=self.emb_dim, n_entities=kg.n_ent,
                                     n_relations=kg.n_rel)
-        all_is = [int(d.split('_')[1]) for d in os.listdir(models_path) if os.path.isdir(join(models_path, d)) and 'trial_' in d]
+        all_is = [int(d.split('_')[1]) for d in os.listdir(models_path) if os.path.isdir(join(models_path, d)) and f'{self.model_type}_' in d]
         i = [x for x in range(len(all_is)+1) if x not in all_is][0]
-        self.model_path = join(models_path, f'trial_{str(i+1).zfill(2)}')
+        self.model_path = join(models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
         os.makedirs(self.model_path, exist_ok=True)
         self.logfile = join(self.model_path, 'log.txt')
         ## Hyperparameters
@@ -127,10 +128,8 @@ class CustomTransModel():
 
     def logline(self, line):
         with open(self.logfile, 'a+') as f:
-            # Since `line` is a dict
-            for (k,v) in line.items():
-                f.write(f"{k}:{v}")
-                f.write('\n')
+            f.write(line)
+            f.write('\n')
 
     def set_optimizer(self, optClass=Adam, **kwargs):
         self.optimizer = optClass(self.model.parameters(), lr=self.lr,
@@ -205,9 +204,9 @@ class CustomBilinearModel():
                                 n_relations = self.kg.n_rel)
         all_is = [int(d.split('_')[1]) for d in os.listdir(models_path
                                 ) if os.path.isdir(join(models_path, d))
-                                    and 'trial_' in d]
+                                    and f'{self.model_type}_' in d]
         i = [x for x in range(len(all_is)+1) if x not in all_is][0]
-        self.model_path = join(models_path, f'trial_{str(i+1).zfill(2)}')
+        self.model_path = join(models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
         os.makedirs(self.model_path, exist_ok=True)
         self.logfile = join(self.model_path, 'log.txt')
 
@@ -277,8 +276,11 @@ class CustomBilinearModel():
     def train_model(self, n_epochs, val_kg):
         epochs = tqdm(range(n_epochs), unit='epoch')
         for epoch in epochs:
+            if self.epochs == 0:
+                dt = datetime.now().strftime("%Y-%m-%d %H:%M:%S")+' UTC'
+                self.logline(f'Training started at {dt}\n')
             mean_epoch_loss = self.one_epoch()
-            print(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
+            self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
             if (epoch+1%100)==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
                                     f'epoch_{self.epochs}_{self.model_type}_model.pt'))
@@ -287,10 +289,10 @@ class CustomBilinearModel():
                     self.best_epoch = epoch
                     torch.save(self.model.state_dict(), join(self.model_path,
                                 f'best_{self.model_type}_model.pt'))
-                print(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
+                self.logline(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 self.val_losses.append(val_loss)
                 self.val_epochs.append(self.epochs)
-        print(f"best epoch: {self.best_epoch}")
+        self.logline(f"\nbest epoch: {self.best_epoch}\n")
         self.model.normalize_parameters()
 
 def modelslist(module):
