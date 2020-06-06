@@ -183,7 +183,7 @@ class CustomTransModel():
         epochs = tqdm(range(n_epochs), unit='epoch')
         for epoch in epochs:
             mean_epoch_loss = self.one_epoch()
-            print(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
+            self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
             if (epoch+1%100)==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
                                 f'best_{self.model_type}_model.pt'))
@@ -192,11 +192,10 @@ class CustomTransModel():
                     self.best_epoch = self.epochs
                     torch.save(self.model.state_dict(), join(self.model_path,
                                 f'best_{self.model_type}_model.pt'))
-                print(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
+                self.logline(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 self.val_losses.append(val_loss)
                 self.val_epochs.append(self.epochs)
-            # epochs.set_description(
-            #     'Epoch {} | mean loss: {:.5f}'.format(self.epochs + 1, mean_epoch_loss))
+        self.logline(f"\nbest epoch: {self.best_epoch}\n")
         self.model.normalize_parameters()
 
 class CustomBilinearModel():
