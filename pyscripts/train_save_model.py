@@ -184,9 +184,9 @@ class CustomTransModel():
         for epoch in epochs:
             mean_epoch_loss = self.one_epoch()
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
-            if (epoch+1%(n_epochs//10))==0 or epoch==0:
+            if ((epoch+1)%(n_epochs//10))==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
-                                f'best_{self.model_type}_model.pt'))
+                                f'epoch_{self.epochs}_{self.model_type}_model.pt'))
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
                     self.best_epoch = self.epochs
@@ -293,7 +293,7 @@ class CustomBilinearModel():
                 self.logline(f'Training started at {dt}\n')
             mean_epoch_loss = self.one_epoch()
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
-            if (epoch+1%(n_epochs//10))==0 or epoch==0:
+            if ((epoch+1)%(n_epochs//10))==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
                                     f'epoch_{self.epochs}_{self.model_type}_model.pt'))
                 val_loss = self.validate(val_kg)
