@@ -179,7 +179,6 @@ class CustomTransModel():
         return np.mean(losses)
 
     def train_model(self, n_epochs, val_kg):
-        self.model.normalize_parameters()
         epochs = tqdm(range(n_epochs), unit='epoch')
         for epoch in epochs:
             mean_epoch_loss = self.one_epoch()
@@ -193,6 +192,7 @@ class CustomTransModel():
                                 f'best_{self.model_type}_model.pt'))
             epochs.set_description(
                 'Epoch {} | mean loss: {:.5f}'.format(self.epochs + 1, mean_epoch_loss))
+        self.model.normalize_parameters()
 
 class CustomBilinearModel():
     def __init__(self, kg, model_type, **kwargs):
