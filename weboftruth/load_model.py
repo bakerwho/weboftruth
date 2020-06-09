@@ -29,9 +29,9 @@ def load_model(model_folder, whichmodel='best_'):
                         n_relations=vars['n_relations'])
     elif model_type in ['DistMult', 'HolE', 'TransE']:
         model = getattr(models, vars['model_type']+'Model'
-                        )(emb_dim=args['emb_dim'],
-                        n_entities=args['n_entities'],
-                        n_relations=args['n_relations'])
+                        )(emb_dim=vars['emb_dim'],
+                        n_entities=vars['n_entities'],
+                        n_relations=vars['n_relations'])
     else:
         raise ValueError("Not equipped to deal with this model")
     model_fn = [x for x in os.listdir(model_folder
