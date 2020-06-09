@@ -23,6 +23,8 @@ import sys
 import argparse
 parser = argparse.ArgumentParser()
 
+torch.manual_seed(0)
+
 ## pathnames
 # args.path = "~/weboftruth"
 # args.path = "/project2/jevans/aabir/weboftruth/"
