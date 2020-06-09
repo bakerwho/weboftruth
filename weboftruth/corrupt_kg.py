@@ -23,12 +23,14 @@ def kg_corrupt(input_kg, save_path, sampler=torchkge.sampling.BernoulliNegativeS
             corrupt_list.append((kg_corrupted[0][i].item(),
                                     kg_corrupted[1][i].item(),
                                     kg_to_corrupt[i][2]))
-        cp_corrupt_df = pd.DataFrame(corrupt_list, columns =['from', 'to', 'rel'])
-        cp_corrupt_df['true_positive'] = False
+        corrupt_df = pd.DataFrame(corrupt_list, columns =['from', 'to', 'rel'])
+        corrupt_df['true_positive'] = False
         true_df = pd.DataFrame(true_list, columns =['from', 'to', 'rel'])
         true_df['true_positive'] = True
-        corrupt_kg_df = pd.concat([true_df, cp_corrupt_df])
-        corrupt_kg = torchkge.data_structures.KnowledgeGraph(df = corrupt_kg_df.drop(['true_positive'], axis = 'columns'))
+        corrupt_kg_df = pd.concat([true_df, corrupt_df])
+        corrupt_kg = torchkge.data_structures.KnowledgeGraph(
+                        df=corrupt_kg_df.drop(['true_positive'],
+                        axis = 'columns'))
         corrupt_kg_df.to_csv(join(save_path,
                                 f'corrupt_kg_df_{int(true_share*100)}.dat'),
                                 index = False)
