@@ -35,9 +35,9 @@ def load_model(model_folder, whichmodel='best_'):
                         n_relations=vars['n_relations'])
     else:
         raise ValueError("Not equipped to deal with this model")
-    model_fn = [x for x in os.listdir(model_folder
+    model_file = [x for x in os.listdir(model_folder
                             ) if whichmodel in x and '.pt' in x][0]
-    model.load_state_dict(torch.load(PATH))
+    model.load_state_dict(torch.load(join(model_folder, model_file)))
     model.eval()
     return model
 
