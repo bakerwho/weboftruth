@@ -23,10 +23,10 @@ def load_model(model_folder, whichmodel='best_'):
     model_type = vars['model_type']
     if model_type in ['TransR', 'TransD', 'TorusE']:
         model = getattr(models, vars['model_type']+'Model'
-                        )(ent_emb_dim=args['ent_emb_dim'],
-                        rel_emb_dim=args['rel_emb_dim'],
-                        n_entities=args['n_entities'],
-                        n_relations=args['n_relations'])
+                        )(ent_emb_dim=vars['ent_emb_dim'],
+                        rel_emb_dim=vars['rel_emb_dim'],
+                        n_entities=vars['n_entities'],
+                        n_relations=vars['n_relations'])
     elif model_type in ['DistMult', 'HolE', 'TransE']:
         model = getattr(models, vars['model_type']+'Model'
                         )(emb_dim=args['emb_dim'],
