@@ -318,7 +318,7 @@ def modelslist(module):
 if __name__ == '__main__':
     print(f"Path: {args.path}\nModel Type: {args.model_type}")
     print(f"Epochs: {args.epochs}\nSmall: {args.small}")
-    print(f"Truth share: {args.ts})
+    print(f"Truth share: {args.ts}")
     tr_df, val_df, test_df = read_data(tr_fp, val_fp, test_fp,
                                 svo_paths[args.ts])
     sizes = [df.shape[0] for df in (tr_df, val_df, test_df)]
