@@ -3,6 +3,8 @@ from os.path import join
 import torchkge
 from torchkge import models
 
+import re
+
 
 def load_model(model_folder, whichmodel='best_'):
     """ Loads a model from a .py file by initializing an empty model with
