@@ -3,17 +3,17 @@ from os.path import join
 import torchkge
 from torchkge import models
 
-"""
-import sys
-import argparse
-parser = argparse.ArgumentParser()
-"""
 
 def load_model(model_folder, whichmodel='best_'):
     """ Loads a model from a .py file by initializing an empty model with
     appropriate parameters read from log.txt
-    model_folder: path containing log.txt and .pt models
-    whichmodel: string to match to .pt name
+    Inputs:
+        model_folder: path containing log.txt and .pt models
+        whichmodel: string to match to .pt name
+    Usage:
+        import weboftruth as wot
+        from os.path import join
+        wot.load_model(join(wot.train_save_model.models_path, 'TransE_01'))
     """
     with open(join(model_folder, 'log.txt'), 'r') as f:
         metadata = f.readlines()
@@ -43,7 +43,7 @@ def parse_metadata(md):
         md = md.split('\n')
     vars = {}
     for line in md:
-        k, v = parseline(line, kwds)
+        k, v = parseline(line)
         vars[k] = v
     return vars
 

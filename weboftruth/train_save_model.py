@@ -53,7 +53,10 @@ svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 80, 50]}
 
 models_path = join(args.path, 'models')
 
-os.makedirs(models_path, exist_ok=True)
+try:
+    os.makedirs(models_path, exist_ok=True)
+except:
+    print("Warning: models folder may not exist")
 
 for f in os.listdir(svo_paths[100]):
     if 'train' in f: tr_fn = f
