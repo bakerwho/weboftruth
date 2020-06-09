@@ -44,6 +44,8 @@ def parse_metadata(md):
     vars = {}
     for line in md:
         k, v = parseline(line)
+        if k is None and v is None:
+            continue
         vars[k] = v
     return vars
 
@@ -59,6 +61,7 @@ def parseline(line):
         return 'ent_emb_dim', int(re.findall(f'\d+', line)[0])
     if 'rel_emb' in line:
         return 'rel_emb_dim', int(re.findall(f'\d+', line)[0])
+    return None, None
 
 
 me = """variable    value
