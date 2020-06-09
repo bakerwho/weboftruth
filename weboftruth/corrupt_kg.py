@@ -1,7 +1,8 @@
 import pandas as pd 
 import torchkge 
+from os.path import join
 
-def kg_corrupt(input_kg, sampler=torchkge.sampling.BernoulliNegativeSampler, true_share = 0.8, use_cuda = True):
+def kg_corrupt(input_kg, sampler=torchkge.sampling.BernoulliNegativeSampler, true_share = 0.8, save_path, use_cuda = True):
     """
     Input: KG structure
     Output: 
@@ -23,7 +24,8 @@ def kg_corrupt(input_kg, sampler=torchkge.sampling.BernoulliNegativeSampler, tru
         cp_corrupt_df['true_positive'] = False
         corrupt_kg_df = pd.concat([tp_df, cp_corrupt_df])
         corrupt_kg = torchkge.data_structures.KnowledgeGraph(df = corrupt_kg_df.drop(['true_positive']))
-        ########### FIX THIS! ################
-        corrupt_kg_df.to_csv("xxxxx.dat", index = False)
-        ########### FIX THIS! ################
+        ########### AABIR: CHECK THIS ################
+        corrupt_kg_df.to_csv(join(save_path,
+                                f'corrupt_kg_df_{true_share*100}.dat'), index = False)
+        ########### AABIR: CHECK THIS ################
         return corrupt_kg
