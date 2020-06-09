@@ -17,7 +17,7 @@ from tqdm.autonotebook import tqdm
 from datetime import datetime
 from tabulate import tabulate
 
-from corrupt_kg import kg_corrupt
+from weboftruth.corrupt import corrupt_kg
 
 import sys
 import argparse
@@ -316,7 +316,7 @@ if __name__ == '__main__':
     sizes = [df.shape[0] for df in (tr_df, val_df, test_df)]
     full_df = pd.concat([tr_df, val_df, test_df])
     full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
-    full_corrupt_kg = kg_corrupt(full_kg, save_path = svo_paths[args.ts], sampler=torchkge.sampling.BernoulliNegativeSampler, true_share = args.ts/100, use_cuda = True)
+    full_corrupt_kg = corrupt_kg(full_kg, save_path = svo_paths[args.ts], sampler=torchkge.sampling.BernoulliNegativeSampler, true_share = args.ts/100, use_cuda = True)
     tr_kg, val_kg, test_kg = full_corrupt_kg.split_kg(sizes=sizes)
     if args.model_type+'Model' in modelslist(torchkge.models.translation):
         if args.small:

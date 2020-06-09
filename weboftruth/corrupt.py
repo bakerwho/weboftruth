@@ -2,7 +2,7 @@ import pandas as pd
 import torchkge
 from os.path import join
 
-def kg_corrupt(input_kg, save_path, sampler=torchkge.sampling.BernoulliNegativeSampler, true_share = 0.8, use_cuda = True):
+def corrupt_kg(input_kg, save_path, sampler=torchkge.sampling.BernoulliNegativeSampler, true_share = 0.8, use_cuda = True):
     """
     Input: KG structure
     Output:

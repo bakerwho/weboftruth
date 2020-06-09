@@ -9,7 +9,7 @@ import argparse
 parser = argparse.ArgumentParser()
 """
 
-def load_model(model_folder, whichmodel=None):
+def load_model(model_folder, whichmodel='best_'):
     """ Loads a model from a .py file by initializing an empty model with
     appropriate parameters read from log.txt
     model_folder: path containing log.txt and .pt models
@@ -32,8 +32,6 @@ def load_model(model_folder, whichmodel=None):
                         n_relations=args['n_relations'])
     else:
         raise ValueError("Not equipped to deal with this model")
-    if whichmodel is None:
-        whichmodel = 'best_'
     model_fn = [x for x in os.listdir(model_folder
                             ) if whichmodel in x and '.pt' in x][0]
     model.load_state_dict(torch.load(PATH))
