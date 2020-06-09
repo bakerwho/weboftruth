@@ -15,7 +15,7 @@ def load_model(model_folder, whichmodel='best_'):
     model_folder: path containing log.txt and .pt models
     whichmodel: string to match to .pt name
     """
-    with open(join(model_folder), 'log.txt') as f:
+    with open(join(model_folder, 'log.txt'), 'r') as f:
         metadata = f.readlines()
     vars = parse_metadata(metadata)
     model_type = vars['model_type']
