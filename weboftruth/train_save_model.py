@@ -44,7 +44,7 @@ parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
 
 args = parser.parse_args()
 
-svo_data_path = join(args.path, 'data/SVO-tensor-dataset')
+svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
 svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 80, 50]}
 
 models_path = join(args.path, 'models')
