@@ -316,18 +316,19 @@ if __name__ == '__main__':
     sizes = [df.shape[0] for df in (tr_df, val_df, test_df)]
     full_df = pd.concat([tr_df, val_df, test_df])
     full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
-    full_corrupt_kg = corrupt_kg(full_kg, save_path = svo_paths[args.ts], sampler=torchkge.sampling.BernoulliNegativeSampler, true_share = args.ts/100, use_cuda = True)
+    full_corrupt_kg = corrupt_kg(full_kg, save_path=svo_paths[args.ts], sampler=torchkge.sampling.BernoulliNegativeSampler,
+                        true_share=args.ts/100, use_cuda=True)
     tr_kg, val_kg, test_kg = full_corrupt_kg.split_kg(sizes=sizes)
     if args.model_type+'Model' in modelslist(torchkge.models.translation):
         if args.small:
-            mod = CustomTransModel(test_kg, model_type = args.model_type)
+            mod = CustomTransModel(test_kg, model_type=args.model_type)
         else:
-            mod = CustomTransModel(tr_kg, model_type = args.model_type)
+            mod = CustomTransModel(tr_kg, model_type=args.model_type)
     elif args.model_type+'Model' in modelslist(torchkge.models.bilinear):
         if args.small:
-            mod = CustomBilinearModel(tr_kg, model_type = args.model_type)
+            mod = CustomBilinearModel(tr_kg, model_type=args.model_type)
         else:
-            mod = CustomBilinearModel(tr_kg, model_type = args.model_type)
+            mod = CustomBilinearModel(tr_kg, model_type=args.model_type)
     mod.set_sampler(samplerClass=BernoulliNegativeSampler, kg=tr_kg)
     mod.set_optimizer(optClass=Adam)
     mod.set_loss(lossClass=MarginLoss, margin=0.5)
