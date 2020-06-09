@@ -2,6 +2,7 @@ import os
 from os.path import join
 import torchkge
 from torchkge import models
+import torch
 
 import re
 
