@@ -22,13 +22,14 @@ def load_model(model_folder, whichmodel=None):
     if model_type in ['TransR', 'TransD', 'TorusE']:
         model = getattr(models, vars['model_type']+'Model'
                         )(ent_emb_dim=args['ent_emb_dim'],
-                        'rel_emb_dim=args['rel_emb_dim'],
+                        rel_emb_dim=args['rel_emb_dim'],
                         n_entities=args['n_entities'],
                         n_relations=args['n_relations'])
     elif model_type in ['DistMult', 'HolE', 'TransE']:
-        model = getattr(models, vars['model_type']+'Model')
-            (emb_dim=args['emb_dim'],
-            n_entities=args['n_entities'], n_relations=args['n_relations'])
+        model = getattr(models, vars['model_type']+'Model'
+                        )(emb_dim=args['emb_dim'],
+                        n_entities=args['n_entities'],
+                        n_relations=args['n_relations'])
     else:
         raise ValueError("Not equipped to deal with this model")
     if whichmodel is None:
