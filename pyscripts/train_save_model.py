@@ -39,26 +39,29 @@ parser.add_argument("-m", "--model", dest='model_type',
                         help="model type")
 parser.add_argument("-s", "--small", dest='small', default=False,
                         help="train small dataset", type=bool)
+parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
+                        help="truth share of dataset", type=int)
 
 args = parser.parse_args()
 
 svo_data_path = join(args.path, 'data/SVO-tensor-dataset')
+svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 80, 50]}
 
 models_path = join(args.path, 'models')
 
 os.makedirs(models_path, exist_ok=True)
 
-for f in os.listdir(svo_data_path):
-    if 'train' in f: tr_fp = f
-    if 'valid' in f: val_fp = f
-    if 'test' in f: test_fp = f
+for f in os.listdir(svo_paths[100]):
+    if 'train' in f: tr_fn = f
+    if 'valid' in f: val_fn = f
+    if 'test' in f: test_fn = f
 
-def read_data(tr_fp, val_fp, test_fp):
-    tr_df = pd.read_csv(join(svo_data_path, tr_fp),
+def read_data(tr_fn, val_fn, test_fn, path):
+    tr_df = pd.read_csv(join(path, tr_fn),
                        sep='\t', header=None, names=['from', 'rel', 'to'])
-    val_df = pd.read_csv(join(svo_data_path, val_fp),
+    val_df = pd.read_csv(join(path, val_fn),
                        sep='\t', header=None, names=['from', 'rel', 'to'])
-    test_df = pd.read_csv(join(svo_data_path, test_fp),
+    test_df = pd.read_csv(join(path, test_fn),
                        sep='\t', header=None, names=['from', 'rel', 'to'])
     return tr_df, val_df, test_df
 
@@ -72,7 +75,6 @@ def train_kg_corrupt(train_kg, sampler=torchkge.sampling.BernoulliNegativeSample
         cp_list.append((train_kg_cp_corrupt[0][i].item(), train_kg_cp_corrupt[1][i].item(), train_kg_cp[i][2]))
     cp_corrupt_df = pd.DataFrame(cp_list, columns =['from', 'to', 'rel'])
     corrupt_kg = torchkge.data_structures.KnowledgeGraph(df = pd.concat([tp_df, cp_corrupt_df]))
-
     return corrupt_kg
 
 class CustomTransModel():
@@ -99,6 +101,8 @@ class CustomTransModel():
                 self.model = getattr(torchkge.models, f'{model_type}Model'
                                 )(emb_dim=self.emb_dim, n_entities=kg.n_ent,
                                     n_relations=kg.n_rel)
+        self.n_entities = kg.n_ent
+        self.n_relations = kg.n_rel
         all_is = [int(d.split('_')[1]) for d in os.listdir(models_path) if os.path.isdir(join(models_path, d)) and f'{self.model_type}_' in d]
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
         self.model_path = join(models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
@@ -314,7 +318,9 @@ def modelslist(module):
 if __name__ == '__main__':
     print(f"Path: {args.path}\nModel Type: {args.model_type}")
     print(f"Epochs: {args.epochs}\nSmall: {args.small}")
-    tr_df, val_df, test_df = read_data(tr_fp, val_fp, test_fp)
+    print(f"Truth share: {args.ts})
+    tr_df, val_df, test_df = read_data(tr_fp, val_fp, test_fp,
+                                svo_paths[args.ts])
     sizes = [df.shape[0] for df in (tr_df, val_df, test_df)]
     full_df = pd.concat([tr_df, val_df, test_df])
     full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
