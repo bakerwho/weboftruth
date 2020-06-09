@@ -65,18 +65,6 @@ def read_data(tr_fn, val_fn, test_fn, path):
                        sep='\t', header=None, names=['from', 'rel', 'to'])
     return tr_df, val_df, test_df
 
-def train_kg_corrupt(train_kg, sampler=torchkge.sampling.BernoulliNegativeSampler, true_share = 0.8, use_cuda = True):
-    train_kg_tp, train_kg_cp = train_kg.split_kg(share = true_share)
-    tp_list = [train_kg_tp[i] for i in range(train_kg_tp.n_facts)]
-    tp_df = pd.DataFrame(tp_list, columns =['from', 'to', 'rel'])
-    train_kg_cp_corrupt = sampler(train_kg_cp).corrupt_kg(batch_size = 128, use_cuda = use_cuda, which = 'main')
-    cp_list = []
-    for i in range(train_kg_cp.n_facts):
-        cp_list.append((train_kg_cp_corrupt[0][i].item(), train_kg_cp_corrupt[1][i].item(), train_kg_cp[i][2]))
-    cp_corrupt_df = pd.DataFrame(cp_list, columns =['from', 'to', 'rel'])
-    corrupt_kg = torchkge.data_structures.KnowledgeGraph(df = pd.concat([tp_df, cp_corrupt_df]))
-    return corrupt_kg
-
 class CustomTransModel():
     def __init__(self, kg, model_type, **kwargs):
         self.kg = kg
@@ -324,7 +312,8 @@ if __name__ == '__main__':
     sizes = [df.shape[0] for df in (tr_df, val_df, test_df)]
     full_df = pd.concat([tr_df, val_df, test_df])
     full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
-    tr_kg, val_kg, test_kg = full_kg.split_kg(sizes=sizes)
+    full_corrupt_kg = kg_corrupt(full_kg, sampler=torchkge.sampling.BernoulliNegativeSampler, true_share = args.ts, use_cuda = True)
+    tr_kg, val_kg, test_kg = full_corrupt_kg.split_kg(sizes=sizes)
     if args.model_type+'Model' in modelslist(torchkge.models.translation):
         if args.small:
             mod = CustomTransModel(test_kg, model_type = args.model_type)
