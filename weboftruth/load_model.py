@@ -81,6 +81,8 @@ logfile     /project2/jevans/aabir/weboftruth/models/TransE_01/log.txt
 lr          0.0004
 n_epochs    100
 b_size      32
+n_entities  30492
+n_relations 4538
 """
 
 # linear classifier

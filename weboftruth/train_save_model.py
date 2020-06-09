@@ -41,6 +41,12 @@ parser.add_argument("-e", "--epochs", dest="epochs",
 parser.add_argument("-m", "--model", dest='model_type',
                         default='TransE',
                         help="model type")
+parser.add_argument("-lr", "--learningrate", dest='lr',
+                            default=1e-4,
+                            help="learning rate", type=float)
+parser.add_argument("-emb", "--embdim", dest='emb_dim',
+                        default=250,
+                        help="embedding dimension", type=int)
 parser.add_argument("-s", "--small", dest='small', default=False,
                         help="train small dataset", type=bool)
 parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
@@ -78,15 +84,15 @@ class CustomTransModel():
         self.model_type = model_type
         self.diss_type = kwargs.pop('diss_type', 'L2')
         if model_type in ['TransR', 'TransD', 'TorusE']:
-            self.ent_emb_dim = kwargs.pop('ent_emb_dim', 250)
-            self.rel_emb_dim = kwargs.pop('rel_emb_dim', 250)
+            self.ent_emb_dim = kwargs.pop('ent_emb_dim', args.emb_dim)
+            self.rel_emb_dim = kwargs.pop('rel_emb_dim', args.emb_dim)
             self.model = getattr(torchkge.models.translation, model_type + 'Model'
                                     )(ent_emb_dim=self.ent_emb_dim,
                                         rel_emb_dim=self.rel_emb_dim,
                                         n_entities=self.kg.n_ent,
                                         n_relations=self.kg.n_rel)
         else:
-            self.emb_dim = kwargs.pop('emb_dim', 250)
+            self.emb_dim = kwargs.pop('emb_dim', args.emb_dim)
             if model_type is 'TransE':
                 self.model = getattr(torchkge.models, f'{model_type}Model'
                                 )(emb_dim=self.emb_dim, n_entities=kg.n_ent,
@@ -104,7 +110,7 @@ class CustomTransModel():
         os.makedirs(self.model_path, exist_ok=True)
         self.logfile = join(self.model_path, 'log.txt')
         ## Hyperparameters
-        self.lr = kwargs.pop('lr', 0.0004)
+        self.lr = kwargs.pop('lr', args.lr)
         self.n_epochs = kwargs.pop('n_epochs', 100)
         self.b_size = kwargs.pop('b_size', 32)
         self.logline(tabulate([(k,v) for k, v in vars(self).items()],
