@@ -56,7 +56,7 @@ def parseline(line):
     for kwd in kwds:
         tp = kwds[kwd]
         if kwd in line:
-            return kwd, tp(line.replace(word, '').strip())
+            return kwd, tp(line.replace(kwd, '').strip())
     if 'ent_emb' in line:
         return 'ent_emb_dim', int(re.findall(f'\d+', line)[0])
     if 'rel_emb' in line:
