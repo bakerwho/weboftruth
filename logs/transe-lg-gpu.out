@@ -1,8 +1,7 @@
-run started at  Fri Jun 5 20:45:08 CDT 2020
+run started at  Sun Jun 7 18:45:13 CDT 2020
 Path: /project2/jevans/aabir/weboftruth/
 Model Type: TransE
 Epochs: 200
 Small: True
 Using cuda.
-Epoch 1 | Train loss: 6.818455883253364
-echo run ended at  Fri Jun 5 20:51:47 CDT 2020
+echo run ended at  Sun Jun 7 23:10:39 CDT 2020

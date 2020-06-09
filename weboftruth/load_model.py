@@ -10,6 +10,11 @@ parser = argparse.ArgumentParser()
 """
 
 def load_model(model_folder, whichmodel=None):
+    """ Loads a model from a .py file by initializing an empty model with
+    appropriate parameters read from log.txt
+    model_folder: path containing log.txt and .pt models
+    whichmodel: string to match to .pt name
+    """
     with open(join(model_folder), 'log.txt') as f:
         metadata = f.readlines()
     vars = parse_metadata(metadata)
