@@ -3,7 +3,7 @@ import os
 from os.path import join
 import numpy as np
 import torch
-import zipfile 
+import zipfile
 
 import torchkge
 from torchkge import models
@@ -39,7 +39,7 @@ models_path = join(args.path, 'models')
 
 def idx_dictionaries(path_to_entities = join(svo_data_path, 'svo-nouns.lst'),
                     path_to_relations = join(svo_data_path, 'svo-verbs.lst')):
-    
+
     entity_word_dict = {}
     relation_word_dict = {}
 
@@ -57,7 +57,7 @@ def idx_dictionaries(path_to_entities = join(svo_data_path, 'svo-nouns.lst'),
 
     return entity_word_dict, relation_word_dict
 
-    
+
 def get_glove_embeddings(path_to_glove, svo_entity_dict, svo_rel_dict,  n_dim = 50):
 
     glove_dict = {}
@@ -69,8 +69,8 @@ def get_glove_embeddings(path_to_glove, svo_entity_dict, svo_rel_dict,  n_dim = 
         files =  zip.namelist()
 
         for file in files:
-            if str(n_dim) in files: 
-                glove_file = file  
+            if str(n_dim) in files:
+                glove_file = file
 
         with zip.open(glove_file, 'r') as myfile:
             for line in myfile:
@@ -101,29 +101,12 @@ def get_glove_embeddings(path_to_glove, svo_entity_dict, svo_rel_dict,  n_dim = 
 
     return svo_entity_glovedict, svo_relation_glovedict
 
-    
 
-    
+"""print(myfile.read())
+# printing all the contents of the zip file
+zip.printdir()
 
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-            print(myfile.read()) 
-        # printing all the contents of the zip file 
-        zip.printdir() 
-    
-        # extracting all the files 
-        print('Extracting all the files now...') 
-        zip.extractall() 
-        print('Done!') 
+# extracting all the files
+print('Extracting all the files now...')
+zip.extractall()
+print('Done!') """
