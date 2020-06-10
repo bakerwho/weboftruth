@@ -8,8 +8,8 @@ for ts in [100, 80, 50]:
         tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df.drop(
             columns=['true_positive'])) for df in (tr_df, val_df, test_df))
     else:
-        tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df)
-                                ) for df in (tr_df, val_df, test_df))
+        tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df
+                                    ) for df in (tr_df, val_df, test_df))
     for model_type in ['DistMult', 'HolE', 'TransE']:
         if model_type == 'TransE':
             print(f"running {model_type} on config {ts}")
