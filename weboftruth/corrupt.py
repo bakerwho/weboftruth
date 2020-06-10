@@ -50,7 +50,7 @@ def corrupt_kg(input_kg, save_folder=None,
                 size = sizedict[setname]
                 name = f'svo_data_ts{config}_{setname}_{size}.dat'
                 outfile = join(save_folder, name)
-                df.to_csv(outfile, index=False)
+                df.to_csv(outfile, index=False, sep='\t')
                 print(f'Writing {setname} KnowledgeGraph to {outfile}')
             out_kgs.append(torchkge.data_structures.KnowledgeGraph(
                             df=df.drop(['true_positive'],
