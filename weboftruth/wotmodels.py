@@ -34,7 +34,7 @@ torch.manual_seed(0)
 
 #-p wot_path -e epochs -m model_type -small False
 parser.add_argument("-p", "--path", dest="path",
-                        default="'/home/ubuntu/weboftruth/",
+                        default="/home/ubuntu/weboftruth/",
                         help="path to weboftruth")
 parser.add_argument("-e", "--epochs", dest="epochs",
                         default=100,
