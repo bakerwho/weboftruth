@@ -29,7 +29,7 @@ def df_to_kg(df):
     cols = ['from', 'rel', 'to']
     assert set(df.columns).issuperset(
                         set(cols)), f"DataFrame does not contain columns {cols}"
-    return torchkge.data_structures.KnowledgeGraph(df[[cols]])
+    return torchkge.data_structures.KnowledgeGraph(df[[cols]], axis='columns')
 
 def load_model(model_folder, whichmodel='best_'):
     """ Loads a model from a .py file by initializing an empty model with
