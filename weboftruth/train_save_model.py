@@ -64,7 +64,7 @@ try:
 except:
     print("Warning: models folder may not exist")
 
-for f in os.listdir(svo_paths[100]):
+for f in os.listdir(svo_paths[args.ts]):
     if 'train' in f: tr_fn = f
     if 'valid' in f: val_fn = f
     if 'test' in f: test_fn = f

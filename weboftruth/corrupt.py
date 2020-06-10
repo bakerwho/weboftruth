@@ -1,6 +1,7 @@
 import pandas as pd
 import torchkge
 from os.path import join
+from sklearn.model_selection import train_test_split
 
 def corrupt_kg(input_kg, save_path,
                 sampler=torchkge.sampling.BernoulliNegativeSampler,
@@ -30,10 +31,11 @@ def corrupt_kg(input_kg, save_path,
         true_df = pd.DataFrame(true_list, columns =['from', 'to', 'rel'])
         true_df['true_positive'] = True
         corrupt_kg_df = pd.concat([true_df, corrupt_df])
-        corrupt_kg = torchkge.data_structures.KnowledgeGraph(
-                        df=corrupt_kg_df.drop(['true_positive'],
-                        axis = 'columns'))
-        corrupt_kg_df.to_csv(join(save_path,
-                                f'corrupt_kg_df_{int(true_share*100)}.dat'),
-                                index = False)
+        #corrupt_kg = torchkge.data_structures.KnowledgeGraph(
+        #                df=corrupt_kg_df.drop(['true_positive'],
+        #                axis = 'columns'))
+        tr_kg, val_kg, test_kg = full_corrupt_kg.split_kg(sizes=sizes)
+        #corrupt_kg_df.to_csv(join(save_path,
+        #                        f'corrupt_kg_df_{int(true_share*100)}.dat'),
+        #                        index = False)
         return corrupt_kg

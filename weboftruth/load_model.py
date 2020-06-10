@@ -6,7 +6,6 @@ import torch
 
 import re
 
-
 def load_model(model_folder, whichmodel='best_'):
     """ Loads a model from a .py file by initializing an empty model with
     appropriate parameters read from log.txt
