@@ -1,5 +1,9 @@
 import weboftruth as wot
 
+from torchkge.sampling import BernoulliNegativeSampler
+from torch.optim import Adam
+from torchkge.utils import MarginLoss
+
 for ts in [100, 80, 50]:
     print(f'running for configuration {ts}')
     tr_fn, val_fn, test_fn = wot.utils.get_file_names(ts)
