@@ -5,3 +5,4 @@ docs/planning
 data/SVO-tensor-dataset/50/*
 data/SVO-tensor-dataset/80/*
 weboftruth/__pycache__
+notebooks/

@@ -30,9 +30,9 @@ def parse_data(filepath, emb_modelfolder, whichmodel='best_'):
     return Xs, Ys
 
 def train_linear_model(Xs, Ys):
-    lrmodel = LinearRegression().(Xs, Ys)
+    lrmodel = LinearRegression()
+    lrmodel.fit(Xs, Ys)
     return lrmodel
 
 def evaluate_linear_model(lrmodel, Xs, Ys):
     Y_pred = lrmodel.predict(Xs)
-    
