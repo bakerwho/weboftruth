@@ -73,7 +73,7 @@ class CustomTransModel():
         self.truth_share = ts
         self.model_type = model_type
         self.diss_type = kwargs.pop('diss_type', 'L2')
-        if model_type in ['TransR', 'TransD', 'TorusE']:
+        if self.model_type in ['TransR', 'TransD', 'TorusE']:
             self.ent_emb_dim = kwargs.pop('ent_emb_dim', args.emb_dim)
             self.rel_emb_dim = kwargs.pop('rel_emb_dim', args.emb_dim)
             self.model = getattr(torchkge.models.translation, model_type + 'Model'
@@ -83,7 +83,7 @@ class CustomTransModel():
                                         n_relations=self.kg.n_rel)
         else:
             self.emb_dim = kwargs.pop('emb_dim', args.emb_dim)
-            if model_type is 'TransE':
+            if self.model_type is 'TransE':
                 self.model = getattr(torchkge.models, f'{model_type}Model'
                                 )(emb_dim=self.emb_dim, n_entities=kg.n_ent,
                                     n_relations=kg.n_rel,
@@ -94,7 +94,9 @@ class CustomTransModel():
                                     n_relations=kg.n_rel)
         self.n_entities = kg.n_ent
         self.n_relations = kg.n_rel
-        all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path) if os.path.isdir(join(wot.models_path, d)) and f'{self.model_type}_' in d]
+        all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path
+                        ) if os.path.isdir(join(wot.models_path, d)
+                        ) and f'{self.model_type}_' in d]
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
         self.model_path = join(wot.models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
         os.makedirs(self.model_path, exist_ok=True)
@@ -329,9 +331,11 @@ if __name__ == '__main__':
                                         ts=args.ts)
     elif args.model_type+'Model' in modelslist(torchkge.models.bilinear):
         if args.small:
-            mod = CustomBilinearModel(tr_kg, model_type=args.model_type)
+            mod = CustomBilinearModel(tr_kg, model_type=args.model_type,
+                                        ts=args.ts)
         else:
-            mod = CustomBilinearModel(tr_kg, model_type=args.model_type)
+            mod = CustomBilinearModel(tr_kg, model_type=args.model_type,
+                                        ts=args.ts)
     mod.set_sampler(samplerClass=BernoulliNegativeSampler, kg=tr_kg)
     mod.set_optimizer(optClass=Adam)
     mod.set_loss(lossClass=MarginLoss, margin=0.5)
