@@ -1,4 +1,4 @@
- import os
+import os
 from os.path import join
 import torchkge
 from torchkge import models
