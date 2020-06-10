@@ -1,4 +1,4 @@
-import os
+ import os
 from os.path import join
 import torchkge
 from torchkge import models
@@ -9,7 +9,7 @@ import pandas as pd
 import weboftruth as wot
 
 def get_file_names(ts=100):
-    for f in os.listdir(wot.svo_paths[ts]):
+    for f in os.listdir(wot.wotmodels.svo_paths[ts]):
         if 'train' in f: tr_fn = f
         if 'valid' in f: val_fn = f
         if 'test' in f: test_fn = f

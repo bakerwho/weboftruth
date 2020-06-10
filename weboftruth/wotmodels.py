@@ -34,7 +34,7 @@ torch.manual_seed(0)
 
 #-p wot_path -e epochs -m model_type -small False
 parser.add_argument("-p", "--path", dest="path",
-                        default="/project2/jevans/aabir/weboftruth/",
+                        default="~/weboftruth/",
                         help="path to weboftruth")
 parser.add_argument("-e", "--epochs", dest="epochs",
                         default=100,
@@ -43,7 +43,7 @@ parser.add_argument("-m", "--model", dest='model_type',
                         default='TransE',
                         help="model type")
 parser.add_argument("-lr", "--learningrate", dest='lr',
-                            default=1e-4,
+                            default=5e-5,
                             help="learning rate", type=float)
 parser.add_argument("-emb", "--embdim", dest='emb_dim',
                         default=250,
@@ -66,8 +66,9 @@ except:
     print("Warning: models folder may not exist")
 
 class CustomTransModel():
-    def __init__(self, kg, model_type, **kwargs):
+    def __init__(self, kg, model_type, ts, **kwargs):
         self.kg = kg
+        self.truth_share = ts
         self.model_type = model_type
         self.diss_type = kwargs.pop('diss_type', 'L2')
         if model_type in ['TransR', 'TransD', 'TorusE']:
@@ -191,8 +192,9 @@ class CustomTransModel():
         self.model.normalize_parameters()
 
 class CustomBilinearModel():
-    def __init__(self, kg, model_type, **kwargs):
+    def __init__(self, kg, model_type, ts, **kwargs):
         self.kg = kg
+        self.truth_share = ts
         self.emb_dim = kwargs.pop('emb_dim', 250)
         self.model_type = model_type
         self.model = getattr(torchkge.models.bilinear, self.model_type + 'Model'
@@ -320,9 +322,11 @@ if __name__ == '__main__':
                                 ) for df in (tr_df, val_df, test_df))
     if args.model_type+'Model' in modelslist(torchkge.models.translation):
         if args.small:
-            mod = CustomTransModel(test_kg, model_type=args.model_type)
+            mod = CustomTransModel(test_kg, model_type=args.model_type,
+                                        ts=args.ts)
         else:
-            mod = CustomTransModel(tr_kg, model_type=args.model_type)
+            mod = CustomTransModel(tr_kg, model_type=args.model_type,
+                                        ts=args.ts)
     elif args.model_type+'Model' in modelslist(torchkge.models.bilinear):
         if args.small:
             mod = CustomBilinearModel(tr_kg, model_type=args.model_type)
