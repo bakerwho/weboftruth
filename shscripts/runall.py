@@ -6,7 +6,7 @@ for ts in [100, 80, 50]:
                                 wot.svo_paths[ts])
     if ts != 100:
         tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df.drop(
-            columns=['true_positive']))) for df in (tr_df, val_df, test_df))
+            columns=['true_positive'])) for df in (tr_df, val_df, test_df))
     else:
         tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df)
                                 ) for df in (tr_df, val_df, test_df))
