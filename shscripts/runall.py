@@ -15,11 +15,11 @@ for ts in [100, 80, 50]:
     for model_type in ['DistMult', 'HolE', 'TransE']:
         if model_type == 'TransE':
             print(f"running {model_type} on config {ts}")
-            mod = CustomTransModel(tr_kg, model_type=model_type,
+            mod = wot.wotmodels.CustomTransModel(tr_kg, model_type=model_type,
                                         ts=ts)
         else:
             print(f"running {model_type} on config {ts}")
-            mod = CustomBilinearModel(tr_kg, model_type=model_type,
+            mod = wot.wotmodels.CustomBilinearModel(tr_kg, model_type=model_type,
                                             ts=ts)
         mod.set_sampler(samplerClass=BernoulliNegativeSampler, kg=tr_kg)
         mod.set_optimizer(optClass=Adam)
