@@ -26,6 +26,12 @@ for ts in [100, 80, 50]:
             print(f"running {model_type} on config {ts}")
             mod = wot.wotmodels.CustomBilinearModel(tr_kg, model_type=model_type,
                                             ts=ts)
+        if cuda.is_available():
+            print("Using cuda.")
+            cuda.empty_cache()
+            cuda.init()
+            mod.model.cuda()
+            mod.loss_fn.cuda()
         mod.set_sampler(samplerClass=BernoulliNegativeSampler, kg=tr_kg)
         mod.set_optimizer(optClass=Adam)
         mod.set_loss(lossClass=MarginLoss, margin=0.5)
