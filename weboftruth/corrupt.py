@@ -57,3 +57,4 @@ def corrupt_kg(input_kg, save_path=None,
         return out_kgs
 
 if __name__=='__main__':
+    pass
