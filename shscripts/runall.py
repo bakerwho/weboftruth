@@ -2,6 +2,7 @@ import weboftruth as wot
 
 from torchkge.sampling import BernoulliNegativeSampler
 from torch.optim import Adam
+from torch import cuda
 from torchkge.utils import MarginLoss
 
 for ts in [100, 80, 50]:
