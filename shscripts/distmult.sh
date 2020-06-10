@@ -12,9 +12,9 @@ module load cuda/9.1
 
 echo 'run started at ' $(date)
 
-for ts in 100 80 50
+for ts in 50 80 100
 do
-    python /project2/jevans/aabir/weboftruth/weboftruth/wotmodels.py -e 200 -m 'TransE' -lr 0.00005 -ts $ts
+    python /project2/jevans/aabir/weboftruth/weboftruth/wotmodels.py -e 200 -m 'TransE' -lr 0.00005 -ts $ts -p '/project2/jevans/aabir/weboftruth'
 done
 
 echo echo 'run ended at ' $(date)
