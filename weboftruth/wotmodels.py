@@ -316,7 +316,7 @@ if __name__ == '__main__':
     tr_fn, val_fn, test_fn = wot.utils.get_file_names(args.ts)
     dfs = wot.utils.read_data(tr_fn, val_fn, test_fn,
                                 svo_paths[args.ts])
-    dfs = [df.drop('true_positive', axis=1, inplace=True
+    dfs = [df.drop('true_positive', axis=1
                 ) if 'true_positive' in df.columns else df
                 for df in dfs ]
     tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
