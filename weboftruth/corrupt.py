@@ -43,11 +43,12 @@ def corrupt_kg(input_kg, save_folder=None,
         out_dfs['valid'], out_dfs['test'] = train_test_split(df2, train_size=250000)
         config = int(true_share*100)
         sizedict = dict(zip(['train', 'valid', 'test'],
-                [1000000, 250000, 50000])).items()
+                [1000000, 250000, 50000]))
         out_kgs = []
         for setname, df in out_dfs.items():
             if save_folder is not None:
-                name = f'svo_data_ts{config}_{setname}_{sizedict[setname]}.dat'
+                size = sizedict[setname]
+                name = f'svo_data_ts{config}_{setname}_{size}.dat'
                 outfile = join(save_folder, name)
                 df.to_csv(outfile, index=False)
                 print(f'Writing {setname} KnowledgeGraph to {outfile}')
