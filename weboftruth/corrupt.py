@@ -46,7 +46,7 @@ def corrupt_kg(input_kg, save_folder=None,
                 [1000000, 250000, 50000])).items()
         out_kgs = []
         for setname, df in out_dfs.items():
-            if savepath is not None:
+            if save_folder is not None:
                 name = f'svo_data_ts{config}_{setname}_{sizedict[setname]}.dat'
                 outfile = join(save_folder, name)
                 df.to_csv(outfile, index=False)
@@ -62,17 +62,20 @@ if __name__=='__main__':
     tr_df, val_df, test_df = read_data(tr_fn, val_fn, test_fn,
                                 svo_paths[100])
     full_df = pd.concat([tr_df, val_df, test_df])
+    full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
     for ts in [80, 50]:
-        full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
         corrupt_kg(full_kg, save_folder=svo_paths[ts],
                     true_share=ts)
 """
+import weboftruth as wot
+import torchkge
+import pandas as pd
+tr_fn, val_fn, test_fn = wot.utils.get_file_names(100)
+tr_df, val_df, test_df = wot.utils.read_data(tr_fn, val_fn, test_fn,
+                            wot.svo_paths[100])
+full_df = pd.concat([tr_df, val_df, test_df])
+full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
 for ts in [80, 50]:
-    tr_fn, val_fn, test_fn = wot.utils.get_file_names(ts)
-    tr_df, val_df, test_df = wot.utils.read_data(tr_fn, val_fn, test_fn,
-                                svo_paths[100])
-    full_df = pd.concat([tr_df, val_df, test_df])
-    full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
-    wot.corrupt.corrupt_kg(full_kg, save_folder=svo_paths[ts],
-                true_share=ts)
+    wot.corrupt.corrupt_kg(full_kg, save_folder=wot.svo_paths[ts],
+                true_share=ts/100)
 """
