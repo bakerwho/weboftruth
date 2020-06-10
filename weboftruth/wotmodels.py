@@ -314,13 +314,12 @@ if __name__ == '__main__':
     print(f"Epochs: {args.epochs}\nSmall: {args.small}")
     print(f"Truth share: {args.ts}")
     tr_fn, val_fn, test_fn = wot.utils.get_file_names(args.ts)
-    tr_df, val_df, test_df = wot.utils.read_data(tr_fn, val_fn, test_fn,
+    dfs = wot.utils.read_data(tr_fn, val_fn, test_fn,
                                 svo_paths[args.ts])
-    for df in (tr_df, val_df, test_df):
-        if 'true_positive' in df.columns:
-            df.drop('true_positive', inplace=True)
-    tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df
-                                ) for df in (tr_df, val_df, test_df))
+    dfs = [df.drop('true_positive', inplace=True
+                ) for df in (tr_df, val_df, test_df
+                ) if 'true_positive' in df.columns]
+    tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in (dfs))
     if args.model_type+'Model' in modelslist(torchkge.models.translation):
         if args.small:
             mod = CustomTransModel(test_kg, model_type=args.model_type,

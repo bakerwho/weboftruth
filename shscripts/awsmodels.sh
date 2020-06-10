@@ -5,8 +5,8 @@ source activate pytorch_p36
 pip install --user torchkge
 pip install --user tabulate
 
-mkdir weboftruth/data/SVO-tensor-dataset/50
-mkdir weboftruth/data/SVO-tensor-dataset/80
+mkdir /home/ubuntu/weboftruth/data/SVO-tensor-dataset/50
+mkdir /home/ubuntu/weboftruth/data/SVO-tensor-dataset/80
 
 #python ~/weboftruth/corrupt.py
 
