@@ -341,6 +341,7 @@ if __name__ == '__main__':
     if cuda.is_available():
         print("Using cuda.")
         cuda.empty_cache()
+        cuda.init()
         mod.model.cuda()
         mod.loss_fn.cuda()
     mod.train_model(args.epochs, val_kg)
