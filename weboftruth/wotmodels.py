@@ -316,12 +316,9 @@ if __name__ == '__main__':
     tr_fn, val_fn, test_fn = wot.utils.get_file_names(args.ts)
     tr_df, val_df, test_df = read_data(tr_fn, val_fn, test_fn,
                                 svo_paths[args.ts])
-    #sizes = [df.shape[0] for df in (tr_df, val_df, test_df)]
-    #full_df = pd.concat([tr_df, val_df, test_df])
-    #full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
-    #full_corrupt_kg = corrupt_kg(full_kg, save_path=wot.svo_paths[args.ts],
-    #                    sampler=torchkge.sampling.BernoulliNegativeSampler,
-    #                    true_share=args.ts/100, use_cuda=True)
+    for df in (tr_df, val_df, test_df):
+        if 'true_positive' in df.columns:
+            df.drop('true_positive', inplace=True)
     tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df
                                 ) for df in (tr_df, val_df, test_df))
     if args.model_type+'Model' in modelslist(torchkge.models.translation):
