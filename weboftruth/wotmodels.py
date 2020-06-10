@@ -314,7 +314,7 @@ if __name__ == '__main__':
     print(f"Epochs: {args.epochs}\nSmall: {args.small}")
     print(f"Truth share: {args.ts}")
     tr_fn, val_fn, test_fn = wot.utils.get_file_names(args.ts)
-    tr_df, val_df, test_df = read_data(tr_fn, val_fn, test_fn,
+    tr_df, val_df, test_df = wot.utils.read_data(tr_fn, val_fn, test_fn,
                                 svo_paths[args.ts])
     for df in (tr_df, val_df, test_df):
         if 'true_positive' in df.columns:
