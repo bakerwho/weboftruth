@@ -45,7 +45,7 @@ def corrupt_kg(input_kg, save_path=None,
                 [1000000, 250000, 50000])).items()
         out_kgs = []
         for setname, df in out_dfs.items():
-            if savepath is not None:
+            if save_path is not None:
                 name = f'svo_data_ts{config}_{setname}_{sizedict[setname]}.dat'
                 outfile = join(save_path, name)
                 df.to_csv(outfile, index=False)

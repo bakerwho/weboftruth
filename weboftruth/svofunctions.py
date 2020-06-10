@@ -34,3 +34,25 @@ svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 80, 50]}
 models_path = join(args.path, 'models')
 
 #get glove embeddings for svo
+
+def idx_dictionaries(path_to_entities = join(svo_data_path, 'svo-nouns.lst'),
+                    path_to_relations = join(svo_data_path, 'svo-verbs.lst')):
+    
+    entity_dict = {}
+    relation_dict = {}
+
+    with open(path_to_entities, 'r') as f:
+        for i, line in enumerate(f):
+            elem_list = [elem.strip() for elem in line.split('__')]
+            entity_name = elem_list[1][:(len(elem_list[1])-3)]
+            entity_dict[i] = entity_name
+
+    with open(path_to_relations, 'r') as f:
+        for i, line in enumerate(f):
+            elem_list = [elem.strip() for elem in line.split('__')]
+            relation_name = elem_list[1][:(len(elem_list[1])-3)]
+            relation_dict[i] = relation_name
+
+    return entity_dict, relation_dict
+
+
