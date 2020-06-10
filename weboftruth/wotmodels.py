@@ -52,7 +52,7 @@ parser.add_argument("-s", "--small", dest='small', default=False,
                         help="train small dataset", type=bool)
 parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
                         help="truth share of dataset", type=int)
-parser.add_argument("-ve", "--valevery", dest="ve", default=100,
+parser.add_argument("-ve", "--valevery", dest="ve", default=10,
                         help="validate every X epochs", type=int)
 
 args = parser.parse_args()
