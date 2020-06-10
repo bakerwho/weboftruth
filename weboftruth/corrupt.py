@@ -3,9 +3,10 @@ import torchkge
 from os.path import join
 from sklearn.model_selection import train_test_split
 
+from weboftruth.wotmodels import *
 from weboftruth.utils import load_model
 
-def corrupt_kg(input_kg, save_path=None,
+def corrupt_kg(input_kg, save_folder=None,
                 sampler=torchkge.sampling.BernoulliNegativeSampler,
                 true_share=0.8, use_cuda=False):
     """
@@ -42,13 +43,14 @@ def corrupt_kg(input_kg, save_path=None,
         out_dfs['valid'], out_dfs['test'] = train_test_split(df2, train_size=250000)
         config = int(true_share*100)
         sizedict = dict(zip(['train', 'valid', 'test'],
-                [1000000, 250000, 50000])).items()
+                [1000000, 250000, 50000]))
         out_kgs = []
         for setname, df in out_dfs.items():
-            if save_path is not None:
-                name = f'svo_data_ts{config}_{setname}_{sizedict[setname]}.dat'
-                outfile = join(save_path, name)
-                df.to_csv(outfile, index=False)
+            if save_folder is not None:
+                size = sizedict[setname]
+                name = f'svo_data_ts{config}_{setname}_{size}.dat'
+                outfile = join(save_folder, name)
+                df.to_csv(outfile, index=False, sep='\t')
                 print(f'Writing {setname} KnowledgeGraph to {outfile}')
             out_kgs.append(torchkge.data_structures.KnowledgeGraph(
                             df=df.drop(['true_positive'],
@@ -57,4 +59,24 @@ def corrupt_kg(input_kg, save_path=None,
         return out_kgs
 
 if __name__=='__main__':
-    pass
+    tr_fn, val_fn, test_fn = wot.utils.get_file_names(100)
+    tr_df, val_df, test_df = read_data(tr_fn, val_fn, test_fn,
+                                svo_paths[100])
+    full_df = pd.concat([tr_df, val_df, test_df])
+    full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
+    for ts in [80, 50]:
+        corrupt_kg(full_kg, save_folder=svo_paths[ts],
+                    true_share=ts)
+"""
+import weboftruth as wot
+import torchkge
+import pandas as pd
+tr_fn, val_fn, test_fn = wot.utils.get_file_names(100)
+tr_df, val_df, test_df = wot.utils.read_data(tr_fn, val_fn, test_fn,
+                            wot.svo_paths[100])
+full_df = pd.concat([tr_df, val_df, test_df])
+full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
+for ts in [80, 50]:
+    wot.corrupt.corrupt_kg(full_kg, save_folder=wot.svo_paths[ts],
+                true_share=ts/100)
+"""

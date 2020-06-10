@@ -11,5 +11,5 @@ module load Anaconda3/5.3.0
 module load cuda/9.1
 
 echo 'run started at ' $(date)
-python /project2/jevans/aabir/weboftruth/weboftruth/train_save_model.py -e 200 -m 'HolE' -s False
+python /project2/jevans/aabir/weboftruth/weboftruth/wotmodels.py -e 200 -m 'HolE'
 echo echo 'run ended at ' $(date)

@@ -4,11 +4,12 @@ import torchkge
 from torchkge import models
 import torch
 import re
+import pandas as pd
 
 import weboftruth as wot
 
 def get_file_names(ts=100):
-    for f in os.listdir(wot.svo_paths[ts]):
+    for f in os.listdir(wot.wotmodels.svo_paths[ts]):
         if 'train' in f: tr_fn = f
         if 'valid' in f: val_fn = f
         if 'test' in f: test_fn = f
@@ -24,11 +25,10 @@ def read_data(tr_fn, val_fn, test_fn, path):
     return tr_df, val_df, test_df
 
 def df_to_kg(df):
-    assert df.shape[1] in [3, 4], 'Invalid DataFrame shape on axis 1'
+    assert df.shape[1]==3, 'Invalid DataFrame shape on axis 1'
     cols = ['from', 'rel', 'to']
-    assert set(df.columns).issuperset(
-                        set(cols)), f"DataFrame does not contain columns {cols}"
-    return torchkge.data_structures.KnowledgeGraph(df[[cols]])
+    assert set(df.columns)==set(cols), f"DataFrame does not contain columns {cols}"
+    return torchkge.data_structures.KnowledgeGraph(df)
 
 def load_model(model_folder, whichmodel='best_'):
     """ Loads a model from a .py file by initializing an empty model with

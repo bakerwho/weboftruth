@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser()
 # args.path = "/project2/jevans/aabir/weboftruth/"
 # args.path = "/Users/aabir/Documents/research/weboftruth"
 ################################################################
-
+"""
 #-p wot_path -e epochs -m model_type -small False
 parser.add_argument("-p", "--path", dest="path",
                         default="/project2/jevans/aabir/weboftruth/",
@@ -32,7 +32,7 @@ svo_data_path = join(args.path, 'data/SVO-tensor-dataset')
 svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 80, 50]}
 
 models_path = join(args.path, 'models')
-
+"""
 #get glove embeddings for svo
 
 def idx_dictionaries(path_to_entities = join(svo_data_path, 'svo-nouns.lst'),
