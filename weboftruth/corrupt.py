@@ -3,7 +3,9 @@ import torchkge
 from os.path import join
 from sklearn.model_selection import train_test_split
 
-def corrupt_kg(input_kg, save_path,
+from weboftruth.utils import load_model
+
+def corrupt_kg(input_kg, save_path=None,
                 sampler=torchkge.sampling.BernoulliNegativeSampler,
                 true_share=0.8, use_cuda=False):
     """
@@ -34,8 +36,24 @@ def corrupt_kg(input_kg, save_path,
         #corrupt_kg = torchkge.data_structures.KnowledgeGraph(
         #                df=corrupt_kg_df.drop(['true_positive'],
         #                axis = 'columns'))
-        tr_kg, val_kg, test_kg = full_corrupt_kg.split_kg(sizes=sizes)
-        #corrupt_kg_df.to_csv(join(save_path,
-        #                        f'corrupt_kg_df_{int(true_share*100)}.dat'),
-        #                        index = False)
-        return corrupt_kg
+        out_dfs = {}
+        out_dfs['train'], df2 = train_test_split(corrupt_kg_df,
+                                                    train_size=int(1e6))
+        out_dfs['valid'], out_dfs['test'] = train_test_split(df2, train_size=250000)
+        config = int(true_share*100)
+        sizedict = dict(zip(['train', 'valid', 'test'],
+                [1000000, 250000, 50000])).items()
+        out_kgs = []
+        for setname, df in out_dfs.items():
+            if savepath is not None:
+                name = f'svo_data_ts{config}_{setname}_{sizedict[setname]}.dat'
+                outfile = join(save_path, name)
+                df.to_csv(outfile, index=False)
+                print(f'Writing {setname} KnowledgeGraph to {outfile}')
+            out_kgs.append(torchkge.data_structures.KnowledgeGraph(
+                            df=df.drop(['true_positive'],
+                            axis = 'columns')))
+        # tr_kg, val_kg, test_kg = out_kgs
+        return out_kgs
+
+if __name__=='__main__':

@@ -1,5 +1,4 @@
 import pandas as pd
-import pickle
 import os
 from os.path import join
 import numpy as np
@@ -17,6 +16,8 @@ from tqdm.autonotebook import tqdm
 from datetime import datetime
 from tabulate import tabulate
 
+import weboftruth as wot
+from weboftruth import utils
 from weboftruth.corrupt import corrupt_kg
 
 import sys
@@ -33,7 +34,7 @@ torch.manual_seed(0)
 
 #-p wot_path -e epochs -m model_type -small False
 parser.add_argument("-p", "--path", dest="path",
-                        default="/project2/jevans/aabir/weboftruth/",
+                        default=wot.cwd,
                         help="path to weboftruth")
 parser.add_argument("-e", "--epochs", dest="epochs",
                         default=100,
@@ -53,30 +54,6 @@ parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
                         help="truth share of dataset", type=int)
 
 args = parser.parse_args()
-
-svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
-svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 80, 50]}
-
-models_path = join(args.path, 'models')
-
-try:
-    os.makedirs(models_path, exist_ok=True)
-except:
-    print("Warning: models folder may not exist")
-
-for f in os.listdir(svo_paths[args.ts]):
-    if 'train' in f: tr_fn = f
-    if 'valid' in f: val_fn = f
-    if 'test' in f: test_fn = f
-
-def read_data(tr_fn, val_fn, test_fn, path):
-    tr_df = pd.read_csv(join(path, tr_fn),
-                       sep='\t', header=None, names=['from', 'rel', 'to'])
-    val_df = pd.read_csv(join(path, val_fn),
-                       sep='\t', header=None, names=['from', 'rel', 'to'])
-    test_df = pd.read_csv(join(path, test_fn),
-                       sep='\t', header=None, names=['from', 'rel', 'to'])
-    return tr_df, val_df, test_df
 
 class CustomTransModel():
     def __init__(self, kg, model_type, **kwargs):
@@ -104,9 +81,9 @@ class CustomTransModel():
                                     n_relations=kg.n_rel)
         self.n_entities = kg.n_ent
         self.n_relations = kg.n_rel
-        all_is = [int(d.split('_')[1]) for d in os.listdir(models_path) if os.path.isdir(join(models_path, d)) and f'{self.model_type}_' in d]
+        all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path) if os.path.isdir(join(wot.models_path, d)) and f'{self.model_type}_' in d]
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
-        self.model_path = join(models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
+        self.model_path = join(wot.models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
         os.makedirs(self.model_path, exist_ok=True)
         self.logfile = join(self.model_path, 'log.txt')
         ## Hyperparameters
@@ -212,8 +189,8 @@ class CustomBilinearModel():
                             )(emb_dim=self.emb_dim,
                                 n_entities = self.kg.n_ent,
                                 n_relations = self.kg.n_rel)
-        all_is = [int(d.split('_')[1]) for d in os.listdir(models_path
-                                ) if os.path.isdir(join(models_path, d))
+        all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path
+                                ) if os.path.isdir(join(wot.models_path, d))
                                     and f'{self.model_type}_' in d]
         i = [x for x in range(len(all_is)+1) if x not in all_is][0]
         self.model_path = join(models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
@@ -321,11 +298,11 @@ if __name__ == '__main__':
     print(f"Epochs: {args.epochs}\nSmall: {args.small}")
     print(f"Truth share: {args.ts}")
     tr_df, val_df, test_df = read_data(tr_fn, val_fn, test_fn,
-                                svo_paths[100])
+                                wot.svo_paths[100])
     sizes = [df.shape[0] for df in (tr_df, val_df, test_df)]
     full_df = pd.concat([tr_df, val_df, test_df])
     full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
-    full_corrupt_kg = corrupt_kg(full_kg, save_path=svo_paths[args.ts],
+    full_corrupt_kg = corrupt_kg(full_kg, save_path=wot.svo_paths[args.ts],
                         sampler=torchkge.sampling.BernoulliNegativeSampler,
                         true_share=args.ts/100, use_cuda=True)
     tr_kg, val_kg, test_kg = full_corrupt_kg.split_kg(sizes=sizes)

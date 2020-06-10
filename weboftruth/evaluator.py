@@ -1,8 +1,5 @@
-#from sklearn.linear_model import LinearRegression
-
 import numpy as np
-
-from weboftruth.load_model import load_model
+from weboftruth.utils import load_model
 
 def read_triples(filepath):
     """Read triples from filepath
