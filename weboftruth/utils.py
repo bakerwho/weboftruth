@@ -28,7 +28,7 @@ def df_to_kg(df):
     assert df.shape[1]==3, 'Invalid DataFrame shape on axis 1'
     cols = ['from', 'rel', 'to']
     assert set(df.columns)==set(cols), f"DataFrame does not contain columns {cols}"
-    return torchkge.data_structures.KnowledgeGraph(df.astype('int32'))
+    return torchkge.data_structures.KnowledgeGraph(df)
 
 def load_model(model_folder, whichmodel='best_'):
     """ Loads a model from a .py file by initializing an empty model with
