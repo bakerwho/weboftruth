@@ -52,6 +52,8 @@ parser.add_argument("-s", "--small", dest='small', default=False,
                         help="train small dataset", type=bool)
 parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
                         help="truth share of dataset", type=int)
+parser.add_argument("-ve", "--valevery", dest="ve", default=10,
+                        help="validate every X epochs", type=int)
 
 args = parser.parse_args()
 
@@ -177,7 +179,7 @@ class CustomTransModel():
         for epoch in epochs:
             mean_epoch_loss = self.one_epoch()
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
-            if ((epoch+1)%(n_epochs//10))==0 or epoch==0:
+            if ((epoch+1)%args.ve)==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
                                 f'epoch_{self.epochs}_{self.model_type}_model.pt'))
                 val_loss = self.validate(val_kg)
@@ -204,7 +206,7 @@ class CustomBilinearModel():
         all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path
                                 ) if os.path.isdir(join(wot.models_path, d))
                                     and f'{self.model_type}_' in d]
-        i = [x for x in range(len(all_is)+1) if x not in all_is][0]
+        i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
         self.model_path = join(models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
         os.makedirs(self.model_path, exist_ok=True)
         self.logfile = join(self.model_path, 'log.txt')
@@ -289,7 +291,7 @@ class CustomBilinearModel():
                 self.logline(f'Training started at {dt}\n')
             mean_epoch_loss = self.one_epoch()
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
-            if ((epoch+1)%(n_epochs//10))==0 or epoch==0:
+            if ((epoch+1)%args.ve)==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
                                     f'epoch_{self.epochs}_{self.model_type}_model.pt'))
                 val_loss = self.validate(val_kg)
@@ -312,16 +314,12 @@ if __name__ == '__main__':
     print(f"Epochs: {args.epochs}\nSmall: {args.small}")
     print(f"Truth share: {args.ts}")
     tr_fn, val_fn, test_fn = wot.utils.get_file_names(args.ts)
-    tr_df, val_df, test_df = read_data(tr_fn, val_fn, test_fn,
-                                wot.svo_paths[100])
-    #sizes = [df.shape[0] for df in (tr_df, val_df, test_df)]
-    #full_df = pd.concat([tr_df, val_df, test_df])
-    #full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
-    #full_corrupt_kg = corrupt_kg(full_kg, save_path=wot.svo_paths[args.ts],
-    #                    sampler=torchkge.sampling.BernoulliNegativeSampler,
-    #                    true_share=args.ts/100, use_cuda=True)
-    tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df
-                                ) for df in (tr_df, val_df, test_df))
+    dfs = wot.utils.read_data(tr_fn, val_fn, test_fn,
+                                svo_paths[args.ts])
+    dfs = [df.drop('true_positive', axis=1
+                ) if 'true_positive' in df.columns else df
+                for df in dfs ]
+    tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
     if args.model_type+'Model' in modelslist(torchkge.models.translation):
         if args.small:
             mod = CustomTransModel(test_kg, model_type=args.model_type,

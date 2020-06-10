@@ -17,11 +17,11 @@ def get_file_names(ts=100):
 
 def read_data(tr_fn, val_fn, test_fn, path):
     tr_df = pd.read_csv(join(path, tr_fn),
-                       sep='\t', header=None, names=['from', 'rel', 'to'])
+                       sep='\t')#, names=['from', 'rel', 'to'])
     val_df = pd.read_csv(join(path, val_fn),
-                       sep='\t', header=None, names=['from', 'rel', 'to'])
+                       sep='\t')#, names=['from', 'rel', 'to'])
     test_df = pd.read_csv(join(path, test_fn),
-                       sep='\t', header=None, names=['from', 'rel', 'to'])
+                       sep='\t')#, names=['from', 'rel', 'to'])
     return tr_df, val_df, test_df
 
 def df_to_kg(df):
