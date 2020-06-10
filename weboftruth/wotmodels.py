@@ -316,8 +316,9 @@ if __name__ == '__main__':
     tr_fn, val_fn, test_fn = wot.utils.get_file_names(args.ts)
     dfs = wot.utils.read_data(tr_fn, val_fn, test_fn,
                                 svo_paths[args.ts])
-    dfs = [df.drop('true_positive', inplace=True
-                ) for df in dfs if 'true_positive' in df.columns]
+    dfs = [df.drop('true_positive', axis=1, inplace=True
+                ) if 'true_positive' in df.columns else df
+                for df in dfs ]
     tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
     if args.model_type+'Model' in modelslist(torchkge.models.translation):
         if args.small:
