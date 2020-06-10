@@ -52,6 +52,8 @@ parser.add_argument("-s", "--small", dest='small', default=False,
                         help="train small dataset", type=bool)
 parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
                         help="truth share of dataset", type=int)
+parser.add_argument("-ve", "--valevery", dest="ve", default=100,
+                        help="validate every X epochs", type=int)
 
 args = parser.parse_args()
 
@@ -177,7 +179,7 @@ class CustomTransModel():
         for epoch in epochs:
             mean_epoch_loss = self.one_epoch()
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
-            if ((epoch+1)%(n_epochs//10))==0 or epoch==0:
+            if ((epoch+1)%args.ve)==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
                                 f'epoch_{self.epochs}_{self.model_type}_model.pt'))
                 val_loss = self.validate(val_kg)
@@ -289,7 +291,7 @@ class CustomBilinearModel():
                 self.logline(f'Training started at {dt}\n')
             mean_epoch_loss = self.one_epoch()
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
-            if ((epoch+1)%(n_epochs//10))==0 or epoch==0:
+            if ((epoch+1)%args.ve)==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
                                     f'epoch_{self.epochs}_{self.model_type}_model.pt'))
                 val_loss = self.validate(val_kg)
