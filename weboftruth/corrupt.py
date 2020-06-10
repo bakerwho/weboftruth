@@ -3,9 +3,10 @@ import torchkge
 from os.path import join
 from sklearn.model_selection import train_test_split
 
+from weboftruth.wotmodels import *
 from weboftruth.utils import load_model
 
-def corrupt_kg(input_kg, save_path=None,
+def corrupt_kg(input_kg, save_folder=None,
                 sampler=torchkge.sampling.BernoulliNegativeSampler,
                 true_share=0.8, use_cuda=False):
     """
@@ -47,7 +48,7 @@ def corrupt_kg(input_kg, save_path=None,
         for setname, df in out_dfs.items():
             if savepath is not None:
                 name = f'svo_data_ts{config}_{setname}_{sizedict[setname]}.dat'
-                outfile = join(save_path, name)
+                outfile = join(save_folder, name)
                 df.to_csv(outfile, index=False)
                 print(f'Writing {setname} KnowledgeGraph to {outfile}')
             out_kgs.append(torchkge.data_structures.KnowledgeGraph(
@@ -57,4 +58,11 @@ def corrupt_kg(input_kg, save_path=None,
         return out_kgs
 
 if __name__=='__main__':
-    pass
+    for ts in [80, 50]:
+        tr_fn, val_fn, test_fn = wot.utils.get_file_names(ts)
+        tr_df, val_df, test_df = read_data(tr_fn, val_fn, test_fn,
+                                    svo_paths[100])
+        full_df = pd.concat([tr_df, val_df, test_df])
+        full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
+        corrupt_kg(full_kg, save_folder=svo_paths[ts],
+                    true_share=ts)
