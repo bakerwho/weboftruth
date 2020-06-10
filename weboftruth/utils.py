@@ -4,6 +4,7 @@ import torchkge
 from torchkge import models
 import torch
 import re
+import pandas as pd
 
 import weboftruth as wot
 
