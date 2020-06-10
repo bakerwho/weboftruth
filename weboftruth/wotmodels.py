@@ -16,7 +16,7 @@ from tqdm.autonotebook import tqdm
 from datetime import datetime
 from tabulate import tabulate
 
-import weboftruth as wot
+from weboftruth import *
 from weboftruth import utils
 from weboftruth.corrupt import corrupt_kg
 
@@ -61,7 +61,7 @@ svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 80, 50]}
 models_path = join(args.path, 'models')
 
 try:
-    os.makedirs(wot.models_path, exist_ok=True)
+    os.makedirs(models_path, exist_ok=True)
 except:
     print("Warning: models folder may not exist")
 
