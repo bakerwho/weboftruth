@@ -1,6 +1,6 @@
 import numpy as np
 from weboftruth.utils import load_model
-from sklearn.linear_model import LinearRegression, Ridge
+from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 
@@ -61,17 +61,13 @@ from os.path import join
 
 tr_fn, val_fn, test_fn = wot.utils.get_file_names(50)
 filepath = join(wot.svo_paths[50], tr_fn)
-sovs, Ys = read_triples(filepath)
 x_tr, y_tr = parse_data(filepath, join(wot.models_path, 'TransE_01'))
 
 test_fp = join(paths[50], test_fn)
 x_te, y_te = parse_data(test_fp,
                     join(wot.models_path, 'TransE_01'))
 
-for i, cls in enumerate([LinearRegression, Ridge, SVC]):
-    kwds = {}
-    if i == 1:
-        kwds['alpha'] = 100
-    model = train_sklearnmodel(cls, x_tr, y_tr, **kwds)
+for i, cls in enumerate([LogisticRegression, SVC]):
+    model = train_sklearnmodel(cls, x_tr, y_tr)
     evaluate_model(model, x_te, y_te)
 """
