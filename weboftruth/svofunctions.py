@@ -58,72 +58,57 @@ def idx_dictionaries(path_to_entities = join(svo_data_path, 'svo-nouns.lst'),
     return entity_word_dict, relation_word_dict
 
     
-def get_glove_embeddings(path_to_glove, svo_entity_dict, svo_rel_dict,  n_dim = 50):
+def get_glove_embeddings(path_to_glove, n_dim = 50):
 
     glove_dict = {}
-    svo_entity_glovedict = {}
-    svo_relation_glovedict = {}
+    
 
     with zipfile.ZipFile(path_to_glove, 'r') as zip:
 
         files =  zip.namelist()
+        print(files)
 
         for file in files:
-            if str(n_dim) in files: 
-                glove_file = file  
+            if str(n_dim) in file: 
+                print(file)
+                with zip.open(file, 'r') as myfile:
+                    for line in myfile:
+                        embed_list = line.decode("utf-8").split()
+                        glove_dict[str(embed_list[0])] = torch.FloatTensor([float(i) for i in embed_list[1:]])
 
-        with zip.open(glove_file, 'r') as myfile:
-            for line in myfile:
-                embed_list = line.split()
-                glove_dict[embed_list[0]] = torch.Tensor([float(i) for i in embed_list[1:]], dtype = torch.float64)
+    return glove_dict
 
-    for k, val in svo_entity_dict.values():
+def svo_glove(svo_entity_dict, svo_rel_dict, glove_dict, n_dim):
+
+    svo_entity_glovedict = {}
+    svo_relation_glovedict = {}
+
+    print(len(glove_dict.keys()))
+    i,j = 0, 0
+    for (k, val) in svo_entity_dict.items():
         val_list = val.split('_')
         val_embed = torch.zeros(n_dim, dtype=torch.float64)
         for unigram in val_list:
             try:
-                val_embed.add(glove_dict[unigram])
+                val_embed = val_embed.add(glove_dict[unigram])
+                i+=1
             except KeyError:
-                val_embed.add(glove_dict['unk'])
+                val_embed = val_embed.add(torch.zeros(n_dim, dtype=torch.float64))
+                j+=1
+    
         val_embed = val_embed.div(len(val_list))
         svo_entity_glovedict[k] = val_embed
+    print(i,j)
 
-    for k, val in svo_rel_dict.values():
+    for (k, val) in svo_rel_dict.items():
         val_list = val.split('_')
         val_embed = torch.zeros(n_dim, dtype=torch.float64)
         for unigram in val_list:
             try:
-                val_embed.add(glove_dict[unigram])
+                val_embed = val_embed.add(glove_dict[unigram])
             except KeyError:
-                val_embed.add(glove_dict['unk'])
+                val_embed = val_embed.add(torch.zeros(n_dim, dtype=torch.float64))
         val_embed = val_embed.div(len(val_list))
         svo_relation_glovedict[k] = val_embed
 
     return svo_entity_glovedict, svo_relation_glovedict
-
-    
-
-    
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-            print(myfile.read()) 
-        # printing all the contents of the zip file 
-        zip.printdir() 
-    
-        # extracting all the files 
-        print('Extracting all the files now...') 
-        zip.extractall() 
-        print('Done!') 
