@@ -69,15 +69,23 @@ import weboftruth as wot
 
 from os.path import join
 
-tr_fn, val_fn, test_fn = wot.utils.get_file_names(50)
-filepath = join(wot.svo_paths[50], tr_fn)
-x_tr, y_tr = get_svo_model_embeddings(filepath, join(wot.models_path, 'TransE_01'))
+from sklearn.linear_model import LogisticRegression
 
-test_fp = join(paths[50], test_fn)
-x_te, y_te = get_svo_model_embeddings(test_fp,
-                    join(wot.models_path, 'TransE_01'))
+#tr_fn, val_fn, test_fn = wot.utils.get_file_names(50)
+#tr_fp = join(wot.svo_paths[50], tr_fn)
+#test_fp = join(wot.svo_paths[50], test_fn)
+#model_folder = wot.models_path
 
-for i, cls in enumerate([LogisticRegression, SVC]):
-    model = train_sklearnmodel(cls, x_tr, y_tr)
-    evaluate_model(model, x_te, y_te)
+d_path = '/project2/jevans/aabir/weboftruth/data/SVO-tensor-dataset/50/'
+train_fp, test_fp = [d_path+ v for v in ['svo_data_ts50_train_1000000.dat',
+                                        'svo_data_ts50_test_50000.dat']]
+model_folder = '/project2/jevans/aabir/weboftruth/models'
+
+x_tr, y_tr = wot.get_svo_model_embeddings(train_fp, join(model_folder, 'DistMult_01'))
+
+x_te, y_te = wot.get_svo_model_embeddings(test_fp,
+                    join(model_folder, 'DistMult_01'))
+
+model = wot.train_sklearnmodel(LogisticRegression, x_tr, y_tr)
+wot.evaluate_model(model, x_te, y_te)
 """

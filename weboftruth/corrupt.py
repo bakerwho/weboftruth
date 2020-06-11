@@ -66,7 +66,8 @@ if __name__=='__main__':
     full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
     for ts in [50, 80]:
         corrupt_kg(full_kg, save_folder=svo_paths[ts],
-                    true_share=ts)
+                    true_share=ts/100)
+
 """
 import weboftruth as wot
 import torchkge
