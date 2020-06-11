@@ -1,5 +1,6 @@
 keys/
 data/ClaimsKG
+data/glove.6B
 models/interim
 docs/planning
 data/SVO-tensor-dataset/50/*

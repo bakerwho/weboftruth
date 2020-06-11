@@ -35,10 +35,10 @@ models_path = join(args.path, 'models')
 """
 #get glove embeddings for svo
 
-def idx_dictionaries(path_to_entities = join(wot.wotmodels.svo_data_path,
-                    'svo-nouns.lst'),
-                    path_to_relations = join(wot.wotmodels.svo_data_path,
-                    'svo-verbs.lst')):
+def idx_dictionaries(path_to_entities = join(wot.svo_data_path,
+                                            'svo-nouns.lst'),
+                    path_to_relations = join(wot.svo_data_path,
+                                            'svo-verbs.lst')):
     entity_word_dict = {}
     relation_word_dict = {}
     with open(path_to_entities, 'r') as f:
@@ -53,8 +53,7 @@ def idx_dictionaries(path_to_entities = join(wot.wotmodels.svo_data_path,
             relation_word_dict[i] = relation_name
     return entity_word_dict, relation_word_dict
 
-
-def get_glove_embeddings(path_to_glove, n_dim = 50):
+def get_glove_embeddings(path_to_glove, n_dim=50):
     glove_dict = {}
     with zipfile.ZipFile(path_to_glove, 'r') as zip:
         files =  zip.namelist()
@@ -95,3 +94,11 @@ def svo_glove(svo_entity_dict, svo_rel_dict, glove_dict, n_dim):
         val_embed = val_embed.div(len(val_list))
         svo_relation_glovedict[k] = val_embed
     return svo_entity_glovedict, svo_relation_glovedict
+
+if __name__=="__main__":
+    n_dim = 300
+    folder = join(wot.svo_data_path, 'glove.6B')
+    ent_word_dict, rel_word_dict = idx_dictionaries()
+    glove_dict = get_glove_embeddings(folder, n_dim=n_dim)
+    svo_glove = svo_glove(ent_word_dict, rel_word_dict, glove_dict, n_dim)
+    

@@ -1,0 +1,1 @@
+import weboftruth as wot
