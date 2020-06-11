@@ -13,9 +13,9 @@ mkdir /home/ubuntu/weboftruth/data/SVO-tensor-dataset/80
 for ts in 50 100 80
 do
     echo "running DistMult"
-    python ~/weboftruth/weboftruth/wotmodels.py -e 250 -emb 300 -ts $ts -m 'DistMult' -p '/home/ubuntu/weboftruth' -ve 10
+    python ~/weboftruth/weboftruth/wotmodels.py -e 250 -emb 300 -ts $ts -m 'DistMult' -p '/home/ubuntu/weboftruth' -ve 10 -lr 0.0001
     echo "running HolE"
-    python /home/ubuntu/weboftruth/weboftruth/wotmodels.py -e 250 -emb 300 -ts $ts -m 'HolE' -p '/home/ubuntu/weboftruth' -ve 10
+    python /home/ubuntu/weboftruth/weboftruth/wotmodels.py -e 250 -emb 300 -ts $ts -m 'HolE' -p '/home/ubuntu/weboftruth' -ve 10 -lr 0.0001
     echo "running TransE"
-    python /home/ubuntu/weboftruth/weboftruth/wotmodels.py -e 250 -emb 300 -ts $ts -m 'TransE' -p '/home/ubuntu/weboftruth' -ve 10
+    python /home/ubuntu/weboftruth/weboftruth/wotmodels.py -e 250 -emb 300 -ts $ts -m 'TransE' -p '/home/ubuntu/weboftruth' -ve 10 -lr 0.0001
 done

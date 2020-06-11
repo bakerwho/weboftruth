@@ -3,7 +3,7 @@ import os
 from os.path import join
 import numpy as np
 import torch
-import zipfile 
+import zipfile
 
 import torchkge
 from torchkge import models
@@ -11,9 +11,7 @@ from torchkge import models
 from datetime import datetime
 from tabulate import tabulate
 
-import sys
-import argparse
-parser = argparse.ArgumentParser()
+import weboftruth as wot
 
 ## pathnames
 # args.path = "~/weboftruth"
@@ -37,9 +35,11 @@ models_path = join(args.path, 'models')
 """
 #get glove embeddings for svo
 
-def idx_dictionaries(path_to_entities = join(svo_data_path, 'svo-nouns.lst'),
-                    path_to_relations = join(svo_data_path, 'svo-verbs.lst')):
-    
+def idx_dictionaries(path_to_entities = join(wot.wotmodels.svo_data_path,
+                    'svo-nouns.lst'),
+                    path_to_relations = join(wot.wotmodels.svo_data_path,
+                    'svo-verbs.lst')):
+
     entity_word_dict = {}
     relation_word_dict = {}
 
