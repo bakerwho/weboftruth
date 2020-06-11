@@ -12,11 +12,8 @@ def read_triples(filepath):
     Input:
         filepath: file with format "{subject}\t{verb}\t{object}\t{bool}"
     """
-    with open(filepath, 'r') as f:
-        for line in f:
-            vals = [int(i) for i in line.split()]
-            triple, istrue = vals[:3], vals[3]
-            yield triple, istrue
+    df = pd.read_csv(filepath)
+    return df[['from', 'to', 'rel']].to_numpy(), df['true_positive'].to_numpy()
 
 def get_vector_from_triple(triple, ent_vectors, rel_vectors):
     s, v, o = triple
