@@ -21,12 +21,17 @@ def get_file_names(ts=100):
     return tr_fn, val_fn, test_fn
 
 def read_data(tr_fn, val_fn, test_fn, path):
-    tr_df = pd.read_csv(join(path, tr_fn),
-                       sep='\t')#, names=['from', 'rel', 'to'])
-    val_df = pd.read_csv(join(path, val_fn),
-                       sep='\t')#, names=['from', 'rel', 'to'])
-    test_df = pd.read_csv(join(path, test_fn),
-                       sep='\t')#, names=['from', 'rel', 'to'])
+    try:
+        tr_df = pd.read_csv(join(path, tr_fn),
+                           sep='\t', names=['from', 'rel', 'to'])
+        val_df = pd.read_csv(join(path, val_fn),
+                           sep='\t', names=['from', 'rel', 'to'])
+        test_df = pd.read_csv(join(path, test_fn),
+                           sep='\t', names=['from', 'rel', 'to'])
+    except:
+        tr_df = pd.read_csv(join(path, tr_fn), sep='\t')
+        val_df = pd.read_csv(join(path, val_fn), sep='\t')
+        test_df = pd.read_csv(join(path, test_fn), sep='\t')
     return tr_df, val_df, test_df
 
 def df_to_kg(df):
