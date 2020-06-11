@@ -60,11 +60,11 @@ def corrupt_kg(input_kg, save_folder=None,
 
 if __name__=='__main__':
     tr_fn, val_fn, test_fn = wot.utils.get_file_names(100)
-    tr_df, val_df, test_df = read_data(tr_fn, val_fn, test_fn,
-                                svo_paths[100])
-    full_df = pd.concat([tr_df, val_df, test_df])
+    tr_df, val_df, test_df = wot.read_data(tr_fn, val_fn, test_fn,
+                                wot.svo_paths[100])
+    full_df = pd.concat([tr_df, val_df, test_df], axis=0)
     full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
-    for ts in [80, 50]:
+    for ts in [50, 80]:
         corrupt_kg(full_kg, save_folder=svo_paths[ts],
                     true_share=ts)
 """
