@@ -67,6 +67,9 @@ def get_glove_embeddings(path_to_glove, n_dim=50):
     return glove_dict
 
 def svo_glove(svo_entity_dict, svo_rel_dict, glove_dict, n_dim):
+    """
+        Output: entity_dict, rel_dict with key=index and value = tensor
+    """
     svo_entity_glovedict = {}
     svo_relation_glovedict = {}
     print(len(glove_dict.keys()))
@@ -101,4 +104,3 @@ if __name__=="__main__":
     ent_word_dict, rel_word_dict = idx_dictionaries()
     glove_dict = get_glove_embeddings(folder, n_dim=n_dim)
     svo_glove = svo_glove(ent_word_dict, rel_word_dict, glove_dict, n_dim)
-    
