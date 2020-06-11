@@ -5,7 +5,7 @@ from sklearn.svm import SVC
 
 import weboftruth as wot
 
-path = wot.
+paths = wot.svo_paths
 
 def read_triples(filepath):
     """Read triples from filepath
@@ -41,4 +41,18 @@ def evaluate_linear_model(lrmodel, Xs, Ys):
     Y_pred = lrmodel.predict(Xs)
 
 if __name__=='__main__':
-    Xs, Ys = parse_data(join())
+    tr_fn, val_fn, test_fn = wot.utils.get_file_names(50)
+    x_tr, y_tr = parse_data(join(paths[50], tr_fn))
+    x_te, y_te = parse_data(join(paths[50], test_fn))
+
+"""
+import weboftruth as wot
+
+from os.path import join
+
+tr_fn, val_fn, test_fn = wot.utils.get_file_names(50)
+x_tr, y_tr = wot.evaluator.parse_data(join(wot.svo_paths[50], tr_fn),
+                                    join(wot.models_path, 'TransE_01'))
+
+x_te, y_te = wot.evaluator.parse_data(join(paths[50], test_fn))
+"""
