@@ -8,8 +8,13 @@ import pandas as pd
 
 import weboftruth as wot
 
+def reset_paths(path):
+    wot.svo_data_path = join(path, 'data', 'SVO-tensor-dataset')
+    wot.svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 80, 50]}
+    wot.models_path = join(path, 'models')
+
 def get_file_names(ts=100):
-    for f in os.listdir(wot.wotmodels.svo_paths[ts]):
+    for f in os.listdir(wot.svo_paths[ts]):
         if 'train' in f: tr_fn = f
         if 'valid' in f: val_fn = f
         if 'test' in f: test_fn = f

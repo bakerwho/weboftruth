@@ -1,5 +1,11 @@
 import numpy as np
 from weboftruth.utils import load_model
+from sklearn.linear_model import LinearRegression
+from sklearn.svm import SVC
+
+import weboftruth as wot
+
+path = wot.
 
 def read_triples(filepath):
     """Read triples from filepath
@@ -33,3 +39,6 @@ def train_linear_model(Xs, Ys):
 
 def evaluate_linear_model(lrmodel, Xs, Ys):
     Y_pred = lrmodel.predict(Xs)
+
+if __name__=='__main__':
+    Xs, Ys = parse_data(join())
