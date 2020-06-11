@@ -1,7 +1,11 @@
-run started at  Sun Jun 7 18:45:13 CDT 2020
-Path: /project2/jevans/aabir/weboftruth/
+run started at  Wed Jun 10 17:06:18 CDT 2020
+Path: /project2/jevans/aabir/weboftruth
 Model Type: TransE
 Epochs: 200
-Small: True
-Using cuda.
-echo run ended at  Sun Jun 7 23:10:39 CDT 2020
+Small: False
+Truth share: 50
+Path: /project2/jevans/aabir/weboftruth
+Model Type: TransE
+Epochs: 200
+Small: False
+Truth share: 80
