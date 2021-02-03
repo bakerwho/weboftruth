@@ -6,14 +6,14 @@ This repo contains Python and bash scripts for training Knowledge Graph embeddin
 
 Two embedding spaces are created (one for Entities (Subjects/Objects) and one for Relationships/Verbs). Extensive use is made of the package `torchkge` that implements KGE algorithms like TransE. It is built on PyTorch.
 
-Results:
+## Results:
 - We trained Entity and Relationship embeddings for a cleaned dataset of SVO triples constructed from Wikipedia sentences.
 - We trained three configurations - embeddings of dimension 50, 100 and 200.
 - A binary classifier (logistic regression) on concatenated SVO embeddings recorded 79% accuracy at telling **true** triples apart from **false** (negatively sampled) ones
 
 This was part of a coursework for CAPP 30255 at the University of Chicago by Aabir Abubaker Kar Adarsh Mathew
 
-The filestructure is as follows:
+## Filestructure:
 
 - data
 
