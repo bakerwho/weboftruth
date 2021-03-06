@@ -1,0 +1,15 @@
+README.md
+setup.py
+weboftruth/__init__.py
+weboftruth/corrupt.py
+weboftruth/evaluator.py
+weboftruth/ner.py
+weboftruth/results.py
+weboftruth/svofunctions.py
+weboftruth/utils.py
+weboftruth/wotmodels.py
+weboftruth.egg-info/PKG-INFO
+weboftruth.egg-info/SOURCES.txt
+weboftruth.egg-info/dependency_links.txt
+weboftruth.egg-info/requires.txt
+weboftruth.egg-info/top_level.txt

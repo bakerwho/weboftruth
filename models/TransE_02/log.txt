@@ -1,0 +1,1778 @@
+variable     value
+-----------  ------------------------------------------------------------------
+kg           <torchkge.data_structures.KnowledgeGraph object at 0x7ff220b21b50>
+truth_share  100
+model_type   TransE
+diss_type    L2
+emb_dim      250
+model        TransEModel(
+               (ent_emb): Embedding(30492, 250)
+               (rel_emb): Embedding(4538, 250)
+             )
+n_entities   30492
+n_relations  4538
+model_path   /home-nfs/tenzorok/weboftruth/models/TransE_02
+logfile      /home-nfs/tenzorok/weboftruth/models/TransE_02/log.txt
+lr           5e-05
+n_epochs     100
+b_size       32
+Epoch 1 | Train loss: 14.019790607145865
+variable     value
+-----------  ------------------------------------------------------------------
+kg           <torchkge.data_structures.KnowledgeGraph object at 0x7f9a4ec2db50>
+truth_share  100
+model_type   TransE
+diss_type    L2
+emb_dim      250
+model        TransEModel(
+               (ent_emb): Embedding(30492, 250)
+               (rel_emb): Embedding(4538, 250)
+             )
+n_entities   30492
+n_relations  4538
+model_path   /home-nfs/tenzorok/weboftruth/models/TransE_02
+logfile      /home-nfs/tenzorok/weboftruth/models/TransE_02/log.txt
+lr           5e-05
+n_epochs     100
+b_size       32
+Epoch 1 | Train loss: 14.019790607145865
+	Epoch 1 | Validation loss: 15.80326959374465
+Epoch 2 | Train loss: 7.67982663541089
+Epoch 3 | Train loss: 4.977105248622533
+Epoch 4 | Train loss: 4.016431842576164
+Epoch 5 | Train loss: 3.5026841888260187
+Epoch 6 | Train loss: 3.1453464268997173
+Epoch 7 | Train loss: 2.8705422113718364
+Epoch 8 | Train loss: 2.6656023182046176
+Epoch 9 | Train loss: 2.5076838091791656
+Epoch 10 | Train loss: 2.353404563641929
+	Epoch 10 | Validation loss: 16.07634968736274
+
+best epoch: 1
+
+variable     value
+-----------  ------------------------------------------------------------------
+kg           <torchkge.data_structures.KnowledgeGraph object at 0x7f95abb67c40>
+truth_share  100
+model_type   TransE
+diss_type    L2
+emb_dim      250
+model        TransEModel(
+               (ent_emb): Embedding(30492, 250)
+               (rel_emb): Embedding(4538, 250)
+             )
+n_entities   30492
+n_relations  4538
+model_path   /home-nfs/tenzorok/weboftruth/models/TransE_02
+logfile      /home-nfs/tenzorok/weboftruth/models/TransE_02/log.txt
+lr           5e-05
+n_epochs     100
+b_size       32
+variable     value
+-----------  ------------------------------------------------------------------
+kg           <torchkge.data_structures.KnowledgeGraph object at 0x7f6afd798be0>
+truth_share  80
+model_type   TransE
+diss_type    L2
+emb_dim      250
+model        TransEModel(
+               (ent_emb): Embedding(30492, 250)
+               (rel_emb): Embedding(4507, 250)
+             )
+n_entities   30492
+n_relations  4507
+model_path   /home-nfs/tenzorok/weboftruth/models/TransE_02
+logfile      /home-nfs/tenzorok/weboftruth/models/TransE_02/log.txt
+lr           5e-05
+n_epochs     100
+b_size       32
+Epoch 1 | Train loss: 14.87787904482719
+	Epoch 1 | Validation loss: 15.92046476640241
+Epoch 2 | Train loss: 10.118432388476872
+Epoch 3 | Train loss: 7.137292112723218
+Epoch 4 | Train loss: 5.921608945130043
+Epoch 5 | Train loss: 5.2048430305591005
+Epoch 6 | Train loss: 4.715818900238621
+Epoch 7 | Train loss: 4.3243336813549575
+Epoch 8 | Train loss: 4.0199024676704385
+Epoch 9 | Train loss: 3.7801837971612637
+Epoch 10 | Train loss: 3.5575769594175046
+	Epoch 10 | Validation loss: 15.983043562018672
+
+best epoch: 1
+
+variable     value
+-----------  ------------------------------------------------------------------
+kg           <torchkge.data_structures.KnowledgeGraph object at 0x7f97e8ca98b0>
+truth_share  80
+model_type   TransE
+diss_type    L2
+emb_dim      250
+model        TransEModel(
+               (ent_emb): Embedding(30492, 250)
+               (rel_emb): Embedding(4507, 250)
+             )
+n_entities   30492
+n_relations  4507
+model_path   /home-nfs/tenzorok/weboftruth/models/TransE_02
+logfile      /home-nfs/tenzorok/weboftruth/models/TransE_02/log.txt
+lr           5e-05
+n_epochs     100
+b_size       32
+variable     value
+-----------  ------------------------------------------------------------------
+kg           <torchkge.data_structures.KnowledgeGraph object at 0x7f44b06130a0>
+truth_share  100
+model_type   TransE
+diss_type    L2
+emb_dim      250
+model        TransEModel(
+               (ent_emb): Embedding(30492, 250)
+               (rel_emb): Embedding(4538, 250)
+             )
+n_entities   30492
+n_relations  4538
+model_path   /home-nfs/tenzorok/weboftruth/models/TransE_02
+logfile      /home-nfs/tenzorok/weboftruth/models/TransE_02/log.txt
+lr           5e-05
+n_epochs     100
+b_size       32
+Epoch 1 | Train loss: 14.87787904482719
+variable     value
+-----------  ------------------------------------------------------------------
+kg           <torchkge.data_structures.KnowledgeGraph object at 0x7f80a8d868b0>
+truth_share  80
+model_type   TransE
+diss_type    L2
+emb_dim      250
+model        TransEModel(
+               (ent_emb): Embedding(30492, 250)
+               (rel_emb): Embedding(4507, 250)
+             )
+n_entities   30492
+n_relations  4507
+model_path   /home-nfs/tenzorok/weboftruth/models/TransE_02
+logfile      /home-nfs/tenzorok/weboftruth/models/TransE_02/log.txt
+lr           5e-05
+n_epochs     100
+b_size       32
+Epoch 1 | Train loss: 14.87787904482719
+	Epoch 1 | Validation loss: 15.92046476640241
+Epoch 2 | Train loss: 10.118432388476872
+Epoch 3 | Train loss: 7.137292112723218
+
+best epoch: 1
+
+variable     value
+-----------  ------------------------------------------------------------------
+kg           <torchkge.data_structures.KnowledgeGraph object at 0x7fda361bfbe0>
+truth_share  100
+model_type   TransE
+diss_type    L2
+emb_dim      250
+model        TransEModel(
+               (ent_emb): Embedding(30492, 250)
+               (rel_emb): Embedding(4538, 250)
+             )
+n_entities   30492
+n_relations  4538
+model_path   /home-nfs/tenzorok/weboftruth/models/TransE_02
+logfile      /home-nfs/tenzorok/weboftruth/models/TransE_02/log.txt
+lr           5e-05
+n_epochs     100
+b_size       32
+Epoch 1 | Train loss: 14.019790607145865
+	Epoch 1 | Validation loss: 15.80326959374465
+Epoch 2 | Train loss: 7.67982663541089
+Epoch 3 | Train loss: 4.977105248622533
+
+best epoch: 1
+
+variable     value
+-----------  ------------------------------------------------------------------
+kg           <torchkge.data_structures.KnowledgeGraph object at 0x7f9c0b622c40>
+truth_share  80
+model_type   TransE
+diss_type    L2
+emb_dim      250
+model        TransEModel(
+               (ent_emb): Embedding(30492, 250)
+               (rel_emb): Embedding(4507, 250)
+             )
+n_entities   30492
+n_relations  4507
+model_path   /home-nfs/tenzorok/weboftruth/models/TransE_02
+logfile      /home-nfs/tenzorok/weboftruth/models/TransE_02/log.txt
+lr           5e-05
+n_epochs     100
+b_size       32
+Epoch 1 | Train loss: 14.87787904482719
+	Epoch 1 | Validation loss: 15.92046476640241
+Epoch 2 | Train loss: 10.118432388476872
+Epoch 3 | Train loss: 7.137292112723218
+
+best epoch: 1
+
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}
+		Test loss: {np.mean(losses)}

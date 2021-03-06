@@ -29,14 +29,14 @@ torch.manual_seed(0)
 ## pathnames
 # args.path = "~/weboftruth"
 # args.path = "/project2/jevans/aabir/weboftruth/"
-# args.path = "/Users/aabir/Documents/research/weboftruth"
+# args.path = "/home-nfs/tenzorok/weboftruth"
 ################################################################
 
 #-p wot_path -e epochs -m model_type -small False
 parser.add_argument("-p", "--path", dest="path",
                         #default="/home/ubuntu/weboftruth/",
                         #default="/project2/jevans/aabir/weboftruth/",
-                        default="/Users/aabir/Documents/research/weboftruth",
+                        default="/home-nfs/tenzorok/weboftruth",
                         help="path to weboftruth")
 parser.add_argument("-e", "--epochs", dest="epochs",
                         default=100,
@@ -163,7 +163,7 @@ class CustomTransModel():
         self.tr_losses.append(epoch_loss)
         return epoch_loss
 
-    def validate(self, val_kg):
+    def validate(self, val_kg, istest=False):
         losses = []
         try:
             dataloader = DataLoader(val_kg, batch_size=self.b_size, use_cuda='all')
@@ -176,6 +176,8 @@ class CustomTransModel():
             pos, neg = self.model(h, t, n_h, n_t, r)
             loss = self.loss_fn(pos, neg)
             losses.append(loss.item())
+            if istest:
+                self.logline('\t\tTest loss: {np.mean(losses)}')
         return np.mean(losses)
 
     def train_model(self, n_epochs, val_kg):
