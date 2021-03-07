@@ -96,6 +96,7 @@ class CustomTransModel():
                                     n_relations=kg.n_rel)
         self.n_entities = kg.n_ent
         self.n_relations = kg.n_rel
+        print('!!', kg.n_ent, kg.n_rel)
         all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path
                         ) if os.path.isdir(join(wot.models_path, d)
                         ) and f'{self.model_type}_' in d]
@@ -187,12 +188,12 @@ class CustomTransModel():
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
             if ((epoch+1)%args.ve)==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
-                                f'epoch_{self.epochs}_{self.model_type}_model.pt'))
+                                f'epoch_{self.epochs}_{self.model_type}_model_80test.pt'))
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
                     self.best_epoch = self.epochs
                     torch.save(self.model.state_dict(), join(self.model_path,
-                                f'best_{self.model_type}_model.pt'))
+                                f'best_80test_{self.model_type}_model.pt'))
                 self.logline(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 self.val_losses.append(val_loss)
                 self.val_epochs.append(self.epochs)
@@ -299,12 +300,12 @@ class CustomBilinearModel():
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
             if ((epoch+1)%args.ve)==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
-                                    f'epoch_{self.epochs}_{self.model_type}_model.pt'))
+                                    f'epoch_{self.epochs}_{self.model_type}_model_80test.pt'))
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
                     self.best_epoch = epoch
                     torch.save(self.model.state_dict(), join(self.model_path,
-                                f'best_{self.model_type}_model.pt'))
+                                f'best_80test_{self.model_type}_model.pt'))
                 self.logline(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 self.val_losses.append(val_loss)
                 self.val_epochs.append(self.epochs)
@@ -320,12 +321,18 @@ if __name__ == '__main__':
     print(f"Epochs: {args.epochs}\nSmall: {args.small}")
     print(f"Truth share: {args.ts}")
     tr_fn, val_fn, test_fn = wot.utils.get_file_names(args.ts)
+    print(tr_fn)
     dfs = wot.utils.read_data(tr_fn, val_fn, test_fn,
                                 svo_paths[args.ts])
     dfs = [df.drop('true_positive', axis=1
                 ) if 'true_positive' in df.columns else df
                 for df in dfs ]
-    tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
+    #tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
+    sizes = [df.shape[0] for df in dfs]
+    full_df = pd.concat([dfs[0], dfs[1], dfs[2]])
+    full_kg = wot.utils.df_to_kg(full_df)
+    tr_kg, val_kg, test_kg = full_kg.split_kg(sizes=sizes)
+    print(tr_kg.n_rel)
     if args.model_type+'Model' in modelslist(torchkge.models.translation):
         if args.small:
             mod = CustomTransModel(test_kg, model_type=args.model_type,

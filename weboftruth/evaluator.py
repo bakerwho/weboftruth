@@ -4,29 +4,39 @@ from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 
+from os.path import join
 import pandas as pd
 
 import weboftruth as wot
 
-paths = wot.svo_paths
+# paths = wot.svo_paths
+paths = {100: '/home-nfs/tenzorok/weboftruth/data/SVO-tensor-dataset/100', 80: '/home-nfs/tenzorok/weboftruth/data/SVO-tensor-dataset/80_old', 50: '/home-nfs/tenzorok/weboftruth/data/SVO-tensor-dataset/50_old'}
+print(paths)
 
 def read_triples(filepath):
     """Read triples from filepath
     Input:
         filepath: file with format "{subject}\t{verb}\t{object}\t{bool}"
     """
+    print('filepath with data', filepath)
     df = pd.read_csv(filepath, sep='\t')
     return df[['from', 'to', 'rel']].to_numpy(), df['true_positive'].to_numpy()
 
 def get_vector_from_triple(triple, ent_vectors, rel_vectors):
     s, o, v = triple
+    #s, v, o = triple
+    # print(ent_vectors.shape, rel_vectors.shape, ent_vectors.shape)
+    # print(s, v, o)
     v1, v2, v3 = ent_vectors[s], rel_vectors[v], ent_vectors[o]
     return np.concatenate((v1, v2, v3), axis=0)
 
 def get_svo_model_embeddings(filepath, emb_modelfolder, whichmodel='best_'):
     Xs, Ys = [], []
+    print('load model', emb_modelfolder, whichmodel)
     model = load_model(emb_modelfolder, whichmodel=whichmodel)
+    print(model)
     ent_vectors, rel_vectors = model.get_embeddings()
+    print('read triplets from', filepath)
     sovs, Ys = read_triples(filepath)
     for sov in sovs:
         Xs.append(get_vector_from_triple(sov, ent_vectors, rel_vectors))
@@ -57,9 +67,10 @@ def evaluate_model(model, Xs, Ys):
     return acc
 
 if __name__=='__main__':
-    tr_fn, val_fn, test_fn = wot.utils.get_file_names(50)
-    x_tr, y_tr = get_svo_model_embeddings(join(paths[50], tr_fn))
-    x_te, y_te = get_svo_model_embeddings(join(paths[50], test_fn))
+    tr_fn, val_fn, test_fn = wot.utils.get_file_names(80)
+    print(tr_fn)
+    x_tr, y_tr = get_svo_model_embeddings(join(paths[80], tr_fn), '/home-nfs/tenzorok/weboftruth/models/TransE_02', 'best_80test_')
+    x_te, y_te = get_svo_model_embeddings(join(paths[80], test_fn),  '/home-nfs/tenzorok/weboftruth/models/TransE_02', 'best_80test_')
     for cls in [LinearRegression, Ridge, SVC]:
         model = train_sklearnmodel(cls, x_tr, y_tr)
         evaluate_model(model, x_te, y_te)

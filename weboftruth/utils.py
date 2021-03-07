@@ -70,6 +70,7 @@ def load_model(model_folder, whichmodel='best_'):
         raise ValueError("Not equipped to deal with this model")
     model_file = [x for x in os.listdir(model_folder
                             ) if whichmodel in x and '.pt' in x][0]
+    print(model_file)
     model.load_state_dict(torch.load(join(model_folder, model_file),
                                     map_location=torch.device('cpu')))
     model.eval()
