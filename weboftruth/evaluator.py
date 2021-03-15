@@ -8,9 +8,21 @@ from os.path import join
 import pandas as pd
 
 import weboftruth as wot
+import argparse
+#parser = argparse.ArgumentParser()
 
-# paths = wot.svo_paths
-paths = {100: '/home-nfs/tenzorok/weboftruth/data/SVO-tensor-dataset/100', 80: '/home-nfs/tenzorok/weboftruth/data/SVO-tensor-dataset/80_old', 50: '/home-nfs/tenzorok/weboftruth/data/SVO-tensor-dataset/50_old'}
+#parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
+#                      help="truth share of dataset", type=int)
+
+#parser.add_argument("-m_folder", dest="emb_modelfolder", default="/home-nfs/tenzorok/weboftruth/models/TransE_02", help="model folder", type=str)
+
+#parser.add_argument("-w_model", dest="whichmodel", default="best_",
+#                      help="model to generate embeddings", type=str)
+
+#args = parser.parse_args()
+#paths = wot.svo_paths
+paths = {100: '/home-nfs/tenzorok/weboftruth/data/SVO-tensor-dataset/100_old',90:'/home-nfs/tenzorok/weboftruth/data/SVO-tensor-dataset/90_old', 80: '/home-nfs/tenzorok/weboftruth/data/SVO-tensor-dataset/80_old', 50: '/home-nfs/tenzorok/weboftruth/data/SVO-tensor-dataset/50_old'}
+
 print(paths)
 
 def read_triples(filepath):
@@ -67,14 +79,26 @@ def evaluate_model(model, Xs, Ys):
     return acc
 
 if __name__=='__main__':
-    tr_fn, val_fn, test_fn = wot.utils.get_file_names(80)
-    print(tr_fn)
-    x_tr, y_tr = get_svo_model_embeddings(join(paths[80], tr_fn), '/home-nfs/tenzorok/weboftruth/models/TransE_02', 'best_80test_')
-    x_te, y_te = get_svo_model_embeddings(join(paths[80], test_fn),  '/home-nfs/tenzorok/weboftruth/models/TransE_02', 'best_80test_')
-    for cls in [LinearRegression, Ridge, SVC]:
-        model = train_sklearnmodel(cls, x_tr, y_tr)
-        evaluate_model(model, x_te, y_te)
+    ts = 90
 
+    tr_fn, val_fn, test_fn = wot.utils.get_file_names(ts)
+    print(tr_fn)
+    whichmodel = 'epoch_1_TransE_model_90'#'best_100'
+    print(paths[ts], tr_fn)
+    x_tr, y_tr = get_svo_model_embeddings(join(paths[ts], tr_fn), "/home-nfs/tenzorok/weboftruth/models/TransE_02", whichmodel)
+    print(x_tr.shape, y_tr[:10])
+    x_te, y_te = get_svo_model_embeddings(join(paths[ts], test_fn), "/home-nfs/tenzorok/weboftruth/models/TransE_02", whichmodel)
+    for cls in [LinearRegression, Ridge, LogisticRegression]: # SVC]:
+        #if cls == SVC:
+            #x_tr = x_tr[:, :300]
+            #model = train_sklearnmodel(cls, x_tr, y_tr)
+            #x_te = x_te[:, :300]
+            #evaluate_model(model, x_te, y_te)
+        #else:
+            #x_tr = x_tr[:, :600]
+        model = train_sklearnmodel(cls, x_tr, y_tr)
+            #x_te = x_te[:, :600]
+        evaluate_model(model, x_te, y_te)
 """
 import weboftruth as wot
 
@@ -82,7 +106,7 @@ from os.path import join
 
 from sklearn.linear_model import LogisticRegression
 
-#tr_fn, val_fn, test_fn = wot.utils.get_file_names(50)
+nearRegression, Ridge,#tr_fn, val_fn, test_fn = wot.utils.get_file_names(50)
 #tr_fp = join(wot.svo_paths[50], tr_fn)
 #test_fp = join(wot.svo_paths[50], test_fn)
 #model_folder = wot.models_path

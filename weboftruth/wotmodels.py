@@ -56,11 +56,13 @@ parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
                         help="truth share of dataset", type=int)
 parser.add_argument("-ve", "--valevery", dest="ve", default=10,
                         help="validate every X epochs", type=int)
+#parser.add_argument("-name", dest="name", default=100,
+#                        help="name for model saving", type=int)
 
 args = parser.parse_args()
 
 svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
-svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 80, 50]}
+svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 90, 80, 50]}
 
 models_path = join(args.path, 'models')
 
@@ -72,6 +74,7 @@ except:
 class CustomTransModel():
     def __init__(self, kg, model_type, ts, **kwargs):
         self.kg = kg
+
         self.truth_share = ts
         self.model_type = model_type
         self.diss_type = kwargs.pop('diss_type', 'L2')
@@ -188,12 +191,12 @@ class CustomTransModel():
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
             if ((epoch+1)%args.ve)==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
-                                f'epoch_{self.epochs}_{self.model_type}_model_80test.pt'))
+                                f'epoch_{self.epochs}_{self.model_type}_model_90.pt'))
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
                     self.best_epoch = self.epochs
                     torch.save(self.model.state_dict(), join(self.model_path,
-                                f'best_80test_{self.model_type}_model.pt'))
+                                f'best_90_{self.model_type}_model.pt'))
                 self.logline(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 self.val_losses.append(val_loss)
                 self.val_epochs.append(self.epochs)
@@ -300,12 +303,12 @@ class CustomBilinearModel():
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
             if ((epoch+1)%args.ve)==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
-                                    f'epoch_{self.epochs}_{self.model_type}_model_80test.pt'))
+                                    f'epoch_{self.epochs}_{self.model_type}_model_{args.name}.pt'))
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
                     self.best_epoch = epoch
                     torch.save(self.model.state_dict(), join(self.model_path,
-                                f'best_80test_{self.model_type}_model.pt'))
+                                f'best_{args.name}_{self.model_type}_model.pt'))
                 self.logline(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 self.val_losses.append(val_loss)
                 self.val_epochs.append(self.epochs)
@@ -329,7 +332,7 @@ if __name__ == '__main__':
                 for df in dfs ]
     #tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
     sizes = [df.shape[0] for df in dfs]
-    full_df = pd.concat([dfs[0], dfs[1], dfs[2]])
+    full_df = pd.concat([dfs[0], dfs[1]], dfs[2]])
     full_kg = wot.utils.df_to_kg(full_df)
     tr_kg, val_kg, test_kg = full_kg.split_kg(sizes=sizes)
     print(tr_kg.n_rel)
