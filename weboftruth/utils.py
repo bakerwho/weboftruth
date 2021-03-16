@@ -7,14 +7,13 @@ import re
 import pandas as pd
 
 import weboftruth as wot
+from weboftruth.constants import *
 
-def reset_paths(path):
-    wot.svo_data_path = join(path, 'data', 'SVO-tensor-dataset')
-    wot.svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 80, 50]}
-    wot.models_path = join(path, 'models')
-
-def get_file_names(ts=100):
-    for f in os.listdir(wot.svo_paths[ts]):
+def get_file_names(ts=100, path='.'):
+    # this does not work for some reason
+    svo_paths = {k:join(path, str(k)) for k in [100, 80, 50]}
+    print(svo_paths)
+    for f in os.listdir(svo_paths[ts]):
         if 'train' in f: tr_fn = f
         if 'valid' in f: val_fn = f
         if 'test' in f: test_fn = f
@@ -99,6 +98,29 @@ def parseline(line):
     if 'rel_emb' in line:
         return 'rel_emb_dim', int(re.findall(f'\d+', line)[0])
     return None, None
+
+def read_triples(filepath):
+    """Read triples from filepath
+    Input:
+        filepath: file with format "{subject}\t{verb}\t{object}\t{bool}"
+    """
+    df = pd.read_csv(filepath, sep='\t')
+    return df[['from', 'to', 'rel']].to_numpy(), df['true_positive'].to_numpy()
+
+class Embeddings():
+    def __init__(self, model):
+        self.ent_vecs, self.rel_vecs = self.model.get_embeddings()
+        self.ent2ix, self.rel2ix = self.kg.ent2ix, self.kg.rel2ix
+
+    def get_vector_from_triple(self, s, rel, o):
+        try:
+            s_ind, o_ind = self.ent2ix[s], self.ent2ix[v]
+            rel_ind = self.rel2ix[rel]
+        except (KeyError, IndexError):
+            s_ind, rel_ind, o_ind = s, rel, o
+        s_vec, o_vec = self.ent_vecs[s_ind], self.ent_vecs[o_ind]
+        rel_vec = self.rel_vecs[rel_ind]
+        return np.concatenate((s_vec, rel_vec, o_vec), axis=0)
 
 
 me = """variable    value

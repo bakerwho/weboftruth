@@ -17,6 +17,7 @@ from datetime import datetime
 from tabulate import tabulate
 
 from weboftruth import *
+from weboftruth.constants import models_path, svo_paths, svo_data_path
 from weboftruth import utils
 from weboftruth.corrupt import corrupt_kg
 
@@ -57,7 +58,7 @@ parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
 parser.add_argument("-ve", "--valevery", dest="ve", default=10,
                         help="validate every X epochs", type=int)
 
-args = parser.parse_args()
+args, unknown = parser.parse_known_args()
 
 svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
 svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 80, 50]}
@@ -96,11 +97,11 @@ class CustomTransModel():
                                     n_relations=kg.n_rel)
         self.n_entities = kg.n_ent
         self.n_relations = kg.n_rel
-        all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path
-                        ) if os.path.isdir(join(wot.models_path, d)
+        all_is = [int(d.split('_')[1]) for d in os.listdir(models_path
+                        ) if os.path.isdir(join(models_path, d)
                         ) and f'{self.model_type}_' in d]
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
-        self.model_path = join(wot.models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
+        self.model_path = join(models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
         os.makedirs(self.model_path, exist_ok=True)
         self.logfile = join(self.model_path, 'log.txt')
         ## Hyperparameters
@@ -109,7 +110,7 @@ class CustomTransModel():
         self.b_size = kwargs.pop('b_size', 32)
         self.logline(tabulate([(k,v) for k, v in vars(self).items()],
                                     headers=['variable', 'value']))
-
+        self.ent_vecs, self.rel_vecs = None, None
         # Legacy code
         # super(CustomTransModel, self).__init__(self.emb_dim, kg.n_ent, kg.n_rel,
         #                     dissimilarity_type=self.diss_type)
@@ -159,7 +160,7 @@ class CustomTransModel():
             running_loss += loss.item()
         self.model.normalize_parameters()
         self.epochs += 1
-        epoch_loss = running_loss/i
+        epoch_loss = running_loss/(i+1)
         self.tr_losses.append(epoch_loss)
         return epoch_loss
 
@@ -207,8 +208,8 @@ class CustomBilinearModel():
                             )(emb_dim=self.emb_dim,
                                 n_entities = self.kg.n_ent,
                                 n_relations = self.kg.n_rel)
-        all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path
-                                ) if os.path.isdir(join(wot.models_path, d))
+        all_is = [int(d.split('_')[1]) for d in os.listdir(models_path
+                                ) if os.path.isdir(join(models_path, d))
                                     and f'{self.model_type}_' in d]
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
         self.model_path = join(models_path, f'{self.model_type}_{str(i+1).zfill(2)}')

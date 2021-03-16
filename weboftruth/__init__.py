@@ -12,3 +12,6 @@ from weboftruth.svofunctions import *
 
 import weboftruth.evaluator
 from weboftruth.evaluator import *
+
+import weboftruth.constants
+from weboftruth.constants import *

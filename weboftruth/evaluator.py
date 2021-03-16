@@ -8,61 +8,65 @@ import pandas as pd
 
 import weboftruth as wot
 
+from weboftruth.utils import read_triples, get_vector_from_triple, Embeddings
+
 paths = wot.svo_paths
 
-def read_triples(filepath):
-    """Read triples from filepath
-    Input:
-        filepath: file with format "{subject}\t{verb}\t{object}\t{bool}"
-    """
-    df = pd.read_csv(filepath, sep='\t')
-    return df[['from', 'to', 'rel']].to_numpy(), df['true_positive'].to_numpy()
+class Evaluator():
+    def __init__(self, emb_modelfolder, whichmodel='best_',
+                emb_model=None):
+        if emb_model is None:
+            emb_model = load_model(emb_modelfolder, whichmodel=whichmodel)
+        self.embeddings = Embeddings(emb_model)
 
-def get_vector_from_triple(triple, ent_vectors, rel_vectors):
-    s, o, v = triple
-    v1, v2, v3 = ent_vectors[s], rel_vectors[v], ent_vectors[o]
-    return np.concatenate((v1, v2, v3), axis=0)
+    def set_pred_model(self, predmodelClass, **kwargs):
+        self.pred_model = predmodelClass(**kwargs)
 
-def get_svo_model_embeddings(filepath, emb_modelfolder, whichmodel='best_'):
-    Xs, Ys = [], []
-    model = load_model(emb_modelfolder, whichmodel=whichmodel)
-    ent_vectors, rel_vectors = model.get_embeddings()
-    sovs, Ys = read_triples(filepath)
-    for sov in sovs:
-        Xs.append(get_vector_from_triple(sov, ent_vectors, rel_vectors))
-    return np.array(Xs), Ys
+    def get_triples(self, filepath):
+        sovs, Ys = read_triples(filepath)
+        return sovs, Ys
 
-def get_svo_glove_embeddings(filepath, ent_glove, rel_glove):
-    Xs, Ys = [], []
-    sovs, Ys = read_triples(filepath)
-    for sov in sovs:
-        s, o, v = sov
-        vector = np.concatenate((ent_glove[s], rel_glove[v], ent_glove[o]),
-                                axis=0)
-        Xs.append(vector)
-    return np.array(Xs), Ys
+    def get_svo_model_embeddings(self, filepath, sovs=None, Ys=None):
+        Xs = []
+        if sovs is None and Ys is None:
+            sovs, Ys = self.get_triples(filepath)
+        for s, o, v in sovs:
+            Xs.append(self.embeddings.get_vector_from_triple(s, v, o))
+        return np.array(Xs), Ys
 
-def train_sklearnmodel(modelClass, Xs, Ys, **kwargs):
-    model = modelClass(**kwargs)
-    model.fit(Xs, Ys)
-    Ypred = model.predict(Xs).astype('int32')
-    acc = accuracy_score(Ypred, Ys.astype('int32'))
-    print(f"Train accuracy on {model.__repr__()}: {acc*100} %")
-    return model
+    def get_svo_glove_embeddings(self, filepath, sovs=None, Ys=None,
+                                ent_glove, rel_glove):
+        Xs = []
+        if sovs is None and Ys is None:
+            sovs, Ys = self.get_triples(filepath)
+        for s, o, v in sovs:
+            vector = np.concatenate((ent_glove[s], rel_glove[v], ent_glove[o]),
+                                    axis=0)
+            Xs.append(vector)
+        return np.array(Xs), Ys
 
-def evaluate_model(model, Xs, Ys):
-    Ypred = model.predict(Xs).astype('int32')
-    acc = accuracy_score(Ypred, Ys.astype('int32'))
-    print(f"Test accuracy on {model.__repr__()}: {acc*100} %")
-    return acc
+    def train_pred_model(self, Xs, Ys, **kwargs):
+        self.pred_model.fit(Xs, Ys)
+        Ypred = model.predict(Xs).astype('int32')
+        acc = accuracy_score(Ypred, Ys.astype('int32'))
+        print(f"Train accuracy on {self.pred_model.__repr__()}: {acc*100} %")
+        return model
+
+    def evaluate_pred_model(self, Xs, Ys):
+        Ypred = self.pred_model.predict(Xs).astype('int32')
+        acc = accuracy_score(Ypred, Ys.astype('int32'))
+        print(f"Test accuracy on {self.pred_model.__repr__()}: {acc*100} %")
+        return acc
 
 if __name__=='__main__':
     tr_fn, val_fn, test_fn = wot.utils.get_file_names(50)
-    x_tr, y_tr = get_svo_model_embeddings(join(paths[50], tr_fn))
-    x_te, y_te = get_svo_model_embeddings(join(paths[50], test_fn))
-    for cls in [LinearRegression, Ridge, SVC]:
-        model = train_sklearnmodel(cls, x_tr, y_tr)
-        evaluate_model(model, x_te, y_te)
+    eval = Evaluator(emb_modelfolder, whichmodel='')
+    x_tr, y_tr = eval.get_svo_model_embeddings(tr_fn)
+    x_te, y_te = eval.get_svo_model_embeddings(test_fn)
+    for predmodel in [LinearRegression, Ridge, SVC]:
+        eval.set_pred_model(predmodel)
+        model.train_pred_model(x_tr, y_tr)
+        model.evaluate_pred_model(x_te, y_te)
 
 """
 import weboftruth as wot
