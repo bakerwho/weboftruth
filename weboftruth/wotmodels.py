@@ -386,7 +386,7 @@ if __name__ == '__main__':
                 for df in dfs ]
     #tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
     sizes = [df.shape[0] for df in dfs]
-    full_df = pd.concat([dfs[0], dfs[1]], dfs[2]])
+    full_df = pd.concat([dfs[0], dfs[1], dfs[2]])
     full_kg = wot.utils.df_to_kg(full_df)
     tr_kg, val_kg, test_kg = full_kg.split_kg(sizes=sizes)
     print(tr_kg.n_rel)

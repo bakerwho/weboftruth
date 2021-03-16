@@ -1,6 +1,8 @@
 README.md
 setup.py
 weboftruth/__init__.py
+weboftruth/check_data.py
+weboftruth/constants.py
 weboftruth/corrupt.py
 weboftruth/evaluator.py
 weboftruth/ner.py
