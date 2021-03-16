@@ -4,9 +4,17 @@ from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 
+from os.path import join
 import pandas as pd
 
 import weboftruth as wot
+import argparse
+#parser = argparse.ArgumentParser()
+
+#parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
+#                      help="truth share of dataset", type=int)
+
+#parser.add_argument("-m_folder", dest="emb_modelfolder", default="/home-nfs/tenzorok/weboftruth/models/TransE_02", help="model folder", type=str)
 
 from weboftruth.utils import read_triples, get_vector_from_triple, Embeddings
 
@@ -75,7 +83,7 @@ from os.path import join
 
 from sklearn.linear_model import LogisticRegression
 
-#tr_fn, val_fn, test_fn = wot.utils.get_file_names(50)
+nearRegression, Ridge,#tr_fn, val_fn, test_fn = wot.utils.get_file_names(50)
 #tr_fp = join(wot.svo_paths[50], tr_fn)
 #test_fp = join(wot.svo_paths[50], test_fn)
 #model_folder = wot.models_path

@@ -64,7 +64,8 @@ if __name__=='__main__':
                                 wot.svo_paths[100])
     full_df = pd.concat([tr_df, val_df, test_df], axis=0)
     full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
-    for ts in [50, 80]:
+    print(svo_paths)
+    for ts in [90]:
         corrupt_kg(full_kg, save_folder=svo_paths[ts],
                     true_share=ts/100)
 

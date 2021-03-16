@@ -30,14 +30,14 @@ torch.manual_seed(0)
 ## pathnames
 # args.path = "~/weboftruth"
 # args.path = "/project2/jevans/aabir/weboftruth/"
-# args.path = "/Users/aabir/Documents/research/weboftruth"
+# args.path = "/home-nfs/tenzorok/weboftruth"
 ################################################################
 
 #-p wot_path -e epochs -m model_type -small False
 parser.add_argument("-p", "--path", dest="path",
                         #default="/home/ubuntu/weboftruth/",
                         #default="/project2/jevans/aabir/weboftruth/",
-                        default="/Users/aabir/Documents/research/weboftruth",
+                        default="/home-nfs/tenzorok/weboftruth",
                         help="path to weboftruth")
 parser.add_argument("-e", "--epochs", dest="epochs",
                         default=100,
@@ -57,11 +57,13 @@ parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
                         help="truth share of dataset", type=int)
 parser.add_argument("-ve", "--valevery", dest="ve", default=10,
                         help="validate every X epochs", type=int)
+#parser.add_argument("-name", dest="name", default=100,
+#                        help="name for model saving", type=int)
 
 args, unknown = parser.parse_known_args()
 
 svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
-svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 80, 50]}
+svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 90, 80, 50]}
 
 models_path = join(args.path, 'models')
 
@@ -73,6 +75,7 @@ except:
 class CustomTransModel():
     def __init__(self, kg, model_type, ts, **kwargs):
         self.kg = kg
+
         self.truth_share = ts
         self.model_type = model_type
         self.diss_type = kwargs.pop('diss_type', 'L2')
@@ -97,8 +100,14 @@ class CustomTransModel():
                                     n_relations=kg.n_rel)
         self.n_entities = kg.n_ent
         self.n_relations = kg.n_rel
+<<<<<<< HEAD
         all_is = [int(d.split('_')[1]) for d in os.listdir(models_path
                         ) if os.path.isdir(join(models_path, d)
+=======
+        print('!!', kg.n_ent, kg.n_rel)
+        all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path
+                        ) if os.path.isdir(join(wot.models_path, d)
+>>>>>>> c2e82e71c3b632cc5a512ccdfb88dccee433073a
                         ) and f'{self.model_type}_' in d]
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
         self.model_path = join(models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
@@ -164,7 +173,7 @@ class CustomTransModel():
         self.tr_losses.append(epoch_loss)
         return epoch_loss
 
-    def validate(self, val_kg):
+    def validate(self, val_kg, istest=False):
         losses = []
         try:
             dataloader = DataLoader(val_kg, batch_size=self.b_size, use_cuda='all')
@@ -177,6 +186,8 @@ class CustomTransModel():
             pos, neg = self.model(h, t, n_h, n_t, r)
             loss = self.loss_fn(pos, neg)
             losses.append(loss.item())
+            if istest:
+                self.logline('\t\tTest loss: {np.mean(losses)}')
         return np.mean(losses)
 
     def train_model(self, n_epochs, val_kg):
@@ -186,12 +197,12 @@ class CustomTransModel():
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
             if ((epoch+1)%args.ve)==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
-                                f'epoch_{self.epochs}_{self.model_type}_model.pt'))
+                                f'epoch_{self.epochs}_{self.model_type}_model_90.pt'))
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
                     self.best_epoch = self.epochs
                     torch.save(self.model.state_dict(), join(self.model_path,
-                                f'best_{self.model_type}_model.pt'))
+                                f'best_90_{self.model_type}_model.pt'))
                 self.logline(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 self.val_losses.append(val_loss)
                 self.val_epochs.append(self.epochs)
@@ -298,12 +309,12 @@ class CustomBilinearModel():
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
             if ((epoch+1)%args.ve)==0 or epoch==0:
                 torch.save(self.model.state_dict(), join(self.model_path,
-                                    f'epoch_{self.epochs}_{self.model_type}_model.pt'))
+                                    f'epoch_{self.epochs}_{self.model_type}_model_{args.name}.pt'))
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
                     self.best_epoch = epoch
                     torch.save(self.model.state_dict(), join(self.model_path,
-                                f'best_{self.model_type}_model.pt'))
+                                f'best_{args.name}_{self.model_type}_model.pt'))
                 self.logline(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 self.val_losses.append(val_loss)
                 self.val_epochs.append(self.epochs)
@@ -319,12 +330,18 @@ if __name__ == '__main__':
     print(f"Epochs: {args.epochs}\nSmall: {args.small}")
     print(f"Truth share: {args.ts}")
     tr_fn, val_fn, test_fn = wot.utils.get_file_names(args.ts)
+    print(tr_fn)
     dfs = wot.utils.read_data(tr_fn, val_fn, test_fn,
                                 svo_paths[args.ts])
     dfs = [df.drop('true_positive', axis=1
                 ) if 'true_positive' in df.columns else df
                 for df in dfs ]
-    tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
+    #tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
+    sizes = [df.shape[0] for df in dfs]
+    full_df = pd.concat([dfs[0], dfs[1]], dfs[2]])
+    full_kg = wot.utils.df_to_kg(full_df)
+    tr_kg, val_kg, test_kg = full_kg.split_kg(sizes=sizes)
+    print(tr_kg.n_rel)
     if args.model_type+'Model' in modelslist(torchkge.models.translation):
         if args.small:
             mod = CustomTransModel(test_kg, model_type=args.model_type,
