@@ -99,16 +99,18 @@ class CustomTransModel():
             self.emb_dim = kwargs.pop('emb_dim', args.emb_dim)
             if self.model_type is 'TransE':
                 self.model = getattr(torchkge.models, f'{model_type}Model'
-                                )(emb_dim=self.emb_dim, n_entities=kg.n_ent,
-                                    n_relations=kg.n_rel,
+                                )(emb_dim=self.emb_dim,
+                                    n_entities=self.trainkg.n_ent,
+                                    n_relations=self.trainkg.n_rel,
                                     dissimilarity_type=self.diss_type)
             else:
                 self.model = getattr(torchkge.models, f'{model_type}Model'
-                                )(emb_dim=self.emb_dim, n_entities=kg.n_ent,
-                                    n_relations=kg.n_rel)
-        self.n_entities = kg.n_ent
-        self.n_relations = kg.n_rel
-        print('!!', kg.n_ent, kg.n_rel)
+                                )(emb_dim=self.emb_dim,
+                                    n_entities=self.trainkg.n_ent,
+                                    n_relations=self.trainkg.n_rel)
+        self.n_entities = self.trainkgn_ent
+        self.n_relations = self.trainkgn_rel
+        print('!!', self.trainkgn_ent, self.trainkgn_rel)
 
         self.setup_model_folder()
         self.save_kg(self.trainkg)
@@ -123,7 +125,7 @@ class CustomTransModel():
         self.ent_vecs, self.rel_vecs = None, None
         print(f'Creating {self.model_type} in folder: {self.model_path}')
         # Legacy code
-        # super(CustomTransModel, self).__init__(self.emb_dim, kg.n_ent, kg.n_rel,
+        # super(CustomTransModel, self).__init__(self.emb_dim, self.trainkgn_ent, self.trainkgn_rel,
         #                     dissimilarity_type=self.diss_type)
 
 
