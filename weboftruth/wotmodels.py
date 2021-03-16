@@ -116,8 +116,12 @@ class CustomTransModel():
         self.n_entities = self.trainkg.n_ent
         self.n_relations = self.trainkg.n_rel
 
+        self.model_path = None
         self.setup_model_folder()
         self.save_kg(self.trainkg, addtxt='train')
+
+        vars_df =  pd.DataFrame.from_dict(vars(self), orient='index')
+        vars_df.to_csv(join(self.model_path, 'wotmodelinfo.txt'), index=False)
 
         self.logfile = join(self.model_path, 'log.txt')
         ## Hyperparameters
@@ -128,6 +132,7 @@ class CustomTransModel():
                                     headers=['variable', 'value']))
         self.ent_vecs, self.rel_vecs = None, None
         print(f'Creating {self.model_type} in folder: {self.model_path}')
+
         # Legacy code
         # super(CustomTransModel, self).__init__(self.emb_dim, self.trainkg.n_ent, self.trainkg.n_rel,
         #                     dissimilarity_type=self.diss_type)
@@ -146,6 +151,8 @@ class CustomTransModel():
         self.val_epochs=[]
 
     def setup_model_folder(self):
+        if self.model_path is not None:
+            return 0
         all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path)
                         #all items in model path
                         if os.path.isdir(join(wot.models_path, d)
@@ -153,7 +160,8 @@ class CustomTransModel():
                         ) and f'{self.model_type}_' in d]
                         #and are of type self.model_type
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
-        self.model_path = join(wot.models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
+        self.model_path = join(wot.models_path, f'{self.model_type}_{str(i).zfill(2)}')
+        print(f" saving model to {self.model_path}")
         os.makedirs(self.model_path, exist_ok=True)
 
     def logline(self, line):
@@ -231,8 +239,10 @@ class CustomTransModel():
     def save_model(self, best=False):
         # files written to self.model_path
         # save torch model
-        modelname = f'e={self.epochs}_ts={self.traints}_{self.model_type}_model'
-        if best:
+        modelname = f'ts={self.traints}_{self.model_type}_model'
+        if not best:
+            modelname = f'e={self.epochs}'+modelname
+        else:
             self.best_epoch = self.epochs
             modelname = 'best_'+modelname
         modelpath = join(self.model_path, modelname+'.pt')
@@ -256,8 +266,6 @@ class CustomTransModel():
 
 def modelslist(module):
     return [x for x in dir(module) if 'model' in x.lower()]
-
-
 
 if __name__ == '__main__':
     print(f"Path: {args.path}\nModel Type: {args.model_type}")

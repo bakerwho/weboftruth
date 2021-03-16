@@ -88,10 +88,10 @@ def load_model(model_folder, which='best_'):
     model.eval()
     return model
 
-def load_kg(modelpath, which=''):
-    kgfile = [f for f in os.listdir(modelpath) if 'kg.csv' in f
+def load_kg(modelfolder, which=''):
+    kgfile = [f for f in os.listdir(modelfolder) if 'kg.csv' in f
                 and which in f][0]
-    return pd.read_csv(join(modelpath, kgfile))
+    return pd.read_csv(join(modelfolder, kgfile))
 
 def parse_metadata(md):
     if not isinstance(md, list) and isinstance(md, str):
@@ -127,8 +127,9 @@ def read_triples(filepath):
     return df[['from', 'to', 'rel']].to_numpy(), df['true_positive'].to_numpy()
 
 class Embeddings():
-    def __init__(self, model):
-        model
+    def __init__(self, model, kg):
+        self.model = model
+        self.kg = kg
         self.ent_vecs, self.rel_vecs = self.model.get_embeddings()
         self.ent2ix, self.rel2ix = self.kg.ent2ix, self.kg.rel2ix
 

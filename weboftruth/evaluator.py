@@ -21,11 +21,12 @@ from weboftruth.utils import *
 paths = wot.svo_paths
 
 class Evaluator():
-    def __init__(self, emb_modelfolder, whichmodel='best_',
+    def __init__(self, modelfolder, whichmodel='best_',
                 emb_model=None):
         if emb_model is None:
-            emb_model = load_model(emb_modelfolder, whichmodel=whichmodel)
-        self.embeddings = Embeddings(emb_model)
+            emb_model = load_model(modelfolder, whichmodel=whichmodel)
+        self.trainkg = load_kg(modelfolder, which='train')
+        self.embeddings = Embeddings(emb_model, self.trainkg)
 
     def set_pred_model(self, predmodelClass, **kwargs):
         self.pred_model = predmodelClass(**kwargs)
