@@ -42,11 +42,12 @@ def df_to_kg(df):
 def kg_to_df(kg):
     i2e, i2r = ({v:k for k,v in dct.items()} for dct in (kg.ent2ix, kg.rel2ix))
     data = []
-    for hr, t in [(k, v) for k, (v,) in kg.dict_of_tails.items()]:
+    for hr, set_of_tails in kg.dict_of_tails.items():
         h, r = hr
-        ent_h, ent_t = i2e[h], i2e[t]
-        rel = i2r[r]
-        data.append([ent_h, ent_t, rel])
+        ent_h, rel = i2e[h], i2r[t]
+        for tail in set_of_tails:
+            ent_t = i2e[tail]
+            data.append([ent_h, ent_t, rel])
     return pd.DataFrame(data, columns=['from', 'to', 'rel'])
 
 
