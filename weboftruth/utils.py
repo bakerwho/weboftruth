@@ -44,7 +44,7 @@ def kg_to_df(kg):
     data = []
     for hr, set_of_tails in kg.dict_of_tails.items():
         h, r = hr
-        ent_h, rel = i2e[h], i2r[t]
+        ent_h, rel = i2e[h], i2r[r]
         for tail in set_of_tails:
             ent_t = i2e[tail]
             data.append([ent_h, ent_t, rel])
