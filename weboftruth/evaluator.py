@@ -42,8 +42,8 @@ class Evaluator():
             Xs.append(self.embeddings.get_vector_from_triple(s, v, o))
         return np.array(Xs), Ys
 
-    def get_svo_glove_embeddings(self, filepath, sovs=None, Ys=None,
-                                ent_glove, rel_glove):
+    def get_svo_glove_embeddings(self, ent_glove, rel_glove,
+                                filepath, sovs=None, Ys=None):
         Xs = []
         if sovs is None and Ys is None:
             sovs, Ys = self.get_triples(filepath)

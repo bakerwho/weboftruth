@@ -39,12 +39,22 @@ def df_to_kg(df):
     assert set(df.columns)==set(cols), f"DataFrame does not contain columns {cols}"
     return torchkge.data_structures.KnowledgeGraph(df)
 
-def load_model(model_folder, whichmodel='best_'):
+def kg_to_df(kg):
+    i2e, i2r = ({v:k for k,v in dct.items()} for dct in (kg.ent2ix, kg.rel2ix))
+    data = []
+    for (h,r), t in [(k, v) for k, (v,) in kg.dict_of_tails.items()]:
+        ent_h, ent_t = i2e[h], i2e[t]
+        rel = i2r[r]
+        data.append([ent_h, ent_t, rel])
+    return pd.DataFrame(data, columns=['from', 'to', 'rel'])
+
+
+def load_model(model_folder, which='best_'):
     """ Loads a model from a .py file by initializing an empty model with
     appropriate parameters read from log.txt
     Inputs:
         model_folder: path containing log.txt and .pt models
-        whichmodel: string to match to .pt name
+        which: string to match to .pt name
     Usage:
         import weboftruth as wot
         from os.path import join
@@ -55,26 +65,31 @@ def load_model(model_folder, whichmodel='best_'):
     vars = parse_metadata(metadata)
     model_type = vars['model_type']
     if model_type in ['TransR', 'TransD', 'TorusE']:
-        model = getattr(models, vars['model_type']+'Model'
+        model = getattr(models, model_type+'Model'
                         )(ent_emb_dim=vars['ent_emb_dim'],
                         rel_emb_dim=vars['rel_emb_dim'],
                         n_entities=vars['n_entities'],
                         n_relations=vars['n_relations'])
     elif model_type in ['DistMult', 'HolE', 'TransE']:
-        model = getattr(models, vars['model_type']+'Model'
+        model = getattr(models, model_type+'Model'
                         )(emb_dim=vars['emb_dim'],
                         n_entities=vars['n_entities'],
                         n_relations=vars['n_relations'])
     else:
         raise ValueError("Not equipped to deal with this model")
     model_file = [x for x in os.listdir(model_folder
-                            ) if whichmodel in x and '.pt' in x][0]
+                            ) if which in x and '.pt' in x][0]
     print(model_file)
     print(vars['emb_dim'])
     model.load_state_dict(torch.load(join(model_folder, model_file),
                                     map_location=torch.device('cpu')))
     model.eval()
     return model
+
+def load_kg(modelpath, which=''):
+    kgfile = [f for f in os.listdir(modelpath) if 'kg.csv' in f
+                and which in f][0]
+    return pd.read_csv(join(modelpath, kgfile))
 
 def parse_metadata(md):
     if not isinstance(md, list) and isinstance(md, str):
@@ -111,6 +126,7 @@ def read_triples(filepath):
 
 class Embeddings():
     def __init__(self, model):
+        model
         self.ent_vecs, self.rel_vecs = self.model.get_embeddings()
         self.ent2ix, self.rel2ix = self.kg.ent2ix, self.kg.rel2ix
 

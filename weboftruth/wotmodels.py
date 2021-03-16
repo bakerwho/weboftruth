@@ -16,7 +16,7 @@ from tqdm.autonotebook import tqdm
 from datetime import datetime
 from tabulate import tabulate
 
-from weboftruth import *
+import weboftruth as wot
 from weboftruth.constants import models_path, svo_paths, svo_data_path
 from weboftruth import utils
 from weboftruth.corrupt import corrupt_kg
@@ -73,10 +73,16 @@ except:
     print("Warning: models folder may not exist")
 
 class CustomTransModel():
-    def __init__(self, kg, model_type, ts, **kwargs):
-        self.kg = kg
+    """
+    Class containing Translation Embedding Models (Torch-KGE) and the
+    Knowledge Graph to be trained on
 
-        self.truth_share = ts
+    The Model and KG are both stored in the folder `self.model_folder`
+
+    Use load_model(model_folder) after initialization to load from disc
+    """
+    def __init__(self, kg, model_type, **kwargs):
+        self.kg = kg
         self.model_type = model_type
         self.diss_type = kwargs.pop('diss_type', 'L2')
         if self.model_type in ['TransR', 'TransD', 'TorusE']:
@@ -101,12 +107,9 @@ class CustomTransModel():
         self.n_entities = kg.n_ent
         self.n_relations = kg.n_rel
         print('!!', kg.n_ent, kg.n_rel)
-        all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path
-                        ) if os.path.isdir(join(wot.models_path, d)
-                        ) and f'{self.model_type}_' in d]
-        i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
-        self.model_path = join(models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
-        os.makedirs(self.model_path, exist_ok=True)
+
+        self.setup_model_folder()
+
         self.logfile = join(self.model_path, 'log.txt')
         ## Hyperparameters
         self.lr = kwargs.pop('lr', args.lr)
@@ -115,6 +118,7 @@ class CustomTransModel():
         self.logline(tabulate([(k,v) for k, v in vars(self).items()],
                                     headers=['variable', 'value']))
         self.ent_vecs, self.rel_vecs = None, None
+        print(f'Creating {self.model_type} in folder: {self.model_path}')
         # Legacy code
         # super(CustomTransModel, self).__init__(self.emb_dim, kg.n_ent, kg.n_rel,
         #                     dissimilarity_type=self.diss_type)
@@ -131,6 +135,14 @@ class CustomTransModel():
         self.best_epoch=-1
         self.val_losses=[]
         self.val_epochs=[]
+
+    def setup_model_folder(self):
+        all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path
+                        ) if os.path.isdir(join(wot.models_path, d)
+                        ) and f'{self.model_type}_' in d]
+        i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
+        self.model_path = join(models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
+        os.makedirs(self.model_path, exist_ok=True)
 
     def logline(self, line):
         with open(self.logfile, 'a+') as f:
@@ -185,29 +197,49 @@ class CustomTransModel():
                 self.logline('\t\tTest loss: {np.mean(losses)}')
         return np.mean(losses)
 
-    def train_model(self, n_epochs, val_kg):
+    def train_model(self, n_epochs, val_kg, ts=''):
         epochs = tqdm(range(n_epochs), unit='epoch')
         for epoch in epochs:
             mean_epoch_loss = self.one_epoch()
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
             if ((epoch+1)%args.ve)==0 or epoch==0:
-                torch.save(self.model.state_dict(), join(self.model_path,
-                                f'epoch_{self.epochs}_{self.model_type}_model_90.pt'))
+                self.save_model(ts=ts)
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
-                    self.best_epoch = self.epochs
-                    torch.save(self.model.state_dict(), join(self.model_path,
-                                f'best_90_{self.model_type}_model.pt'))
+                    self.save_model(best=True, ts=ts)
                 self.logline(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 self.val_losses.append(val_loss)
                 self.val_epochs.append(self.epochs)
         self.logline(f"\nbest epoch: {self.best_epoch}\n")
         self.model.normalize_parameters()
 
+    def save_model(self, best=False, ts=''):
+        # files written to self.model_path
+        # save torch model
+        ts = f"_ts={ts}" if not ts else ts
+        modelname = f'e={self.epochs}{ts}_{self.model_type}_model'
+        if best:
+            self.best_epoch = self.epochs
+            modelname = 'best_'+modelname
+        modelpath = join(self.model_path, modelname+'.pt')
+        print(f' saving f{self.model_type} to {modelpath}')
+        torch.save(self.model.state_dict(), modelpath)
+
+        # save knowledge Graph
+        df = utils.kg_to_df(kg)
+        kgdfname = f'{self.model_type}_kg.csv'
+        kgdfpath = join(self.model_path, kgdfname)
+        if not os.exists(kgdfpath):
+            df.to_csv(kgdfpath, index=False)
+
+    def load_model(self, model_path, which='best_'):
+        self.model = utils.load_model(model_path, which)
+        self.kg = utils.load_kg(model_path)
+
+
 class CustomBilinearModel():
-    def __init__(self, kg, model_type, ts, **kwargs):
+    def __init__(self, kg, model_type, **kwargs):
         self.kg = kg
-        self.truth_share = ts
         self.emb_dim = kwargs.pop('emb_dim', 250)
         self.model_type = model_type
         self.model = getattr(torchkge.models.bilinear, self.model_type + 'Model'
@@ -294,7 +326,7 @@ class CustomBilinearModel():
             self.logline('\t\tTest loss: {np.mean(losses)}')
         return np.mean(losses)
 
-    def train_model(self, n_epochs, val_kg):
+    def train_model(self, n_epochs, val_kg, ts=''):
         epochs = tqdm(range(n_epochs), unit='epoch')
         for epoch in epochs:
             if self.epochs == 0:
@@ -303,21 +335,42 @@ class CustomBilinearModel():
             mean_epoch_loss = self.one_epoch()
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
             if ((epoch+1)%args.ve)==0 or epoch==0:
-                torch.save(self.model.state_dict(), join(self.model_path,
-                                    f'epoch_{self.epochs}_{self.model_type}_model_{args.name}.pt'))
+                self.save_model(ts=ts)
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
-                    self.best_epoch = epoch
-                    torch.save(self.model.state_dict(), join(self.model_path,
-                                f'best_{args.name}_{self.model_type}_model.pt'))
+                    self.save_model(best=True, ts=ts)
                 self.logline(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 self.val_losses.append(val_loss)
                 self.val_epochs.append(self.epochs)
         self.logline(f"\nbest epoch: {self.best_epoch}\n")
         self.model.normalize_parameters()
 
+    def save_model(self, best=False, ts=''):
+        # files written to self.model_path
+        # save torch model
+        ts = f"_ts={ts}" if not ts else ts
+        modelname = f'e={self.epochs}{ts}_{self.model_type}_model'
+        if best:
+            self.best_epoch = self.epochs
+            modelname = 'best_'+modelname
+        modelpath = join(self.model_path, modelname+'.pt')
+        print(f' saving f{self.model_type} to {modelpath}')
+        torch.save(self.model.state_dict(), modelpath)
+
+        # save knowledge Graph
+        df = utils.kg_to_df(kg)
+        kgdfname = f'{self.model_type}_kg.csv'
+        kgdfpath = join(self.model_path, kgdfname)
+        if not os.exists(kgdfpath):
+            df.to_csv(kgdfpath)
+
+    def load_model(self, model_path, which='best_'):
+        self.model = utils.load_model(model_path, which)
+        self.kg = utils.load_kg(model_path)
+
 def modelslist(module):
     return [x for x in dir(module) if 'model' in x.lower()]
+
 
 
 if __name__ == '__main__':
