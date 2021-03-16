@@ -233,7 +233,7 @@ class CustomTransModel():
         df = utils.kg_to_df(kg)
         kgdfname = f'{self.model_type}_kg.csv'
         kgdfpath = join(self.model_path, kgdfname)
-        if not os.exists(kgdfpath):
+        if not os.path.exists(kgdfpath):
             df.to_csv(kgdfpath, index=False)
 
     def load_model(self, model_path, which='best_'):
@@ -365,7 +365,7 @@ class CustomBilinearModel():
         df = utils.kg_to_df(kg)
         kgdfname = f'{self.model_type}_kg.csv'
         kgdfpath = join(self.model_path, kgdfname)
-        if not os.exists(kgdfpath):
+        if not os.path.exists(kgdfpath):
             df.to_csv(kgdfpath)
 
     def load_model(self, model_path, which='best_'):
@@ -379,7 +379,7 @@ class CustomBilinearModel():
         df = utils.kg_to_df(kg)
         kgdfname = f'{self.model_type}_kg.csv'
         kgdfpath = join(self.model_path, kgdfname)
-        if not os.exists(kgdfpath):
+        if not os.path.exists(kgdfpath):
             df.to_csv(kgdfpath, index=False)
 
 def modelslist(module):
