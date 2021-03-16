@@ -79,11 +79,12 @@ class CustomTransModel():
 
     The Model and KG are both stored in the folder `self.model_folder`
 
-    Use load_model(model_folder) after initialization to load from disc
+    Use load_WOTmodel(model_folder) after initialization to load from disc
     """
-    def __init__(self, kg, model_type, **kwargs):
+    def __init__(self, trainkg, traints, model_type, **kwargs):
         # add train_ts/truth_share parameter
-        self.trainkg = kg
+        self.trainkg = trainkg
+        self.traints = traints
         self.model_type = model_type
         self.diss_type = kwargs.pop('diss_type', 'L2')
         if self.model_type in ['TransR', 'TransD', 'TorusE']:
@@ -110,6 +111,7 @@ class CustomTransModel():
         print('!!', kg.n_ent, kg.n_rel)
 
         self.setup_model_folder()
+        self.save_kg(self.trainkg)
 
         self.logfile = join(self.model_path, 'log.txt')
         ## Hyperparameters
@@ -138,9 +140,12 @@ class CustomTransModel():
         self.val_epochs=[]
 
     def setup_model_folder(self):
-        all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path
-                        ) if os.path.isdir(join(wot.models_path, d)
+        all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path)
+                        #all items in model path
+                        if os.path.isdir(join(wot.models_path, d)
+                        # that are directories
                         ) and f'{self.model_type}_' in d]
+                        #and are of type self.model_type
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
         self.model_path = join(wot.models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
         os.makedirs(self.model_path, exist_ok=True)
@@ -223,7 +228,7 @@ class CustomTransModel():
             self.best_epoch = self.epochs
             modelname = 'best_'+modelname
         modelpath = join(self.model_path, modelname+'.pt')
-        print(f' saving f{self.model_type} to {modelpath}')
+        print(f' saving {self.model_type} to {modelpath}')
         torch.save(self.model.state_dict(), modelpath)
 
     def save_kg(self, kg):
@@ -235,8 +240,9 @@ class CustomTransModel():
         kgdfpath = join(self.model_path, kgdfname)
         if not os.path.exists(kgdfpath):
             df.to_csv(kgdfpath, index=False)
+        print(f' saving trainkg to {kgdfpath}')
 
-    def load_model(self, model_path, which='best_'):
+    def load_WOTmodel(self, model_path, which='best_'):
         self.model = utils.load_model(model_path, which)
         self.kg = utils.load_kg(model_path)
 
@@ -358,19 +364,8 @@ class CustomBilinearModel():
             self.best_epoch = self.epochs
             modelname = 'best_'+modelname
         modelpath = join(self.model_path, modelname+'.pt')
-        print(f' saving f{self.model_type} to {modelpath}')
+        print(f' saving {self.model_type} to {modelpath}')
         torch.save(self.model.state_dict(), modelpath)
-
-        # save knowledge Graph
-        df = utils.kg_to_df(kg)
-        kgdfname = f'{self.model_type}_kg.csv'
-        kgdfpath = join(self.model_path, kgdfname)
-        if not os.path.exists(kgdfpath):
-            df.to_csv(kgdfpath)
-
-    def load_model(self, model_path, which='best_'):
-        self.model = utils.load_model(model_path, which)
-        self.trainkg = utils.load_kg(model_path)
 
     def save_kg(self, kg):
         # save knowledge Graph
@@ -381,6 +376,11 @@ class CustomBilinearModel():
         kgdfpath = join(self.model_path, kgdfname)
         if not os.path.exists(kgdfpath):
             df.to_csv(kgdfpath, index=False)
+        print(f' saving trainkg to {kgdfpath}')
+
+    def load_WOTmodel(self, model_path, which='best_'):
+        self.model = utils.load_model(model_path, which)
+        self.kg = utils.load_kg(model_path)
 
 def modelslist(module):
     return [x for x in dir(module) if 'model' in x.lower()]
