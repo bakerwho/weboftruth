@@ -82,7 +82,8 @@ class CustomTransModel():
     Use load_model(model_folder) after initialization to load from disc
     """
     def __init__(self, kg, model_type, **kwargs):
-        self.kg = kg
+        # add train_ts/truth_share parameter
+        self.trainkg = kg
         self.model_type = model_type
         self.diss_type = kwargs.pop('diss_type', 'L2')
         if self.model_type in ['TransR', 'TransD', 'TorusE']:
@@ -91,8 +92,8 @@ class CustomTransModel():
             self.model = getattr(torchkge.models.translation, model_type + 'Model'
                                     )(ent_emb_dim=self.ent_emb_dim,
                                         rel_emb_dim=self.rel_emb_dim,
-                                        n_entities=self.kg.n_ent,
-                                        n_relations=self.kg.n_rel)
+                                        n_entities=self.trainkg.n_ent,
+                                        n_relations=self.trainkg.n_rel)
         else:
             self.emb_dim = kwargs.pop('emb_dim', args.emb_dim)
             if self.model_type is 'TransE':
@@ -125,9 +126,9 @@ class CustomTransModel():
 
 
         try:
-            self.dataloader = DataLoader(self.kg, batch_size=self.b_size, use_cuda='all')
+            self.dataloader = DataLoader(self.trainkg, batch_size=self.b_size, use_cuda='all')
         except AssertionError:
-            self.dataloader = DataLoader(self.kg, batch_size=self.b_size)
+            self.dataloader = DataLoader(self.trainkg, batch_size=self.b_size)
 
         ## Logger
         self.epochs=0
@@ -141,7 +142,7 @@ class CustomTransModel():
                         ) if os.path.isdir(join(wot.models_path, d)
                         ) and f'{self.model_type}_' in d]
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
-        self.model_path = join(models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
+        self.model_path = join(wot.models_path, f'{self.model_type}_{str(i+1).zfill(2)}')
         os.makedirs(self.model_path, exist_ok=True)
 
     def logline(self, line):
@@ -225,7 +226,10 @@ class CustomTransModel():
         print(f' saving f{self.model_type} to {modelpath}')
         torch.save(self.model.state_dict(), modelpath)
 
+    def save_kg(self, kg):
         # save knowledge Graph
+        if kg is None:
+            kg = self.trainkg
         df = utils.kg_to_df(kg)
         kgdfname = f'{self.model_type}_kg.csv'
         kgdfpath = join(self.model_path, kgdfname)
@@ -239,13 +243,13 @@ class CustomTransModel():
 
 class CustomBilinearModel():
     def __init__(self, kg, model_type, **kwargs):
-        self.kg = kg
+        self.trainkg = kg
         self.emb_dim = kwargs.pop('emb_dim', 250)
         self.model_type = model_type
         self.model = getattr(torchkge.models.bilinear, self.model_type + 'Model'
                             )(emb_dim=self.emb_dim,
-                                n_entities = self.kg.n_ent,
-                                n_relations = self.kg.n_rel)
+                                n_entities = self.trainkg.n_ent,
+                                n_relations = self.trainkg.n_rel)
         all_is = [int(d.split('_')[1]) for d in os.listdir(models_path
                                 ) if os.path.isdir(join(models_path, d))
                                     and f'{self.model_type}_' in d]
@@ -262,9 +266,9 @@ class CustomBilinearModel():
                                     headers=['variable', 'value']))
 
         try:
-            self.dataloader = DataLoader(self.kg, batch_size=self.b_size, use_cuda='all')
+            self.dataloader = DataLoader(self.trainkg, batch_size=self.b_size, use_cuda='all')
         except AssertionError:
-            self.dataloader = DataLoader(self.kg, batch_size=self.b_size)
+            self.dataloader = DataLoader(self.trainkg, batch_size=self.b_size)
 
         ## Logger
         self.epochs=0
@@ -366,7 +370,17 @@ class CustomBilinearModel():
 
     def load_model(self, model_path, which='best_'):
         self.model = utils.load_model(model_path, which)
-        self.kg = utils.load_kg(model_path)
+        self.trainkg = utils.load_kg(model_path)
+
+    def save_kg(self, kg):
+        # save knowledge Graph
+        if kg is None:
+            kg = self.trainkg
+        df = utils.kg_to_df(kg)
+        kgdfname = f'{self.model_type}_kg.csv'
+        kgdfpath = join(self.model_path, kgdfname)
+        if not os.exists(kgdfpath):
+            df.to_csv(kgdfpath, index=False)
 
 def modelslist(module):
     return [x for x in dir(module) if 'model' in x.lower()]
