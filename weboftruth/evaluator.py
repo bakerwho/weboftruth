@@ -44,6 +44,7 @@ class Evaluator():
 
     def get_svo_glove_embeddings(self, ent_glove, rel_glove,
                                 filepath, sovs=None, Ys=None):
+        # TODO: generalize to other embeddings
         Xs = []
         if sovs is None and Ys is None:
             sovs, Ys = self.get_triples(filepath)

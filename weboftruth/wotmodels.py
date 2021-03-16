@@ -428,5 +428,5 @@ if __name__ == '__main__':
         cuda.init()
         mod.model.cuda()
         mod.loss_fn.cuda()
-    mod.train_model(args.epochs, val_kg)
+    mod.train_model(args.epochs, tr_kg)
     mod.validate(test_kg, istest=True)
