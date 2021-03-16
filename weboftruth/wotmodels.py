@@ -100,14 +100,9 @@ class CustomTransModel():
                                     n_relations=kg.n_rel)
         self.n_entities = kg.n_ent
         self.n_relations = kg.n_rel
-<<<<<<< HEAD
-        all_is = [int(d.split('_')[1]) for d in os.listdir(models_path
-                        ) if os.path.isdir(join(models_path, d)
-=======
         print('!!', kg.n_ent, kg.n_rel)
         all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path
                         ) if os.path.isdir(join(wot.models_path, d)
->>>>>>> c2e82e71c3b632cc5a512ccdfb88dccee433073a
                         ) and f'{self.model_type}_' in d]
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
         self.model_path = join(models_path, f'{self.model_type}_{str(i+1).zfill(2)}')

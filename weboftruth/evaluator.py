@@ -16,7 +16,7 @@ import argparse
 
 #parser.add_argument("-m_folder", dest="emb_modelfolder", default="/home-nfs/tenzorok/weboftruth/models/TransE_02", help="model folder", type=str)
 
-from weboftruth.utils import read_triples, get_vector_from_triple, Embeddings
+from weboftruth.utils import *
 
 paths = wot.svo_paths
 
