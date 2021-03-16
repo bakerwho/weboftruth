@@ -108,9 +108,8 @@ class CustomTransModel():
                                 )(emb_dim=self.emb_dim,
                                     n_entities=self.trainkg.n_ent,
                                     n_relations=self.trainkg.n_rel)
-        self.n_entities = self.trainkgn_ent
-        self.n_relations = self.trainkgn_rel
-        print('!!', self.trainkgn_ent, self.trainkgn_rel)
+        self.n_entities = self.trainkg.n_ent
+        self.n_relations = self.trainkg.n_rel
 
         self.setup_model_folder()
         self.save_kg(self.trainkg)
@@ -125,7 +124,7 @@ class CustomTransModel():
         self.ent_vecs, self.rel_vecs = None, None
         print(f'Creating {self.model_type} in folder: {self.model_path}')
         # Legacy code
-        # super(CustomTransModel, self).__init__(self.emb_dim, self.trainkgn_ent, self.trainkgn_rel,
+        # super(CustomTransModel, self).__init__(self.emb_dim, self.trainkg.n_ent, self.trainkg.n_rel,
         #                     dissimilarity_type=self.diss_type)
 
 
