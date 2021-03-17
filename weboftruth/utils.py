@@ -11,7 +11,6 @@ import weboftruth as wot
 from weboftruth.constants import *
 
 def get_file_names(ts=100, path='.'):
-    # this does not work for some reason
     svo_paths = {k:join(path, str(k)) for k in [100, 80, 50]}
     print(svo_paths)
     for f in os.listdir(svo_paths[ts]):
@@ -21,7 +20,6 @@ def get_file_names(ts=100, path='.'):
     return tr_fn, val_fn, test_fn
 
 def get_file_paths(ts=100, path='.'):
-    # this does not work for some reason
     svo_paths = {k:join(path, str(k)) for k in [100, 80, 50]}
     print(svo_paths)
     for f in os.listdir(svo_paths[ts]):
@@ -135,7 +133,12 @@ def read_triples(filepath):
     Input:
         filepath: file with format "{subject}\t{verb}\t{object}\t{bool}"
     """
-    df = pd.read_csv(filepath, sep='\t')
+    with open(filepath, 'r') as f:
+        l = f.readline()
+        if all(w in l for w in ('from', 'rel', 'to')):
+            df = pd.read_csv(filepath, sep='\t')
+        else:
+            df = pd.read_csv(filepath, names=['from', 'to', 'rel'], sep='\t')
     return df[['from', 'to', 'rel']].to_numpy(), df['true_positive'].to_numpy()
 
 class Embeddings():
