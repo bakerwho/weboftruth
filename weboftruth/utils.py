@@ -10,22 +10,19 @@ from numpy import concatenate
 import weboftruth as wot
 from weboftruth.constants import *
 
-def get_file_names(ts=100, path='.'):
+def get_file_names(ts=100, path='.', old=False, get_paths=False):
     svo_paths = {k:join(path, str(k)) for k in [100, 80, 50]}
-    print(svo_paths)
+    if old:
+        svo_paths = {k:v+'_old' for k, v in svo_paths.items()}
     for f in os.listdir(svo_paths[ts]):
-        if 'train' in f: tr_fn = f
-        if 'valid' in f: val_fn = f
-        if 'test' in f: test_fn = f
-    return tr_fn, val_fn, test_fn
-
-def get_file_paths(ts=100, path='.'):
-    svo_paths = {k:join(path, str(k)) for k in [100, 80, 50]}
-    print(svo_paths)
-    for f in os.listdir(svo_paths[ts]):
-        if 'train' in f: tr_fn = join(path, str(ts), f)
-        if 'valid' in f: val_fn = join(path, str(ts), f)
-        if 'test' in f: test_fn = join(path, str(ts), f)
+        if get_paths:
+            if 'train' in f: tr_fn = f
+            if 'valid' in f: val_fn = f
+            if 'test' in f: test_fn = f
+        else:
+            if 'train' in f: tr_fn = join(path, str(ts), f)
+            if 'valid' in f: val_fn = join(path, str(ts), f)
+            if 'test' in f: test_fn = join(path, str(ts), f)
     return tr_fn, val_fn, test_fn
 
 def read_data(tr_fn, val_fn, test_fn, path):
@@ -138,7 +135,8 @@ def read_triples(filepath):
         if all(w in l for w in ('from', 'rel', 'to')):
             df = pd.read_csv(filepath, sep='\t')
         else:
-            df = pd.read_csv(filepath, names=['from', 'to', 'rel'], sep='\t')
+            df = pd.read_csv(filepath,
+                names=['from', 'to', 'rel', 'true_positive'], sep='\t')
     return df[['from', 'to', 'rel']].to_numpy(), df['true_positive'].to_numpy()
 
 class Embeddings():
