@@ -280,12 +280,11 @@ if __name__ == '__main__':
     dfs = [df.drop('true_positive', axis=1
                 ) if 'true_positive' in df.columns else df
                 for df in dfs ]
-    #tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
+    tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
     sizes = [df.shape[0] for df in dfs]
-    full_df = pd.concat([dfs[0], dfs[1], dfs[2]])
-    full_kg = wot.utils.df_to_kg(full_df)
-    tr_kg, val_kg, test_kg = full_kg.split_kg(sizes=sizes)
-    print(tr_kg.n_rel)
+    #full_df = pd.concat([dfs[0], dfs[1], dfs[2]])
+    #full_kg = wot.utils.df_to_kg(full_df)
+    #tr_kg, val_kg, test_kg = full_kg.split_kg(sizes=sizes)
     if args.model_type+'Model' in modelslist(torchkge.models.translation):
         if args.small:
             mod = CustomTransModel(trainkg=test_kg, traints=args.ts,

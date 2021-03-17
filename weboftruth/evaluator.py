@@ -82,7 +82,7 @@ if __name__=='__main__':
     evl8 = Evaluator(emb_modelfolder, whichmodel='best_')
     x_tr, y_tr = evl8.get_svo_model_embeddings(tr_fn)
     x_te, y_te = evl8.get_svo_model_embeddings(test_fn)
-    for predmodel in [LinearRegression, Ridge, SVC]:
+    for predmodel in [Ridge, LogisticRegression, SVC]:
         evl8.set_pred_model(predmodel)
         evl8.train_pred_model(x_tr, y_tr)
         evl8.evaluate_pred_model(x_te, y_te)
