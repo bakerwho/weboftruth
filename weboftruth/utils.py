@@ -16,13 +16,13 @@ def get_file_names(ts=100, path='.', old=False, get_paths=False):
         svo_paths = {k:v+'_old' for k, v in svo_paths.items()}
     for f in os.listdir(svo_paths[ts]):
         if get_paths:
-            if 'train' in f: tr_fn = f
-            if 'valid' in f: val_fn = f
-            if 'test' in f: test_fn = f
-        else:
             if 'train' in f: tr_fn = join(path, str(ts), f)
             if 'valid' in f: val_fn = join(path, str(ts), f)
             if 'test' in f: test_fn = join(path, str(ts), f)
+        else:
+            if 'train' in f: tr_fn = f
+            if 'valid' in f: val_fn = f
+            if 'test' in f: test_fn = f
     return tr_fn, val_fn, test_fn
 
 def read_data(tr_fn, val_fn, test_fn, path):
