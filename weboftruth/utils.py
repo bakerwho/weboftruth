@@ -132,28 +132,44 @@ def read_triples(filepath):
     """
     with open(filepath, 'r') as f:
         l = f.readline()
-        if all(w in l for w in ('from', 'rel', 'to')):
+        if all(w in l for w in ('from', 'rel', 'to', 'true_positive')):
             df = pd.read_csv(filepath, sep='\t')
         else:
             df = pd.read_csv(filepath,
                 names=['from', 'to', 'rel', 'true_positive'], sep='\t')
-    return df[['from', 'to', 'rel']].to_numpy(), df['true_positive'].to_numpy()
+    return df[['from', 'rel', 'to']].to_numpy(), df['true_positive'].to_numpy()
 
 class Embeddings():
     def __init__(self, model, kg):
         self.model = model
         self.kg = kg
         self.ent_vecs, self.rel_vecs = self.model.get_embeddings()
+        self.ent_vec_d, self.rel_vec_d = self.ent_vecs.shape[1], self.rel_vecs.shape[1]
         self.ent2ix, self.rel2ix = self.kg.ent2ix, self.kg.rel2ix
 
-    def get_vector_from_triple(self, s, rel, o):
+    def get_vector_from_triple(self, s, o, rel):
         try:
             s_ind, o_ind = self.ent2ix[s], self.ent2ix[o]
             rel_ind = self.rel2ix[rel]
         except (KeyError, IndexError):
             s_ind, rel_ind, o_ind = s, rel, o
-        s_vec, o_vec = self.ent_vecs[s_ind], self.ent_vecs[o_ind]
+        s_vec = self.ent_vecs[s_ind]
+        o_vec = self.ent_vecs[o_ind]
         rel_vec = self.rel_vecs[rel_ind]
+        """
+        try:
+            s_vec = self.ent_vecs[s_ind]
+        except (KeyError, IndexError):
+            s_vec = np.zeros((self.ent_vec_d,))
+        try:
+            o_vec = self.ent_vecs[o_ind]
+        except:
+            o_vec = np.zeros((self.ent_vec_d,))
+        try:
+            rel_vec = self.rel_vecs[rel_ind]
+        except:
+            rel_vec = np.zeros((self.rel_vec_d,))
+        """
         return concatenate((s_vec, rel_vec, o_vec), axis=0)
 
 
