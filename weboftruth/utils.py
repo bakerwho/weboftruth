@@ -148,7 +148,7 @@ class Embeddings():
 
     def get_vector_from_triple(self, s, rel, o):
         try:
-            s_ind, o_ind = self.ent2ix[s], self.ent2ix[v]
+            s_ind, o_ind = self.ent2ix[s], self.ent2ix[o]
             rel_ind = self.rel2ix[rel]
         except (KeyError, IndexError):
             s_ind, rel_ind, o_ind = s, rel, o
