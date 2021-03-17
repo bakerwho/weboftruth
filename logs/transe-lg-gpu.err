@@ -1,37 +1,0 @@
-Traceback (most recent call last):
-  File "/project2/jevans/aabir/weboftruth/weboftruth/wotmodels.py", line 316, in <module>
-    wot.svo_paths[100])
-  File "/project2/jevans/aabir/weboftruth/weboftruth/utils.py", line 20, in read_data
-    sep='\t', header=None, names=['from', 'rel', 'to'])
-  File "/home/aabir/.local/lib/python3.6/site-packages/pandas/io/parsers.py", line 676, in parser_f
-    return _read(filepath_or_buffer, kwds)
-  File "/home/aabir/.local/lib/python3.6/site-packages/pandas/io/parsers.py", line 448, in _read
-    parser = TextFileReader(fp_or_buf, **kwds)
-  File "/home/aabir/.local/lib/python3.6/site-packages/pandas/io/parsers.py", line 880, in __init__
-    self._make_engine(self.engine)
-  File "/home/aabir/.local/lib/python3.6/site-packages/pandas/io/parsers.py", line 1114, in _make_engine
-    self._engine = CParserWrapper(self.f, **self.options)
-  File "/home/aabir/.local/lib/python3.6/site-packages/pandas/io/parsers.py", line 1891, in __init__
-    self._reader = parsers.TextReader(src, **kwds)
-  File "pandas/_libs/parsers.pyx", line 374, in pandas._libs.parsers.TextReader.__cinit__
-  File "pandas/_libs/parsers.pyx", line 674, in pandas._libs.parsers.TextReader._setup_parser_source
-FileNotFoundError: [Errno 2] File /project2/jevans/aabir/weboftruth/data/SVO-tensor-dataset/100/svo_data_ts50_train_1000000.dat does not exist: '/project2/jevans/aabir/weboftruth/data/SVO-tensor-dataset/100/svo_data_ts50_train_1000000.dat'
-Traceback (most recent call last):
-  File "/project2/jevans/aabir/weboftruth/weboftruth/wotmodels.py", line 316, in <module>
-    wot.svo_paths[100])
-  File "/project2/jevans/aabir/weboftruth/weboftruth/utils.py", line 20, in read_data
-    sep='\t', header=None, names=['from', 'rel', 'to'])
-  File "/home/aabir/.local/lib/python3.6/site-packages/pandas/io/parsers.py", line 676, in parser_f
-    return _read(filepath_or_buffer, kwds)
-  File "/home/aabir/.local/lib/python3.6/site-packages/pandas/io/parsers.py", line 448, in _read
-    parser = TextFileReader(fp_or_buf, **kwds)
-  File "/home/aabir/.local/lib/python3.6/site-packages/pandas/io/parsers.py", line 880, in __init__
-    self._make_engine(self.engine)
-  File "/home/aabir/.local/lib/python3.6/site-packages/pandas/io/parsers.py", line 1114, in _make_engine
-    self._engine = CParserWrapper(self.f, **self.options)
-  File "/home/aabir/.local/lib/python3.6/site-packages/pandas/io/parsers.py", line 1891, in __init__
-    self._reader = parsers.TextReader(src, **kwds)
-  File "pandas/_libs/parsers.pyx", line 374, in pandas._libs.parsers.TextReader.__cinit__
-  File "pandas/_libs/parsers.pyx", line 674, in pandas._libs.parsers.TextReader._setup_parser_source
-FileNotFoundError: [Errno 2] File /project2/jevans/aabir/weboftruth/data/SVO-tensor-dataset/100/svo_data_ts80_train_1000000.dat does not exist: '/project2/jevans/aabir/weboftruth/data/SVO-tensor-dataset/100/svo_data_ts80_train_1000000.dat'
-  0%|          | 0/200 [00:00<?, ?epoch/s]  0%|          | 1/200 [05:15<17:25:59, 315.37s/epoch]  1%|          | 2/200 [10:29<17:19:28, 314.99s/epoch]  2%|▏         | 3/200 [15:44<17:13:58, 314.92s/epoch]  2%|▏         | 4/200 [20:59<17:09:16, 315.09s/epoch]  2%|▎         | 5/200 [26:15<17:04:22, 315.19s/epoch]  3%|▎         | 6/200 [31:31<16:59:46, 315.39s/epoch]  4%|▎         | 7/200 [36:46<16:54:49, 315.49s/epoch]  4%|▍         | 8/200 [42:02<16:50:17, 315.72s/epoch]  4%|▍         | 9/200 [47:18<16:45:14, 315.78s/epoch]  5%|▌         | 10/200 [52:35<16:40:24, 315.92s/epoch]  6%|▌         | 11/200 [57:51<16:35:14, 315.95s/epoch]  6%|▌         | 12/200 [1:03:07<16:30:24, 316.09s/epoch]  6%|▋         | 13/200 [1:08:23<16:25:11, 316.10s/epoch]  7%|▋         | 14/200 [1:13:40<16:20:17, 316.23s/epoch]  8%|▊         | 15/200 [1:18:56<16:15:00, 316.22s/epoch]  8%|▊         | 16/200 [1:24:12<16:10:03, 316.32s/epoch]  8%|▊         | 17/200 [1:29:29<16:04:42, 316.30s/epoch]  9%|▉         | 18/200 [1:34:45<15:59:40, 316.38s/epoch] 10%|▉         | 19/200 [1:40:02<15:54:22, 316.37s/epoch] 10%|█         | 20/200 [1:45:21<15:51:23, 317.13s/epoch]slurmstepd-midway2-gpu04: error: *** JOB 2292327 ON midway2-gpu04 CANCELLED AT 2020-06-10T18:58:06 ***

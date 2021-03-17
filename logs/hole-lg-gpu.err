@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "/project2/jevans/aabir/weboftruth/weboftruth/wotmodels.py", line 314, in <module>
-    tr_fn, val_fn, test_fn = wot.utils.get_file_names(args.ts)
-  File "/project2/jevans/aabir/weboftruth/weboftruth/utils.py", line 12, in get_file_names
-    for f in os.listdir(wot.wotmodels.svo_paths[ts]):
-FileNotFoundError: [Errno 2] No such file or directory: '/home/ubuntu/weboftruth/data/SVO-tensor-dataset/100'

@@ -1,7 +1,0 @@
-run started at  Mon Jun 8 23:47:15 CDT 2020
-Path: /project2/jevans/aabir/weboftruth/
-Model Type: DistMult
-Epochs: 200
-Small: True
-Using cuda.
-echo run ended at  Tue Jun 9 17:10:42 CDT 2020

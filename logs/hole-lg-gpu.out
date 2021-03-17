@@ -1,9 +1,0 @@
-run started at  Wed Jun 10 13:02:17 CDT 2020
-Warning: models folder may not exist
-Warning: models folder may not exist
-Path: /home/ubuntu/weboftruth/
-Model Type: HolE
-Epochs: 200
-Small: False
-Truth share: 100
-echo run ended at  Wed Jun 10 13:02:52 CDT 2020

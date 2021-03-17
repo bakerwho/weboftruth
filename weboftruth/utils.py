@@ -20,6 +20,16 @@ def get_file_names(ts=100, path='.'):
         if 'test' in f: test_fn = f
     return tr_fn, val_fn, test_fn
 
+def get_file_paths(ts=100, path='.'):
+    # this does not work for some reason
+    svo_paths = {k:join(path, str(k)) for k in [100, 80, 50]}
+    print(svo_paths)
+    for f in os.listdir(svo_paths[ts]):
+        if 'train' in f: tr_fn = join(path, str(ts), f)
+        if 'valid' in f: val_fn = join(path, str(ts), f)
+        if 'test' in f: test_fn = join(path, str(ts), f)
+    return tr_fn, val_fn, test_fn
+
 def read_data(tr_fn, val_fn, test_fn, path):
     try:
         tr_df = pd.read_csv(join(path, tr_fn),

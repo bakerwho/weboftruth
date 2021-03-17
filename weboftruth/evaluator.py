@@ -72,7 +72,7 @@ class Evaluator():
         return acc
 
 if __name__=='__main__':
-    tr_fn, val_fn, test_fn = wot.utils.get_file_names(50)
+    tr_fn, val_fn, test_fn = wot.utils.get_file_paths(50)
     evl8 = Evaluator(emb_modelfolder, whichmodel='')
     x_tr, y_tr = evl8.get_svo_model_embeddings(tr_fn)
     x_te, y_te = evl8.get_svo_model_embeddings(test_fn)
