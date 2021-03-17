@@ -11,10 +11,10 @@ import weboftruth as wot
 from weboftruth.constants import *
 
 def get_file_names(ts=100, path='.', old=False, get_paths=False):
-    svo_paths = {k:join(path, str(k)) for k in [100, 80, 50]}
+    svo_path = join(path, str(ts))
     if old:
-        svo_paths = {k:v+'_old' for k, v in svo_paths.items()}
-    for f in os.listdir(svo_paths[ts]):
+        svo_path = svo_path+'_old'
+    for f in os.listdir(svo_path):
         if get_paths:
             if 'train' in f: tr_fn = join(path, str(ts), f)
             if 'valid' in f: val_fn = join(path, str(ts), f)

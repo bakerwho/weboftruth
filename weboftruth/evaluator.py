@@ -74,10 +74,11 @@ class Evaluator():
 if __name__=='__main__':
     ts=50
     w_model = 'best_'
-    emb_modelfolder = '/workspace/weboftruth/models/TransE_01'
+    emb_modelfolder = './models/TransE_01'
     tr_fn, val_fn, test_fn = wot.utils.get_file_names(ts,
-                        '/workspace/weboftruth/data/SVO-tensor-dataset',
+                        './data/SVO-tensor-dataset',
                         old=True, get_paths=True)
+    print(tr_fn, val_fn, test_fn)
     evl8 = Evaluator(emb_modelfolder, whichmodel='best_')
     x_tr, y_tr = evl8.get_svo_model_embeddings(tr_fn)
     x_te, y_te = evl8.get_svo_model_embeddings(test_fn)
