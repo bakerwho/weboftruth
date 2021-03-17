@@ -5,6 +5,7 @@ from torchkge import models
 import torch
 import re
 import pandas as pd
+from numpy import concatenate
 
 import weboftruth as wot
 from weboftruth.constants import *
@@ -91,7 +92,8 @@ def load_model(model_folder, which='best_'):
 def load_kg(modelfolder, which=''):
     kgfile = [f for f in os.listdir(modelfolder) if 'kg.csv' in f
                 and which in f][0]
-    return pd.read_csv(join(modelfolder, kgfile))
+    df = pd.read_csv(join(modelfolder, kgfile))
+    return torchkge.KnowledgeGraph(df)
 
 def parse_metadata(md):
     if not isinstance(md, list) and isinstance(md, str):
@@ -141,7 +143,7 @@ class Embeddings():
             s_ind, rel_ind, o_ind = s, rel, o
         s_vec, o_vec = self.ent_vecs[s_ind], self.ent_vecs[o_ind]
         rel_vec = self.rel_vecs[rel_ind]
-        return np.concatenate((s_vec, rel_vec, o_vec), axis=0)
+        return concatenate((s_vec, rel_vec, o_vec), axis=0)
 
 
 me = """variable    value

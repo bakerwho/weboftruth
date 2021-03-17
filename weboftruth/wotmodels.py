@@ -116,12 +116,11 @@ class CustomTransModel():
         self.n_entities = self.trainkg.n_ent
         self.n_relations = self.trainkg.n_rel
 
-        self.model_path = None
-        self.setup_model_folder()
+        self.set_model_path(kwargs.pop('model_path', None))
         self.save_kg(self.trainkg, addtxt='train')
 
         vars_df =  pd.DataFrame.from_dict(vars(self), orient='index')
-        vars_df.to_csv(join(self.model_path, 'wotmodelinfo.txt'), index=False)
+        vars_df.to_csv(join(self.model_path, f'{self.model_type}_modelinfo.txt'))
 
         self.logfile = join(self.model_path, 'log.txt')
         ## Hyperparameters
@@ -150,9 +149,10 @@ class CustomTransModel():
         self.val_losses=[]
         self.val_epochs=[]
 
-    def setup_model_folder(self):
-        if self.model_path is not None:
-            return 0
+    def set_model_path(self, folder_name=None):
+        if folder_name is not None:
+            self.model_path = folder_name
+            return
         all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path)
                         #all items in model path
                         if os.path.isdir(join(wot.models_path, d)
@@ -260,7 +260,9 @@ class CustomTransModel():
             df.to_csv(kgdfpath, index=False)
         print(f' saving trainkg to {kgdfpath}')
 
-    def load_WOTmodel(self, model_path, which='best_'):
+    def load_WOTmodel(self, model_path=None, which='best_'):
+        if model_path is None:
+            model_path = self.model_path
         self.model = utils.load_model(model_path, which)
         self.kg = utils.load_kg(model_path)
 

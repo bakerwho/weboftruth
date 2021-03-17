@@ -22,10 +22,13 @@ paths = wot.svo_paths
 
 class Evaluator():
     def __init__(self, modelfolder, whichmodel='best_',
-                emb_model=None):
+                emb_model=None, trainkg=None):
         if emb_model is None:
-            emb_model = load_model(modelfolder, whichmodel=whichmodel)
-        self.trainkg = load_kg(modelfolder, which='train')
+            emb_model = load_model(modelfolder, which=whichmodel)
+        if trainkg is None:
+            self.trainkg = load_kg(modelfolder, which='train')
+        else:
+            self.trainkg = trainkg
         self.embeddings = Embeddings(emb_model, self.trainkg)
 
     def set_pred_model(self, predmodelClass, **kwargs):
@@ -57,10 +60,10 @@ class Evaluator():
 
     def train_pred_model(self, Xs, Ys, **kwargs):
         self.pred_model.fit(Xs, Ys)
-        Ypred = model.predict(Xs).astype('int32')
+        Ypred = self.pred_model.predict(Xs).astype('int32')
         acc = accuracy_score(Ypred, Ys.astype('int32'))
         print(f"Train accuracy on {self.pred_model.__repr__()}: {acc*100} %")
-        return model
+        return acc
 
     def evaluate_pred_model(self, Xs, Ys):
         Ypred = self.pred_model.predict(Xs).astype('int32')
@@ -70,13 +73,13 @@ class Evaluator():
 
 if __name__=='__main__':
     tr_fn, val_fn, test_fn = wot.utils.get_file_names(50)
-    eval = Evaluator(emb_modelfolder, whichmodel='')
-    x_tr, y_tr = eval.get_svo_model_embeddings(tr_fn)
-    x_te, y_te = eval.get_svo_model_embeddings(test_fn)
+    evl8 = Evaluator(emb_modelfolder, whichmodel='')
+    x_tr, y_tr = evl8.get_svo_model_embeddings(tr_fn)
+    x_te, y_te = evl8.get_svo_model_embeddings(test_fn)
     for predmodel in [LinearRegression, Ridge, SVC]:
-        eval.set_pred_model(predmodel)
-        model.train_pred_model(x_tr, y_tr)
-        model.evaluate_pred_model(x_te, y_te)
+        evl8.set_pred_model(predmodel)
+        evl8.train_pred_model(x_tr, y_tr)
+        evl8.evaluate_pred_model(x_te, y_te)
 
 """
 import weboftruth as wot
