@@ -17,7 +17,7 @@ from datetime import datetime
 from tabulate import tabulate
 
 import weboftruth as wot
-from weboftruth.constants import models_path, svo_paths, svo_data_path
+#from weboftruth.constants import models_path, svo_paths, svo_data_path
 from weboftruth import utils
 from weboftruth.corrupt import corrupt_kg
 
@@ -34,11 +34,12 @@ torch.manual_seed(0)
 ################################################################
 
 #-p wot_path -e epochs -m model_type -small False
-parser.add_argument("-p", "--path", dest="path",
-                        #default="/home/ubuntu/weboftruth/",
-                        #default="/project2/jevans/aabir/weboftruth/",
-                        default="/home-nfs/tenzorok/weboftruth",
-                        help="path to weboftruth")
+parser.add_argument("-dp", "--dpath", dest="datapath",
+                        help="path to data")
+parser.add_argument("-ds", "--dataset", dest="dataset",
+                        help="dataset name", type=str)
+parser.add_argument("-mp", "--mpath", dest="modelpath",
+                        help="path to models")
 parser.add_argument("-e", "--epochs", dest="epochs",
                         default=100,
                         help="no. of training epochs", type=int)
@@ -62,13 +63,13 @@ parser.add_argument("-ve", "--valevery", dest="ve", default=10,
 
 args, unknown = parser.parse_known_args()
 
-svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
-svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 90, 80, 50]}
+#svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
+#svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 90, 80, 50]}
 
-models_path = join(args.path, 'models')
+args.modelpath = args.modelpath
 
 try:
-    os.makedirs(models_path, exist_ok=True)
+    os.makedirs(args.modelpath, exist_ok=True)
 except:
     print("Warning: models folder may not exist")
 
@@ -153,14 +154,14 @@ class CustomTransModel():
         if folder_name is not None:
             self.model_path = folder_name
             return
-        all_is = [int(d.split('_')[1]) for d in os.listdir(wot.models_path)
+        all_is = [int(d.split('_')[1]) for d in os.listdir(wot.args.modelpath)
                         #all items in model path
-                        if os.path.isdir(join(wot.models_path, d)
+                        if os.path.isdir(join(wot.args.modelpath, d)
                         # that are directories
                         ) and f'{self.model_type}_' in d]
                         #and are of type self.model_type
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
-        self.model_path = join(wot.models_path, f'{self.model_type}_{str(i).zfill(2)}')
+        self.model_path = join(wot.args.modelpath, f'{self.model_type}_{str(i).zfill(2)}')
         print(f" saving model to {self.model_path}")
         os.makedirs(self.model_path, exist_ok=True)
 
@@ -200,7 +201,7 @@ class CustomTransModel():
         self.tr_losses.append(epoch_loss)
         return epoch_loss
 
-    def validate(self, val_kg, istest=False):
+    def validate(self, val_kg, istest=False, verbose=False):
         losses = []
         try:
             dataloader = DataLoader(val_kg, batch_size=self.b_size, use_cuda='all')
@@ -214,7 +215,9 @@ class CustomTransModel():
             loss = self.loss_fn(pos, neg)
             losses.append(loss.item())
             if istest:
-                self.logline('\t\tTest loss: {np.mean(losses)}')
+                self.logline(f'\t\tTest loss: {np.mean(losses)}')
+        if verbose:
+            print(f'\t\tTest loss after epoch {self.epochs}: {np.mean(losses)}')
         return np.mean(losses)
 
     def train_model(self, n_epochs, val_kg):
@@ -270,13 +273,17 @@ def modelslist(module):
     return [x for x in dir(module) if 'model' in x.lower()]
 
 if __name__ == '__main__':
-    print(f"Path: {args.path}\nModel Type: {args.model_type}")
+    print(f"Datapath: {args.datapath}\nModelpath: {args.modelpath}")
+    print(f"Dataset: {args.dataset}\n")
+    print(f"Model Type: {args.model_type}")
     print(f"Epochs: {args.epochs}\nSmall: {args.small}")
     print(f"Truth share: {args.ts}")
-    tr_fn, val_fn, test_fn = wot.utils.get_file_names(args.ts)
-    print(tr_fn)
+    #tr_fn, val_fn, test_fn = wot.utils.get_svo_file_names(args.ts)
+    tr_fn, val_fn, test_fn = wot.utils.get_github_filenames(args.datapath,
+                                args.dataset)
+    #print(tr_fn)
     dfs = wot.utils.read_data(tr_fn, val_fn, test_fn,
-                                svo_paths[args.ts])
+                                join(args.datapath, args.dataset))
     dfs = [df.drop('true_positive', axis=1
                 ) if 'true_positive' in df.columns else df
                 for df in dfs ]
@@ -309,8 +316,11 @@ if __name__ == '__main__':
         cuda.init()
         mod.model.cuda()
         mod.loss_fn.cuda()
+    mod.set_model_path(args.modelpath)
     mod.train_model(args.epochs, tr_kg)
-    mod.save_kg(test_kg, 'test')
-    mod.validate(test_kg, istest=True)
+    #mod.save_kg(test_kg, 'test')
+    print('\nTest set performance:')
+    mod.validate(test_kg, istest=True, verbose=True)
     #mod.save_kg(val_kg, 'val')
-    #mod.validate(val_kg, istest=True)
+    print('\nValidation set performance:')
+    mod.validate(val_kg, istest=True, verbose=True)

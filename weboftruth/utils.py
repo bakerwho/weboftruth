@@ -10,7 +10,7 @@ from numpy import concatenate
 import weboftruth as wot
 from weboftruth.constants import *
 
-def get_file_names(ts=100, path='.', old=False, get_paths=False):
+def get_svo_file_names(ts=100, path='.', old=False, get_paths=False):
     svo_path = join(path, str(ts))
     if old:
         svo_path = svo_path+'_old'
@@ -23,6 +23,14 @@ def get_file_names(ts=100, path='.', old=False, get_paths=False):
             if 'train' in f: tr_fn = f
             if 'valid' in f: val_fn = f
             if 'test' in f: test_fn = f
+    return tr_fn, val_fn, test_fn
+
+def get_github_filenames(datapath, dataset, id=True):
+    id_str = 'as_id_' if id else 'as_text_'
+    for f in os.listdir(join(datapath, dataset)):
+        if id_str+'train' in f: tr_fn = f
+        if id_str+'valid' in f: val_fn = f
+        if id_str+'test' in f: test_fn = f
     return tr_fn, val_fn, test_fn
 
 def read_data(tr_fn, val_fn, test_fn, path):
