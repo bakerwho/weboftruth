@@ -88,6 +88,9 @@ class CustomTransModel():
         self.traints = traints
         self.model_type = model_type
         self.diss_type = kwargs.pop('diss_type', 'L2')
+        self.dataset_name = kwargs.pop('dataset_name', None)
+        if self.dataset_name:
+            self.logline(f'Dataset: {self.dataset_name}')
         if self.model_type in ['TransR', 'TransD', 'TorusE']:
             self.ent_emb_dim = kwargs.pop('ent_emb_dim', args.emb_dim)
             self.rel_emb_dim = kwargs.pop('rel_emb_dim', args.emb_dim)
@@ -161,7 +164,9 @@ class CustomTransModel():
                         ) and f'{self.model_type}_' in d]
                         #and are of type self.model_type
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
-        self.model_path = join(wot.args.modelpath, f'{self.model_type}_{str(i).zfill(2)}')
+        ds = self.dataset_name
+        ds = ds+'_' if ds else ''
+        self.model_path = join(wot.args.modelpath, f'{self.model_type}_{ds}{str(i).zfill(2)}')
         print(f" saving model to {self.model_path}")
         os.makedirs(self.model_path, exist_ok=True)
 
