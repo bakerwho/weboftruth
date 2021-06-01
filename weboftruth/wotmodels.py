@@ -120,7 +120,7 @@ class CustomTransModel():
         self.n_entities = self.trainkg.n_ent
         self.n_relations = self.trainkg.n_rel
 
-        self.set_model_path(kwargs.pop('model_path', None))
+        self.create_model_path(kwargs.pop('model_path', None))
         if args.shuffle:
             self.save_kg(self.trainkg, addtxt='train')
 
@@ -154,11 +154,10 @@ class CustomTransModel():
         self.val_losses=[]
         self.val_epochs=[]
 
-    def set_model_path(self, folder_name=None):
-        if folder_name is not None:
-            self.model_path = folder_name
+    def create_model_path(self, folder_name=None):
+        if folder_name is None:
             return
-        all_is = [int(d.split('_')[1]) for d in os.listdir(args.modelpath)
+        all_is = [int(d.split('_')[1]) for d in os.listdir(folder_name)
                         #all items in model path
                         if os.path.isdir(join(args.modelpath, d)
                         # that are directories
@@ -167,7 +166,7 @@ class CustomTransModel():
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
         ds = self.dataset_name
         ds = ds+'_' if ds else ''
-        self.model_path = join(args.modelpath, f'{self.model_type}_{ds}{str(i).zfill(2)}')
+        self.model_path = join(folder_name, f'{self.model_type}_{ds}{str(i).zfill(2)}')
         print(f" saving model to {self.model_path}")
         os.makedirs(self.model_path, exist_ok=True)
 
@@ -339,7 +338,7 @@ if __name__ == '__main__':
         cuda.init()
         mod.model.cuda()
         mod.loss_fn.cuda()
-    mod.set_model_path(args.modelpath)
+    mod.create_model_path(args.modelpath)
     mod.train_model(args.epochs, tr_kg)
     if args.shuffle:
         mod.save_kg(test_kg, 'test')
