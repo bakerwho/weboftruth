@@ -164,7 +164,7 @@ class CustomTransModel():
         ds = self.dataset_name
         ds = ds+'_' if ds else ''
         self.model_path = join(folder_name, f'{self.model_type}_{ds}{str(i).zfill(2)}')
-        print(f"{self.model_type} self.model_path: {mod.model_path}")
+        print(f"{self.model_type} self.model_path: {self.model_path}")
         os.makedirs(self.model_path, exist_ok=True)
 
     def logline(self, line):
@@ -253,7 +253,7 @@ class CustomTransModel():
             modelname = f'e={self.epochs}'+modelname
         else:
             self.best_epoch = self.epochs
-            modelname = 'best_'+modelname
+            modelname = f'best_e={self.epochs}'+modelname
         modelpath = join(self.model_path, modelname+'.pt')
         print(f' saving {self.model_type} to {modelpath}')
         torch.save(self.model.state_dict(), modelpath)
@@ -267,7 +267,7 @@ class CustomTransModel():
         kgdfpath = join(self.model_path, kgdfname)
         if not os.path.exists(kgdfpath):
             df.to_csv(kgdfpath, index=False)
-        print(f' saving trainkg to {kgdfpath}')
+        print(f' saving {addtxt} kg to {kgdfpath}')
 
     def load_WOTmodel(self, model_path=None, which='best_'):
         if model_path is None:
