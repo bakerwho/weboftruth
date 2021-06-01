@@ -33,19 +33,32 @@ def get_github_filenames(datapath, dataset, id=True):
         if id_str+'test' in f: test_fn = f
     return tr_fn, val_fn, test_fn
 
-def read_data(tr_fn, val_fn, test_fn, path):
-    try:
-        tr_df = pd.read_csv(join(path, tr_fn),
-                           sep='\t', names=['from', 'rel', 'to'])
-        val_df = pd.read_csv(join(path, val_fn),
-                           sep='\t', names=['from', 'rel', 'to'])
-        test_df = pd.read_csv(join(path, test_fn),
-                           sep='\t', names=['from', 'rel', 'to'])
-    except:
-        tr_df = pd.read_csv(join(path, tr_fn), sep='\t')
-        val_df = pd.read_csv(join(path, val_fn), sep='\t')
-        test_df = pd.read_csv(join(path, test_fn), sep='\t')
+def read_data(tr_fn, val_fn, test_fn, path, explode_rels=False, rel_sep=None,
+                colnames=['from', 'rel', 'to']):
+    tr_df = pd.read_csv(join(path, tr_fn),
+                       sep='\t', names=colnames)
+    val_df = pd.read_csv(join(path, val_fn),
+                       sep='\t', names=colnames)
+    test_df = pd.read_csv(join(path, test_fn),
+                       sep='\t', names=colnames)
+    if explode_rels:
+        if rel_sep is None:
+            print("Using default separator: '/'")
+            rel_sep = '/'
+        tr_df, val_df, test_df = (explode_rel_column(df, colnames[1], rel_sep)
+                                    for df in (tr_df, val_df, test_df))
+
     return tr_df, val_df, test_df
+
+def explode_rel_column(df, rel_colname='rel', rel_sep='/'):
+    assert rel_colname in df.columns, f"'{rel_colname}' not in column names"
+    rel_col2 = rel_colname+'_full'
+    df.rename(columns={rel_colname: rel_col2, inplace=True)
+    df[rel_colname] = df.rel2.apply(lambda x: [i for i in x.split(
+                                rel_sep) if len(i)>0])
+    df = df.explode(rel_colname)
+    return df
+
 
 def df_to_kg(df):
     assert df.shape[1]==3, 'Invalid DataFrame shape on axis 1'

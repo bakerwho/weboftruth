@@ -58,8 +58,8 @@ parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
                         help="truth share of dataset", type=int)
 parser.add_argument("-ve", "--valevery", dest="ve", default=10,
                         help="validate every X epochs", type=int)
-#parser.add_argument("-name", dest="name", default=100,
-#                        help="name for model saving", type=int)
+parser.add_argument("-shuffle", "--shuffle", dest="shuffle", default=False,
+                        help="to shuffle data at datapath", type=bool)
 
 args, unknown = parser.parse_known_args()
 
@@ -121,7 +121,8 @@ class CustomTransModel():
         self.n_relations = self.trainkg.n_rel
 
         self.set_model_path(kwargs.pop('model_path', None))
-        self.save_kg(self.trainkg, addtxt='train')
+        if args.shuffle:
+            self.save_kg(self.trainkg, addtxt='train')
 
         vars_df =  pd.DataFrame.from_dict(vars(self), orient='index')
         vars_df.to_csv(join(self.model_path, f'{self.model_type}_modelinfo.txt'))
@@ -157,16 +158,16 @@ class CustomTransModel():
         if folder_name is not None:
             self.model_path = folder_name
             return
-        all_is = [int(d.split('_')[1]) for d in os.listdir(wot.args.modelpath)
+        all_is = [int(d.split('_')[1]) for d in os.listdir(args.modelpath)
                         #all items in model path
-                        if os.path.isdir(join(wot.args.modelpath, d)
+                        if os.path.isdir(join(args.modelpath, d)
                         # that are directories
                         ) and f'{self.model_type}_' in d]
                         #and are of type self.model_type
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
         ds = self.dataset_name
         ds = ds+'_' if ds else ''
-        self.model_path = join(wot.args.modelpath, f'{self.model_type}_{ds}{str(i).zfill(2)}')
+        self.model_path = join(args.modelpath, f'{self.model_type}_{ds}{str(i).zfill(2)}')
         print(f" saving model to {self.model_path}")
         os.makedirs(self.model_path, exist_ok=True)
 
@@ -287,20 +288,33 @@ if __name__ == '__main__':
     print(f"Model Type: {args.model_type}")
     print(f"Epochs: {args.epochs}\nSmall: {args.small}")
     print(f"Truth share: {args.ts}")
+
+    # Load data
     #tr_fn, val_fn, test_fn = wot.utils.get_svo_file_names(args.ts)
     tr_fn, val_fn, test_fn = wot.utils.get_github_filenames(args.datapath,
                                 args.dataset)
     #print(tr_fn)
+    explode = 'FB15' in args.dataset.upper()
     dfs = wot.utils.read_data(tr_fn, val_fn, test_fn,
-                                join(args.datapath, args.dataset))
+                                join(args.datapath, args.dataset),
+                                explode_rels=explode,
+                                )
     dfs = [df.drop('true_positive', axis=1
                 ) if 'true_positive' in df.columns else df
                 for df in dfs ]
-    tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
-    sizes = [df.shape[0] for df in dfs]
-    #full_df = pd.concat([dfs[0], dfs[1], dfs[2]])
-    #full_kg = wot.utils.df_to_kg(full_df)
-    #tr_kg, val_kg, test_kg = full_kg.split_kg(sizes=sizes)
+
+    # optionally shuffle dataset
+    if args.shuffle:
+        print("Shuffling and resplitting train/val/test data")
+        sizes = [df.shape[0] for df in dfs]
+        full_df = pd.concat([dfs[0], dfs[1], dfs[2]])
+        full_kg = wot.utils.df_to_kg(full_df)
+        tr_kg, val_kg, test_kg = full_kg.split_kg(sizes=sizes)
+    else:
+        tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
+
+    # Initialize model
+
     if args.model_type+'Model' in modelslist(torchkge.models.translation):
         if args.small:
             mod = CustomTransModel(trainkg=test_kg, traints=args.ts,
@@ -327,9 +341,11 @@ if __name__ == '__main__':
         mod.loss_fn.cuda()
     mod.set_model_path(args.modelpath)
     mod.train_model(args.epochs, tr_kg)
-    #mod.save_kg(test_kg, 'test')
+    if args.shuffle:
+        mod.save_kg(test_kg, 'test')
     print('\nTest set performance:')
     mod.validate(test_kg, istest=True, verbose=True)
-    #mod.save_kg(val_kg, 'val')
+    if args.shuffle:
+        mod.save_kg(val_kg, 'val')
     print('\nValidation set performance:')
     mod.validate(val_kg, istest=True, verbose=True)
