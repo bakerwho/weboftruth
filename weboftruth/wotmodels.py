@@ -225,7 +225,7 @@ class CustomTransModel():
             print(f'\t\tTest loss after epoch {self.epochs}: {np.mean(losses)}')
         return np.mean(losses)
 
-    def train_model(self, n_epochs, val_kg):
+    def train_model(self, n_epochs, val_kg, verbose=False):
         epochs = tqdm(range(n_epochs), unit='epoch')
         if self.epochs == 0:
             dt = datetime.now().strftime("%Y-%m-%d %H:%M:%S")+' UTC'
@@ -233,6 +233,8 @@ class CustomTransModel():
         for epoch in epochs:
             mean_epoch_loss = self.one_epoch()
             self.logline(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
+            if verbose:
+                print(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
             if ((epoch+1)%args.ve)==0 or epoch==0:
                 self.save_model()
                 val_loss = self.validate(val_kg)
@@ -241,6 +243,8 @@ class CustomTransModel():
                 self.logline(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 self.val_losses.append(val_loss)
                 self.val_epochs.append(self.epochs)
+                if verbose:
+                    print(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
         self.logline(f"\nbest epoch: {self.best_epoch}\n")
         self.model.normalize_parameters()
 
