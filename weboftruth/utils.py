@@ -54,7 +54,7 @@ def explode_rel_column(df, rel_colname='rel', rel_sep='/'):
     assert rel_colname in df.columns, f"'{rel_colname}' not in column names"
     rel_col2 = rel_colname+'_full'
     df.rename(columns={rel_colname: rel_col2}, inplace=True)
-    df[rel_colname] = df[rel_col2]apply(lambda x: [i for i in x.split(
+    df[rel_colname] = df[rel_col2].apply(lambda x: [i for i in x.split(
                                 rel_sep) if len(i)>0])
     df = df.explode(rel_colname)
     return df
