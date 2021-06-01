@@ -120,7 +120,7 @@ class CustomTransModel():
         self.n_entities = self.trainkg.n_ent
         self.n_relations = self.trainkg.n_rel
 
-        self.create_model_path(kwargs.pop('model_path', None))
+        self.create_model_path(kwargs.pop('global_model_path', args.modelpath))
         if args.shuffle:
             self.save_kg(self.trainkg, addtxt='train')
 
@@ -135,7 +135,6 @@ class CustomTransModel():
         self.logline(tabulate([(k,v) for k, v in vars(self).items()],
                                     headers=['variable', 'value']))
         self.ent_vecs, self.rel_vecs = None, None
-        print(f'Creating {self.model_type} in folder: {self.model_path}')
 
         # Legacy code
         # super(CustomTransModel, self).__init__(self.emb_dim, self.trainkg.n_ent, self.trainkg.n_rel,
@@ -154,9 +153,7 @@ class CustomTransModel():
         self.val_losses=[]
         self.val_epochs=[]
 
-    def create_model_path(self, folder_name=None):
-        if folder_name is None:
-            return
+    def create_model_path(self, folder_name):
         all_is = [int(d.split('_')[1]) for d in os.listdir(folder_name)
                         #all items in model path
                         if os.path.isdir(join(args.modelpath, d)
@@ -167,7 +164,7 @@ class CustomTransModel():
         ds = self.dataset_name
         ds = ds+'_' if ds else ''
         self.model_path = join(folder_name, f'{self.model_type}_{ds}{str(i).zfill(2)}')
-        print(f" saving model to {self.model_path}")
+        print(f"{self.model_type} self.model_path: {mod.model_path}")
         os.makedirs(self.model_path, exist_ok=True)
 
     def logline(self, line):
@@ -282,11 +279,11 @@ def modelslist(module):
     return [x for x in dir(module) if 'model' in x.lower()]
 
 if __name__ == '__main__':
-    print(f"Datapath: {args.datapath}\nModelpath: {args.modelpath}")
+    print(f"Datapath: {args.datapath}\nGlobal modelpath: {args.modelpath}")
     print(f"Dataset: {args.dataset}\n")
     print(f"Model Type: {args.model_type}")
     print(f"Epochs: {args.epochs}\nSmall: {args.small}")
-    print(f"Truth share: {args.ts}")
+    print(f"Truth share: {args.ts}\nEmbedding dimension: {args.emb_dim}")
 
     # Load data
     #tr_fn, val_fn, test_fn = wot.utils.get_svo_file_names(args.ts)
@@ -338,7 +335,7 @@ if __name__ == '__main__':
         cuda.init()
         mod.model.cuda()
         mod.loss_fn.cuda()
-    mod.create_model_path(args.modelpath)
+    #mod.create_model_path(args.modelpath)
     mod.train_model(args.epochs, tr_kg)
     if args.shuffle:
         mod.save_kg(test_kg, 'test')
