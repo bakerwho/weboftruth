@@ -314,17 +314,21 @@ if __name__ == '__main__':
     if args.model_type+'Model' in modelslist(torchkge.models.translation):
         if args.small:
             mod = CustomTransModel(trainkg=test_kg, traints=args.ts,
-                                    model_type=args.model_type)
+                                    model_type=args.model_type,
+                                    emb_dim=args.emb_dim)
         else:
             mod = CustomTransModel(trainkg=tr_kg, traints=args.ts,
-                                        model_type=args.model_type)
+                                        model_type=args.model_type,
+                                        emb_dim=args.emb_dim)
     elif args.model_type+'Model' in modelslist(torchkge.models.bilinear):
         if args.small:
             mod = CustomBilinearModel(trainkg=tr_kg, traints=args.ts,
-                                model_type=args.model_type)
+                                model_type=args.model_type,
+                                emb_dim=args.emb_dim)
         else:
             mod = CustomBilinearModel(trainkg=tr_kg, traints=args.ts,
-                                    model_type=args.model_type)
+                                    model_type=args.model_type,
+                                    emb_dim=args.emb_dim)
     mod.set_sampler(samplerClass=BernoulliNegativeSampler, kg=tr_kg)
     mod.set_optimizer(optClass=Adam)
     mod.set_loss(lossClass=MarginLoss, margin=0.5)
