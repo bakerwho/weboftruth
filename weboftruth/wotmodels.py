@@ -292,7 +292,8 @@ if __name__ == '__main__':
                                                             args.dataset,
                                                             id=as_id)
     explode = 'FB15K' in args.dataset
-    dfs = wot.utils.read_data(tr_fn, val_fn, test_fn, args.datapath,
+    dfs = wot.utils.read_data(tr_fn, val_fn, test_fn,
+                             join(args.datapath, args.dataset),
                     explode_rels=explode, rel_sep='/',
                     colnames=['from', 'rel', 'to'])
 
