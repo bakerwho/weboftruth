@@ -15,6 +15,8 @@ parser.add_argument("-dp", "--dpath", dest="datapath",
                         help="path to data")
 parser.add_argument("-ds", "--dataset", dest="dataset",
                         help="dataset name", type=str)
+parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
+                        help="truth share of dataset", type=int)
 parser.add_argument("-sampler", "--sampler", dest="sampler",
                         help="sampler", default='BernoulliNegativeSampler')
 
@@ -61,6 +63,11 @@ def corrupt_kg(input_kg, save_folder=None,
         return corrupt_kg, corrupt_kg_df
 
 if __name__=='__main__':
+    pass
+    # TODO: restructure this so that:
+    # Inputs: filepath (CSV/DF), truth share, outfile name
+    # OUTPUT: corrupted csv/df + write to disk
+    """
     print(f"Datapath: {args.datapath}\nDataset: {args.dataset}\n")
     print(f"Sampler: {args.sampler}")
     print(f"Truth share: {args.ts}\nEmbedding dimension: {args.emb_dim}")
@@ -75,9 +82,10 @@ if __name__=='__main__':
     else:
         tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
 
-    for ts in [90]:
+    for ts in [args.ts]:
         corrupt_kg(full_kg, save_folder=svo_paths[ts],
                     true_share=ts/100)
+    """
 
 """
 import weboftruth as wot

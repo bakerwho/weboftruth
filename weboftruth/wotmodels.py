@@ -287,6 +287,7 @@ if __name__ == '__main__':
 
     # Load data
     #tr_fn, val_fn, test_fn = wot.utils.get_svo_file_names(args.ts)
+    tr_fn, val_fn, test_fn = get_github_filenames(args.datapath, args.dataset)
     dfs = wot.utils.get_simonepri_dataset_dfs(args.datapath, args.dataset)
 
     # optionally shuffle dataset
@@ -294,6 +295,16 @@ if __name__ == '__main__':
         tr_kg, val_kg, test_kg = wot.utils.reshuffle_trte_split(dfs)
     else:
         tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
+
+    # corrupt training KG if required
+    if args.ts != 1:
+        tr_kg_old = tr_kg
+        tr_kg, _ = wot.corrupt.corrupt_kg(tr_kg, save_folder=None,
+                        sampler=torchkge.sampling.BernoulliNegativeSampler,
+                        true_share=args.ts, use_cuda=False,
+                        prefilename=f'corrupt_{tr_fn
+                                }{'_shuffle' if args.shuffle else ''}')
+
     # Initialize model
 
     if args.model_type+'Model' in modelslist(torchkge.models.translation):
