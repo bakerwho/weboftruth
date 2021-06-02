@@ -323,11 +323,11 @@ if __name__ == '__main__':
     print(f'Model Name: {mod.model_name}\tModel Path: {mod.model_path}')
 
     # corrupt training KG if required
-    if args.ts != 1:
+    if args.ts != 100:
         tr_kg_old = tr_kg
         tr_kg, _ = wot.corrupt.corrupt_kg(tr_kg, save_folder=mod.model_path,
                         sampler=torchkge.sampling.BernoulliNegativeSampler,
-                        true_share=args.ts, use_cuda=False,
+                        true_share=args.ts/100, use_cuda=False,
                         shuffletxt = '_shuffle' if args.shuffle else '',
                         prefilename=f'corrupt_{tr_fn}{shuffletxt}')
 
