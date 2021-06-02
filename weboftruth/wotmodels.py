@@ -287,7 +287,8 @@ if __name__ == '__main__':
 
     # Load data
     #tr_fn, val_fn, test_fn = wot.utils.get_svo_file_names(args.ts)
-    tr_fn, val_fn, test_fn = get_github_filenames(args.datapath, args.dataset)
+    tr_fn, val_fn, test_fn = wot.utils.get_github_filenames(args.datapath,
+                                                            args.dataset)
     dfs = wot.utils.get_simonepri_dataset_dfs(args.datapath, args.dataset)
 
     # optionally shuffle dataset
