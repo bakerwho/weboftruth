@@ -287,28 +287,13 @@ if __name__ == '__main__':
 
     # Load data
     #tr_fn, val_fn, test_fn = wot.utils.get_svo_file_names(args.ts)
-    tr_fn, val_fn, test_fn = wot.utils.get_github_filenames(args.datapath,
-                                args.dataset)
-    #print(tr_fn)
-    explode = 'FB15' in args.dataset.upper()
-    dfs = wot.utils.read_data(tr_fn, val_fn, test_fn,
-                                join(args.datapath, args.dataset),
-                                explode_rels=explode,
-                                )
-    dfs = [df.drop('true_positive', axis=1
-                ) if 'true_positive' in df.columns else df
-                for df in dfs ]
+    dfs = wot.utils.get_simonepri_dataset_dfs(args.datapath, args.dataset)
 
     # optionally shuffle dataset
     if args.shuffle:
-        print("Shuffling and resplitting train/val/test data")
-        sizes = [df.shape[0] for df in dfs]
-        full_df = pd.concat([dfs[0], dfs[1], dfs[2]])
-        full_kg = wot.utils.df_to_kg(full_df)
-        tr_kg, val_kg, test_kg = full_kg.split_kg(sizes=sizes)
+        tr_kg, val_kg, test_kg = wot.utils.reshuffle_trte_split(dfs)
     else:
         tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
-
     # Initialize model
 
     if args.model_type+'Model' in modelslist(torchkge.models.translation):

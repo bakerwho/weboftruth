@@ -59,6 +59,28 @@ def explode_rel_column(df, rel_colname='rel', rel_sep='/'):
     df = df.explode(rel_colname)
     return df
 
+def get_simonepri_dataset_dfs(datapath, dataset):
+    tr_fn, val_fn, test_fn = wot.utils.get_github_filenames(datapath,
+                                dataset)
+    #print(tr_fn)
+    explode = 'FB15' in dataset.upper()
+    dfs = wot.utils.read_data(tr_fn, val_fn, test_fn,
+                                join(datapath, dataset),
+                                explode_rels=explode,
+                                )
+    dfs = [df.drop('true_positive', axis=1
+                ) if 'true_positive' in df.columns else df
+                for df in dfs ]
+    return dfs
+
+def reshuffle_trte_split(dfs):
+    print("Shuffling and resplitting train/val/test data")
+    sizes = [df.shape[0] for df in dfs]
+    full_df = pd.concat([dfs[0], dfs[1], dfs[2]])
+    full_kg = wot.utils.df_to_kg(full_df)
+    tr_kg, val_kg, test_kg = full_kg.split_kg(sizes=sizes)
+    return tr_kg, val_kg, test_kg
+
 
 def df_to_kg(df):
     assert df.shape[1]==3, 'Invalid DataFrame shape on axis 1'

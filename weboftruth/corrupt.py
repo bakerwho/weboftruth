@@ -6,6 +6,18 @@ from sklearn.model_selection import train_test_split
 from weboftruth.wotmodels import *
 from weboftruth.utils import load_model
 
+import sys
+import argparse
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument("-dp", "--dpath", dest="datapath",
+                        help="path to data")
+parser.add_argument("-ds", "--dataset", dest="dataset",
+                        help="dataset name", type=str)
+parser.add_argument("-sampler", "--sampler", dest="sampler",
+                        help="sampler", default='BernoulliNegativeSampler')
+
 def corrupt_kg(input_kg, save_folder=None,
                 sampler=torchkge.sampling.BernoulliNegativeSampler,
                 true_share=0.8, use_cuda=False, prefilename=''):
@@ -49,12 +61,20 @@ def corrupt_kg(input_kg, save_folder=None,
         return corrupt_kg, corrupt_kg_df
 
 if __name__=='__main__':
-    tr_fn, val_fn, test_fn = wot.utils.get_file_names(100)
-    tr_df, val_df, test_df = wot.read_data(tr_fn, val_fn, test_fn,
-                                wot.svo_paths[100])
-    full_df = pd.concat([tr_df, val_df, test_df], axis=0)
-    full_kg = torchkge.data_structures.KnowledgeGraph(full_df)
-    print(svo_paths)
+    print(f"Datapath: {args.datapath}\nDataset: {args.dataset}\n")
+    print(f"Sampler: {args.sampler}")
+    print(f"Truth share: {args.ts}\nEmbedding dimension: {args.emb_dim}")
+
+    sampler = eval(f"torchkge.sampling.{args.sampler}")
+
+    dfs = wot.utils.get_simonepri_dataset_dfs(args.datapath, args.dataset)
+
+    # optionally shuffle dataset
+    if args.shuffle:
+        tr_kg, val_kg, test_kg = wot.utils.reshuffle_trte_split(dfs)
+    else:
+        tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
+
     for ts in [90]:
         corrupt_kg(full_kg, save_folder=svo_paths[ts],
                     true_share=ts/100)
