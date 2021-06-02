@@ -163,7 +163,8 @@ class CustomTransModel():
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
         ds = self.dataset_name
         ds = ds+'_' if ds else ''
-        self.model_path = join(folder_name, f'{self.model_type}_{ds}{str(i).zfill(2)}')
+        self.model_name = f'{self.model_type}_{ds}{str(i).zfill(2)}'
+        self.model_path = join(folder_name, self.model_name)
         print(f"{self.model_type} self.model_path: {self.model_path}")
         os.makedirs(self.model_path, exist_ok=True)
 
