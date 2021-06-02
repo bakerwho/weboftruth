@@ -12,7 +12,7 @@
 
 echo 'run started at ' $(date)
 
-for ts in 50 80 100
+for ts in 100
 do
     python /Users/aabir/Documents/research/weboftruth/weboftruth/wotmodels.py \
         -e 200 \
