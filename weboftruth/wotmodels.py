@@ -296,15 +296,6 @@ if __name__ == '__main__':
     else:
         tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
 
-    # corrupt training KG if required
-    if args.ts != 1:
-        tr_kg_old = tr_kg
-        tr_kg, _ = wot.corrupt.corrupt_kg(tr_kg, save_folder=None,
-                        sampler=torchkge.sampling.BernoulliNegativeSampler,
-                        true_share=args.ts, use_cuda=False,
-                        shuffletxt = '_shuffle' if args.shuffle else '',
-                        prefilename=f'corrupt_{tr_fn}{shuffletxt}')
-
     # Initialize model
 
     if args.model_type+'Model' in modelslist(torchkge.models.translation):
@@ -328,6 +319,18 @@ if __name__ == '__main__':
     mod.set_sampler(samplerClass=BernoulliNegativeSampler, kg=tr_kg)
     mod.set_optimizer(optClass=Adam)
     mod.set_loss(lossClass=MarginLoss, margin=0.5)
+
+    print(f'Model Name: {mod.model_name}\tModel Path: {mod.model_path}')
+
+    # corrupt training KG if required
+    if args.ts != 1:
+        tr_kg_old = tr_kg
+        tr_kg, _ = wot.corrupt.corrupt_kg(tr_kg, save_folder=mod.model_path,
+                        sampler=torchkge.sampling.BernoulliNegativeSampler,
+                        true_share=args.ts, use_cuda=False,
+                        shuffletxt = '_shuffle' if args.shuffle else '',
+                        prefilename=f'corrupt_{tr_fn}{shuffletxt}')
+
     # Move everything to CUDA if available
     if cuda.is_available():
         print("Using cuda.")
