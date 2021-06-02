@@ -25,7 +25,7 @@ def get_svo_file_names(ts=100, path='.', old=False, get_paths=False):
             if 'test' in f: test_fn = f
     return tr_fn, val_fn, test_fn
 
-def get_github_filenames(datapath, dataset, id=True):
+def get_simonepri_filenames(datapath, dataset, id=True):
     id_str = 'as_id_' if id else 'as_text_'
     for f in os.listdir(join(datapath, dataset)):
         if id_str+'train' in f: tr_fn = f
@@ -35,6 +35,7 @@ def get_github_filenames(datapath, dataset, id=True):
 
 def read_data(tr_fn, val_fn, test_fn, path, explode_rels=False, rel_sep=None,
                 colnames=['from', 'rel', 'to']):
+    # consider deleting
     tr_df = pd.read_csv(join(path, tr_fn),
                        sep='\t', names=colnames)
     val_df = pd.read_csv(join(path, val_fn),

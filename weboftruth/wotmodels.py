@@ -287,9 +287,14 @@ if __name__ == '__main__':
 
     # Load data
     #tr_fn, val_fn, test_fn = wot.utils.get_svo_file_names(args.ts)
-    tr_fn, val_fn, test_fn = wot.utils.get_github_filenames(args.datapath,
-                                                            args.dataset)
-    dfs = wot.utils.get_simonepri_dataset_dfs(args.datapath, args.dataset)
+    as_id = 'FB15K' in args.dataset
+    tr_fn, val_fn, test_fn = wot.utils.get_simonepri_filenames(args.datapath,
+                                                            args.dataset,
+                                                            id=as_id)
+    explode = 'FB15K' in args.dataset                                                        
+    dfs = read_data(tr_fn, val_fn, test_fn, args.datapath,
+                    explode_rels=explode, rel_sep='/',
+                    colnames=['from', 'rel', 'to'])
 
     # optionally shuffle dataset
     if args.shuffle:
