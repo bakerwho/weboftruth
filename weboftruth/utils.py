@@ -84,10 +84,9 @@ def reshuffle_trte_split(dfs):
 
 
 def df_to_kg(df):
-    assert df.shape[1]==3, 'Invalid DataFrame shape on axis 1'
     cols = ['from', 'rel', 'to']
     assert set(df.columns)==set(cols), f"DataFrame does not contain columns {cols}"
-    return torchkge.data_structures.KnowledgeGraph(df)
+    return torchkge.data_structures.KnowledgeGraph(df[cols])
 
 def kg_to_df(kg):
     i2e, i2r = ({v:k for k,v in dct.items()} for dct in (kg.ent2ix, kg.rel2ix))
