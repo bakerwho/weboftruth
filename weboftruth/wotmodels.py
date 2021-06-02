@@ -302,7 +302,7 @@ if __name__ == '__main__':
         tr_kg, _ = wot.corrupt.corrupt_kg(tr_kg, save_folder=None,
                         sampler=torchkge.sampling.BernoulliNegativeSampler,
                         true_share=args.ts, use_cuda=False,
-                        shuffletxt = '_shuffle' if args.shuffle else ''
+                        shuffletxt = '_shuffle' if args.shuffle else '',
                         prefilename=f'corrupt_{tr_fn}{shuffletxt}')
 
     # Initialize model
