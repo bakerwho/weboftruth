@@ -8,7 +8,7 @@ from weboftruth.utils import load_model
 
 def corrupt_kg(input_kg, save_folder=None,
                 sampler=torchkge.sampling.BernoulliNegativeSampler,
-                true_share=0.8, use_cuda=False):
+                true_share=0.8, use_cuda=False, prefilename=''):
     """
     Input: KG structure
     Output:
@@ -20,7 +20,12 @@ def corrupt_kg(input_kg, save_folder=None,
         return input_kg
     else:
         kg_true, kg_to_corrupt = input_kg.split_kg(share = true_share)
+        # setup true dataframe
         true_list = [kg_true[i] for i in range(kg_true.n_facts)]
+        true_df = pd.DataFrame(true_list, columns =['from', 'to', 'rel'])
+        true_df['true_positive'] = True
+
+        # setup corrupted dataframe
         kg_corrupted = sampler(kg_to_corrupt
                         ).corrupt_kg(batch_size = 128, use_cuda = use_cuda,
                         which = 'main')
@@ -31,32 +36,17 @@ def corrupt_kg(input_kg, save_folder=None,
                                     kg_to_corrupt[i][2]))
         corrupt_df = pd.DataFrame(corrupt_list, columns =['from', 'to', 'rel'])
         corrupt_df['true_positive'] = False
-        true_df = pd.DataFrame(true_list, columns =['from', 'to', 'rel'])
-        true_df['true_positive'] = True
+
         corrupt_kg_df = pd.concat([true_df, corrupt_df])
-        #corrupt_kg = torchkge.data_structures.KnowledgeGraph(
-        #                df=corrupt_kg_df.drop(['true_positive'],
-        #                axis = 'columns'))
-        out_dfs = {}
-        out_dfs['train'], df2 = train_test_split(corrupt_kg_df,
-                                                    train_size=int(1e6))
-        out_dfs['valid'], out_dfs['test'] = train_test_split(df2, train_size=250000)
-        config = int(true_share*100)
-        sizedict = dict(zip(['train', 'valid', 'test'],
-                [1000000, 250000, 50000]))
-        out_kgs = []
-        for setname, df in out_dfs.items():
-            if save_folder is not None:
-                size = sizedict[setname]
-                name = f'svo_data_ts{config}_{setname}_{size}.dat'
-                outfile = join(save_folder, name)
-                df.to_csv(outfile, index=False, sep='\t')
-                print(f'Writing {setname} KnowledgeGraph to {outfile}')
-            out_kgs.append(torchkge.data_structures.KnowledgeGraph(
-                            df=df.drop(['true_positive'],
-                            axis = 'columns')))
-        # tr_kg, val_kg, test_kg = out_kgs
-        return out_kgs
+        corrupt_kg = torchkge.data_structures.KnowledgeGraph(
+                        df=corrupt_kg_df.drop(['true_positive'],
+                        axis = 'columns'))
+        if save_folder is not None:
+            name = f'{prefilename}_ts={true_share}.dat'
+            outfile = join(save_folder, name)
+            corrupt_kg_df.to_csv(outfile, index=False, sep='\t')
+            print(f'Writing ts={true_share} KnowledgeGraph to {outfile}')
+        return corrupt_kg, corrupt_kg_df
 
 if __name__=='__main__':
     tr_fn, val_fn, test_fn = wot.utils.get_file_names(100)
