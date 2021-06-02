@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import pandas as pd
 import os
 from os.path import join
@@ -332,11 +334,11 @@ if __name__ == '__main__':
 
     # corrupt training KG if required
     if args.ts != 100:
-        tr_kg_old = tr_kg
+        tr_kg_pure = deepcopy(tr_kg)
+        shuffletxt = '_shuffle' if args.shuffle else '',
         tr_kg, _ = wot.corrupt.corrupt_kg(tr_kg, save_folder=mod.model_path,
                         sampler=torchkge.sampling.BernoulliNegativeSampler,
                         true_share=args.ts/100, use_cuda=False,
-                        shuffletxt = '_shuffle' if args.shuffle else '',
                         prefilename=f'corrupt_{tr_fn}{shuffletxt}')
 
     # Move everything to CUDA if available
