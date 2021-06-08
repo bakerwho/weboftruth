@@ -21,7 +21,6 @@ from tabulate import tabulate
 import weboftruth as wot
 #from weboftruth.constants import models_path, svo_paths, svo_data_path
 from weboftruth import utils
-from weboftruth.corrupt import corrupt_kg
 
 import sys
 import argparse

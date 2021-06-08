@@ -8,7 +8,7 @@ import pandas as pd
 from numpy import concatenate
 
 import weboftruth as wot
-from weboftruth.constants import *
+from weboftruth._constants import *
 
 def get_svo_file_names(ts=100, path='.', old=False, get_paths=False):
     svo_path = join(path, str(ts))
