@@ -16,10 +16,6 @@ import argparse
 
 #parser.add_argument("-m_folder", dest="emb_modelfolder", default="/home-nfs/tenzorok/weboftruth/models/TransE_02", help="model folder", type=str)
 
-from weboftruth.utils import *
-
-paths = wot.svo_paths
-
 class Evaluator():
     def __init__(self, modelfolder, whichmodel='best_',
                 emb_model=None, trainkg=None):
@@ -35,15 +31,17 @@ class Evaluator():
         self.pred_model = predmodelClass(**kwargs)
 
     def get_triples(self, filepath):
-        sovs, Ys = read_triples(filepath)
+        sovs, Ys = wot.utils.read_triples(filepath)
         return sovs, Ys
 
-    def get_svo_model_embeddings(self, filepath, sovs=None, Ys=None):
+    def get_triplet_embeddings_from_file(self, filepath, sovs=None, Ys=None):
         Xs = []
         if sovs is None and Ys is None:
             sovs, Ys = self.get_triples(filepath)
         for s, o, v in sovs:
-            Xs.append(self.embeddings.get_vector_from_triple(s, v, o))
+            s_ind, o_ind = self.trainkg.ent2ix[s], self.trainkg.ent2ix[o]
+            v_ind = self.trainkg.rel2ix[v]
+            Xs.append(self.embeddings.get_vector_from_triple(s_ind, v_ind, o_ind))
         return np.array(Xs), Ys
 
     def get_svo_glove_embeddings(self, ent_glove, rel_glove,
@@ -80,8 +78,8 @@ if __name__=='__main__':
                         old=True, get_paths=True)
     print(tr_fn, val_fn, test_fn)
     evl8 = Evaluator(emb_modelfolder, whichmodel='best_')
-    x_tr, y_tr = evl8.get_svo_model_embeddings(tr_fn)
-    x_te, y_te = evl8.get_svo_model_embeddings(test_fn)
+    x_tr, y_tr = evl8.get_triplet_embeddings_from_file(tr_fn)
+    x_te, y_te = evl8.get_triplet_embeddings_from_file(test_fn)
     for predmodel in [Ridge, LogisticRegression, SVC]:
         evl8.set_pred_model(predmodel)
         evl8.train_pred_model(x_tr, y_tr)

@@ -171,7 +171,7 @@ def parseline(line):
         return 'rel_emb_dim', int(re.findall(f'\d+', line)[0])
     return None, None
 
-def read_triples(filepath):
+def read_evaluation_triples(filepath):
     """Read triples from filepath
     Input:
         filepath: file with format "{subject}\t{verb}\t{object}\t{bool}"
