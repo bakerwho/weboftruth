@@ -16,6 +16,8 @@ import argparse
 
 #parser.add_argument("-m_folder", dest="emb_modelfolder", default="/home-nfs/tenzorok/weboftruth/models/TransE_02", help="model folder", type=str)
 
+from weboftruth.utils import *
+
 class Evaluator():
     def __init__(self, modelfolder, whichmodel='best_',
                 emb_model=None, trainkg=None):
