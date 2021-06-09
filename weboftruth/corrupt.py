@@ -31,10 +31,9 @@ def corrupt_kg(input_kg, save_folder=None,
     """
     assert true_share>=0 and true_share<=1, 'Invalid true_share'
 
-    if not any([sampler==getattr(torchkge.sampling,
-                        x) for x in dir(torchkge.sampling)]):
-        assert isinstance(sampler, str)
+    if isinstance(sampler, str):
         sampler = getattr(torchkge.sampling, sampler)
+    
     if true_share == 1:
         return input_kg
     else:
