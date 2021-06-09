@@ -193,7 +193,7 @@ class Embeddings():
         self.ent_vec_d, self.rel_vec_d = self.ent_vecs.shape[1], self.rel_vecs.shape[1]
         self.ent2ix, self.rel2ix = self.kg.ent2ix, self.kg.rel2ix
 
-    def get_vector_from_triple(self, s, o, rel):
+    def get_vector_from_sov_triple(self, s, o, rel):
         try:
             s_ind, o_ind = self.ent2ix[s], self.ent2ix[o]
             rel_ind = self.rel2ix[rel]

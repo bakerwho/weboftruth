@@ -42,13 +42,7 @@ class Evaluator():
         if sovs is None and Ys is None:
             sovs, Ys = self.get_triples(filepath)
         for i, (s, o, v) in enumerate(sovs):
-            try:
-                s_ind, o_ind = self.trainkg.ent2ix[s], self.trainkg.ent2ix[o]
-                v_ind = self.trainkg.rel2ix[v]
-            except KeyError:
-                skipcount += 1
-                continue
-            Xs.append(self.embeddings.get_vector_from_triple(s_ind, v_ind, o_ind))
+            Xs.append(self.embeddings.get_vector_from_sov_triple(s, o, v))
         print(f"Could not retrieve embeddings for {skipcount}/{i+1} triples")
         return np.array(Xs), Ys
 
