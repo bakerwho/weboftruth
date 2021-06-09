@@ -33,10 +33,10 @@ class Evaluator():
         self.pred_model = predmodelClass(**kwargs)
 
     def get_triples(self, filepath):
-        sovs, Ys = wot.utils.read_triples(filepath)
+        sovs, Ys = wot.utils.read_evaluation_triples(filepath)
         return sovs, Ys
 
-    def get_triplet_embeddings_from_file(self, filepath, sovs=None, Ys=None):
+    def get_triplet_embeddings(self, filepath, sovs=None, Ys=None):
         Xs = []
         if sovs is None and Ys is None:
             sovs, Ys = self.get_triples(filepath)
@@ -80,8 +80,8 @@ if __name__=='__main__':
                         old=True, get_paths=True)
     print(tr_fn, val_fn, test_fn)
     evl8 = Evaluator(emb_modelfolder, whichmodel='best_')
-    x_tr, y_tr = evl8.get_triplet_embeddings_from_file(tr_fn)
-    x_te, y_te = evl8.get_triplet_embeddings_from_file(test_fn)
+    x_tr, y_tr = evl8.get_triplet_embeddings(tr_fn)
+    x_te, y_te = evl8.get_triplet_embeddings(test_fn)
     for predmodel in [Ridge, LogisticRegression, SVC]:
         evl8.set_pred_model(predmodel)
         evl8.train_pred_model(x_tr, y_tr)
