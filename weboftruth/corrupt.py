@@ -38,8 +38,13 @@ def corrupt_kg(input_kg, save_folder=None,
     ix2rel = {v:k for k, v, in rel2ix.items()}
 
     def fact2txt(fact):
-        s, v, o = fact
-        return ix2ent[s], ix2rel[v], ix2ent[o]
+        s, o, v = fact
+        try:
+            s_, v_, o_ = ix2ent[s], ix2rel[v], ix2ent[o]
+            return s_, v_, o_
+        except:
+            #print(s, v, o)
+            return None, None, None
 
     if true_share == 1:
         return input_kg
@@ -58,21 +63,20 @@ def corrupt_kg(input_kg, save_folder=None,
         for i in range(kg_to_corrupt.n_facts):
             s, o = kg_corrupted[0][i].item(), kg_corrupted[1][i].item()
             v = kg_to_corrupt[i][2]
-            corrupt_list.append(fact2txt((s, v, o)))
+            corrupt_list.append(fact2txt((s, o, v)))
         corrupt_df = pd.DataFrame(corrupt_list, columns =['from', 'to', 'rel'])
         corrupt_df['true_positive'] = False
 
         corrupt_kg_df = pd.concat([true_df, corrupt_df])
-        corrupt_kg = torchkge.data_structures.KnowledgeGraph(
+        corrupt_kg = torchkge.KnowledgeGraph(
                         df=corrupt_kg_df.drop(['true_positive'],
                         axis = 'columns'))
+
         if save_folder is not None:
             name = f'{prefilename}_ts={true_share}.dat'
             outfile = join(save_folder, name)
             corrupt_kg_df.to_csv(outfile, index=False, sep='\t')
             print(f'Writing ts={true_share} KnowledgeGraph to {outfile}')
-        corrupt_kg.ent2ix = input_kg.ent2ix
-        corrupt_kg.rel2ix = input_kg.rel2ix
         return corrupt_kg, corrupt_kg_df
 
 if __name__=='__main__':
