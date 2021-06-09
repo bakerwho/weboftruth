@@ -33,12 +33,20 @@ def corrupt_kg(input_kg, save_folder=None,
     if isinstance(sampler, str):
         sampler = getattr(torchkge.sampling, sampler)
 
+    ent2ix, rel2ix = input_kg.ent2ix, input_kg.rel2ix
+    ix2ent = {v:k for k, v, in ent2ix.items()}
+    ix2rel = {v:k for k, v, in rel2ix.items()}
+
+    def fact2txt(fact):
+        s, v, o = fact
+        return ix2ent[s], ix2rel[v], ix2ent[o]
+
     if true_share == 1:
         return input_kg
     else:
         kg_true, kg_to_corrupt = input_kg.split_kg(share = true_share)
         # setup true dataframe
-        true_list = [kg_true[i] for i in range(kg_true.n_facts)]
+        true_list = [fact2txt(kg_true[i]) for i in range(kg_true.n_facts)]
         true_df = pd.DataFrame(true_list, columns =['from', 'to', 'rel'])
         true_df['true_positive'] = True
 
@@ -48,9 +56,9 @@ def corrupt_kg(input_kg, save_folder=None,
                         which = 'main')
         corrupt_list = []
         for i in range(kg_to_corrupt.n_facts):
-            corrupt_list.append((kg_corrupted[0][i].item(),
-                                    kg_corrupted[1][i].item(),
-                                    kg_to_corrupt[i][2]))
+            s, o = kg_corrupted[0][i].item(), kg_corrupted[1][i].item()
+            v = kg_to_corrupt[i][2]
+            corrupt_list.append(fact2txt((s, v, o)))
         corrupt_df = pd.DataFrame(corrupt_list, columns =['from', 'to', 'rel'])
         corrupt_df['true_positive'] = False
 
@@ -63,8 +71,8 @@ def corrupt_kg(input_kg, save_folder=None,
             outfile = join(save_folder, name)
             corrupt_kg_df.to_csv(outfile, index=False, sep='\t')
             print(f'Writing ts={true_share} KnowledgeGraph to {outfile}')
-        corrupt_kg_df.ent2ix = input_kg.ent2ix
-        corrupt_kg_df.rel2ix = input_kg.rel2ix
+        corrupt_kg.ent2ix = input_kg.ent2ix
+        corrupt_kg.rel2ix = input_kg.rel2ix
         return corrupt_kg, corrupt_kg_df
 
 if __name__=='__main__':
