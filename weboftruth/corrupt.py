@@ -40,8 +40,9 @@ def corrupt_kg(input_kg, save_folder=None,
     def fact2txt(fact):
         s, o, v = fact
         try:
-            s_, v_, o_ = ix2ent[s], ix2rel[v], ix2ent[o]
-            return s_, v_, o_
+            s_, o_ = ix2ent[s], ix2ent[o]
+            v_ = ix2rel[v]
+            return s_, o_, v_
         except:
             #print(s, v, o)
             return None, None, None
