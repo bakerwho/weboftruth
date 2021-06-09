@@ -260,11 +260,17 @@ class CustomTransModel():
         print(f' saving {self.model_type} to {modelpath}')
         torch.save(self.model.state_dict(), modelpath)
 
-    def save_kg(self, kg, addtxt=''):
+    def save_kg(self, kgdf, addtxt=''):
         # save knowledge Graph
         if kg is None:
-            kg = self.trainkg
-        df = utils.kg_to_df(kg)
+            kg, addtxt = self.trainkg, 'train'
+        if isinstance(kgdf, pd.DataFrame):
+            df = kgdf
+        elif isinstance(kgdf, torchkge.KnowledgeGraph):
+            df = utils.kg_to_df(kgdf)
+        else:
+            raise TypeError('Invalid argument kgdf must be \
+DataFrame or KnowledgeGraph')
         kgdfname = f'{addtxt}_{self.model_type}_kg.csv'
         kgdfpath = join(self.model_path, kgdfname)
         if not os.path.exists(kgdfpath):
@@ -301,6 +307,7 @@ if __name__ == '__main__':
 
     # optionally shuffle dataset
     if args.shuffle:
+        print('Warning: shuffling train/val/test datasets')
         tr_kg, val_kg, test_kg = wot.utils.reshuffle_trte_split(dfs)
     else:
         tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
@@ -330,6 +337,10 @@ if __name__ == '__main__':
     mod.set_loss(lossClass=MarginLoss, margin=0.5)
 
     print(f'Model Name: {mod.model_name}\tModel Path: {mod.model_path}')
+
+    if args.shuffle:
+        # save new split as datasets were shuffled
+        mod.save_kg(tr)
 
     # corrupt training KG if required
     if args.ts != 100:

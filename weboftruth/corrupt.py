@@ -21,7 +21,7 @@ parser.add_argument("-sampler", "--sampler", dest="sampler",
                         help="sampler", default='BernoulliNegativeSampler')
 
 def corrupt_kg(input_kg, save_folder=None,
-                sampler=torchkge.sampling.BernoulliNegativeSampler,
+                sampler='BernoulliNegativeSampler',
                 true_share=0.8, use_cuda=False, prefilename=''):
     """
     Input: KG structure
@@ -30,6 +30,8 @@ def corrupt_kg(input_kg, save_folder=None,
         - Pandas DF to construct corrupted KG, with 'true_positive' flag indicating if triple is corrupted or not.
     """
     assert true_share>=0 and true_share<=1, 'Invalid true_share'
+    if not isinstance(torchkge.sampling):
+        sampler = getattr(torchkge.sampling, sampler)
     if true_share == 1:
         return input_kg
     else:
