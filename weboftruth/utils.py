@@ -190,13 +190,13 @@ class Embeddings():
         self.model = model
         self.kg = kg
         self.ent_vecs, self.rel_vecs = self.model.get_embeddings()
-        self.ent_vec_d, self.rel_vec_d = self.ent_vecs.shape[1], self.rel_vecs.shape[1]
-        self.ent2ix, self.rel2ix = self.kg.ent2ix, self.kg.rel2ix
+        self.ent_vec_d = self.ent_vecs.shape[1]
+        self.rel_vec_d = self.rel_vecs.shape[1]
 
     def get_vector_from_sov_triple(self, s, o, rel):
         try:
-            s_ind, o_ind = self.ent2ix[s], self.ent2ix[o]
-            rel_ind = self.rel2ix[rel]
+            s_ind, o_ind = self.kg.ent2ix[s], self.kg.ent2ix[o]
+            rel_ind = self.kg.rel2ix[rel]
         except (KeyError, IndexError):
             print(f"\tSkipping {s}, {rel}, {o}")
             return None
