@@ -199,9 +199,13 @@ class Embeddings():
             rel_ind = self.rel2ix[rel]
         except (KeyError, IndexError):
             s_ind, rel_ind, o_ind = s, rel, o
-        s_vec = self.ent_vecs[s_ind]
-        o_vec = self.ent_vecs[o_ind]
-        rel_vec = self.rel_vecs[rel_ind]
+        try:
+            s_vec = self.ent_vecs[s_ind]
+            o_vec = self.ent_vecs[o_ind]
+            rel_vec = self.rel_vecs[rel_ind]
+        except:
+            print(s_ind, rel_ind, o_ind)
+            return None
         """
         try:
             s_vec = self.ent_vecs[s_ind]
