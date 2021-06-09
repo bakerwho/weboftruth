@@ -3,6 +3,7 @@ from weboftruth.utils import load_model
 from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
+from sklearn.neural_network import MLPClassifier
 
 from os.path import join
 import pandas as pd
@@ -64,7 +65,7 @@ class Evaluator():
         return np.array(Xs), Ys
 
     def train_pred_model(self, Xs, Ys, **kwargs):
-        self.pred_model.fit(Xs, Ys)
+        self.pred_model.fit(Xs, Ys, max_iter=10000)
         Ypred = self.pred_model.predict(Xs).astype('int32')
         acc = accuracy_score(Ypred, Ys.astype('int32'))
         print(f"Train accuracy on {self.pred_model.__repr__()}: {acc*100} %")
@@ -87,8 +88,11 @@ if __name__=='__main__':
     evl8 = Evaluator(emb_modelfolder, whichmodel='best_')
     x_tr, y_tr = evl8.get_triplet_embeddings(tr_fn)
     x_te, y_te = evl8.get_triplet_embeddings(test_fn)
-    for predmodel in [Ridge, LogisticRegression, SVC]:
-        evl8.set_pred_model(predmodel)
+    for predmodel in [Ridge, LogisticRegression, MLPClassifier]:
+        kwargs = {}
+        if predmodel == LogisticRegression:
+            kwargs['solver'] = 'newton-cg'
+        evl8.set_pred_model(predmodel, **kwargs)
         evl8.train_pred_model(x_tr, y_tr)
         evl8.evaluate_pred_model(x_te, y_te)
 
