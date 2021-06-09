@@ -198,7 +198,7 @@ class Embeddings():
             s_ind, o_ind = self.ent2ix[s], self.ent2ix[o]
             rel_ind = self.rel2ix[rel]
         except (KeyError, IndexError):
-            print(f"\tSkipping \{{s}, {rel}, {o}\}")
+            print(f"\tSkipping {s}, {rel}, {o}")
             return None
         s_vec = self.ent_vecs[s_ind]
         o_vec = self.ent_vecs[o_ind]
