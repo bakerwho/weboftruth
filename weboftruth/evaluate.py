@@ -33,7 +33,7 @@ class Evaluator():
         self.pred_model = predmodelClass(**kwargs)
 
     def get_triples(self, filepath):
-        sovs, Ys = wot.utils.read_evaluation_triples(filepath)
+        sovs, Ys = wot.utils.read_evaluation_sov_triples(filepath)
         return sovs, Ys
 
     def get_triplet_embeddings(self, filepath, sovs=None, Ys=None):
@@ -41,13 +41,15 @@ class Evaluator():
         skipcount = 0
         if sovs is None and Ys is None:
             sovs, Ys = self.get_triples(filepath)
+        Ys2 = []
         for i, (s, o, v) in enumerate(sovs):
             vec = self.embeddings.get_vector_from_sov_triple(s, o, v)
             if vec is None:
                 continue
             Xs.append(vec)
+            Ys2.append(Ys[i])
         print(f"Could not retrieve embeddings for {skipcount}/{i+1} triples")
-        return np.array(Xs), Ys
+        return np.array(Xs), Ys2
 
     def get_svo_glove_embeddings(self, ent_glove, rel_glove,
                                 filepath, sovs=None, Ys=None):

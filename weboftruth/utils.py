@@ -171,7 +171,7 @@ def parseline(line):
         return 'rel_emb_dim', int(re.findall(f'\d+', line)[0])
     return None, None
 
-def read_evaluation_triples(filepath):
+def read_evaluation_sov_triples(filepath):
     """Read triples from filepath
     Input:
         filepath: file with format "{subject}\t{verb}\t{object}\t{bool}"
@@ -183,7 +183,7 @@ def read_evaluation_triples(filepath):
         else:
             df = pd.read_csv(filepath,
                 names=['from', 'to', 'rel', 'true_positive'], sep='\t')
-    return df[['from', 'rel', 'to']].to_numpy(), df['true_positive'].to_numpy()
+    return df[['from', 'to', 'rel']].to_numpy(), df['true_positive'].to_numpy()
 
 class Embeddings():
     def __init__(self, model, kg):
@@ -194,12 +194,8 @@ class Embeddings():
         self.rel_vec_d = self.rel_vecs.shape[1]
 
     def get_vector_from_sov_triple(self, s, o, rel):
-        try:
-            s_ind, o_ind = self.kg.ent2ix[s], self.kg.ent2ix[o]
-            rel_ind = self.kg.rel2ix[rel]
-        except (KeyError, IndexError):
-            print(f"\tSkipping {s}, {rel}, {o}")
-            return None
+        s_ind, o_ind = self.kg.ent2ix[s], self.kg.ent2ix[o]
+        rel_ind = self.kg.rel2ix[rel]
         s_vec = self.ent_vecs[s_ind]
         o_vec = self.ent_vecs[o_ind]
         rel_vec = self.rel_vecs[rel_ind]
