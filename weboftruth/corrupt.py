@@ -44,7 +44,7 @@ def corrupt_kg(input_kg, save_folder=None,
 
         # setup corrupted dataframe
         kg_corrupted = sampler(kg_to_corrupt
-                        ).corrupt_kg(batch_size = 128, use_cuda = use_cuda,
+                        ).corrupt_kg(batch_size=128, use_cuda=use_cuda,
                         which = 'main')
         corrupt_list = []
         for i in range(kg_to_corrupt.n_facts):
@@ -63,6 +63,8 @@ def corrupt_kg(input_kg, save_folder=None,
             outfile = join(save_folder, name)
             corrupt_kg_df.to_csv(outfile, index=False, sep='\t')
             print(f'Writing ts={true_share} KnowledgeGraph to {outfile}')
+        corrupt_kg_df.ent2ix = input_kg.ent2ix
+        corrupt_kg_df.rel2ix = input_kg.rel2ix
         return corrupt_kg, corrupt_kg_df
 
 if __name__=='__main__':
