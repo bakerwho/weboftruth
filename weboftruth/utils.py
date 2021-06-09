@@ -194,11 +194,14 @@ class Embeddings():
         self.rel_vec_d = self.rel_vecs.shape[1]
 
     def get_vector_from_sov_triple(self, s, o, rel):
-        s_ind, o_ind = self.kg.ent2ix[s], self.kg.ent2ix[o]
-        rel_ind = self.kg.rel2ix[rel]
-        s_vec = self.ent_vecs[s_ind]
-        o_vec = self.ent_vecs[o_ind]
-        rel_vec = self.rel_vecs[rel_ind]
+        try:
+            s_ind, o_ind = self.kg.ent2ix[s], self.kg.ent2ix[o]
+            rel_ind = self.kg.rel2ix[rel]
+            s_vec = self.ent_vecs[s_ind]
+            o_vec = self.ent_vecs[o_ind]
+            rel_vec = self.rel_vecs[rel_ind]
+        except:
+            return None
 
         """
         try:
