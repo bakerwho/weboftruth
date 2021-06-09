@@ -38,12 +38,18 @@ class Evaluator():
 
     def get_triplet_embeddings(self, filepath, sovs=None, Ys=None):
         Xs = []
+        skipcount = 0
         if sovs is None and Ys is None:
             sovs, Ys = self.get_triples(filepath)
-        for s, o, v in sovs:
-            s_ind, o_ind = self.trainkg.ent2ix[s], self.trainkg.ent2ix[o]
-            v_ind = self.trainkg.rel2ix[v]
+        for i, (s, o, v) in enumerate(sovs):
+            try:
+                s_ind, o_ind = self.trainkg.ent2ix[s], self.trainkg.ent2ix[o]
+                v_ind = self.trainkg.rel2ix[v]
+            except KeyError:
+                skipcount += 1
+                continue
             Xs.append(self.embeddings.get_vector_from_triple(s_ind, v_ind, o_ind))
+        print(f"Could not retrieve embeddings for {skipcount}/{i+1} triples")
         return np.array(Xs), Ys
 
     def get_svo_glove_embeddings(self, ent_glove, rel_glove,
