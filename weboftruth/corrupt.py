@@ -30,7 +30,10 @@ def corrupt_kg(input_kg, save_folder=None,
         - Pandas DF to construct corrupted KG, with 'true_positive' flag indicating if triple is corrupted or not.
     """
     assert true_share>=0 and true_share<=1, 'Invalid true_share'
-    if not isinstance(torchkge.sampling):
+
+    if not any([sampler==getattr(torchkge.sampling,
+                        x) for x in dir(torchkge.sampling)]):
+        assert isinstance(sampler, str)
         sampler = getattr(torchkge.sampling, sampler)
     if true_share == 1:
         return input_kg
