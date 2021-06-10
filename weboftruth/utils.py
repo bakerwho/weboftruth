@@ -171,7 +171,7 @@ def parseline(line):
         return 'rel_emb_dim', int(re.findall(f'\d+', line)[0])
     return None, None
 
-def read_evaluation_sov_triples(filepath):
+def read_evaluation_sov_triples(filepath, sep='\t'):
     """Read triples from filepath
     Input:
         filepath: file with format "{subject}\t{verb}\t{object}\t{bool}"
@@ -179,10 +179,10 @@ def read_evaluation_sov_triples(filepath):
     with open(filepath, 'r') as f:
         l = f.readline()
         if all(w in l for w in ('from', 'rel', 'to', 'true_positive')):
-            df = pd.read_csv(filepath, sep='\t')
+            df = pd.read_csv(filepath, sep=sep)
         else:
             df = pd.read_csv(filepath,
-                names=['from', 'to', 'rel', 'true_positive'], sep='\t')
+                names=['from', 'to', 'rel', 'true_positive'], sep=sep)
     return df[['from', 'to', 'rel']].to_numpy(), df['true_positive'].to_numpy()
 
 class Embeddings():
