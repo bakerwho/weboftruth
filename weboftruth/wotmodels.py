@@ -238,7 +238,8 @@ class CustomTransModel():
                 self.save_model()
                 val_loss = self.validate(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
-                    self.save_model(best=True)
+                    if self.epochs>1:
+                        self.save_model(best=True)
                 self.logline(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 self.val_losses.append(val_loss)
                 self.val_epochs.append(self.epochs)

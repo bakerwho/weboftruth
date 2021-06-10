@@ -131,8 +131,8 @@ def load_model(model_folder, which='best_'):
                         n_relations=vars['n_relations'])
     else:
         raise ValueError("Not equipped to deal with this model")
-    model_file = [x for x in os.listdir(model_folder
-                            ) if which in x and '.pt' in x][0]
+    model_file = sorted([x for x in os.listdir(model_folder
+                            ) if which in x and '.pt' in x], reverse=True)[0]
     print(model_file)
     print(vars['emb_dim'])
     model.load_state_dict(torch.load(join(model_folder, model_file),
