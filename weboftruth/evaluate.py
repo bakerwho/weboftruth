@@ -65,14 +65,14 @@ class Evaluator():
         return np.array(Xs), Ys
 
     def train_pred_model(self, Xs, Ys, **kwargs):
-        self.pred_model.fit(Xs, Ys, max_iter=10000)
+        self.pred_model.fit(Xs, Ys, **kwargs)
         Ypred = self.pred_model.predict(Xs).astype('int32')
         acc = accuracy_score(Ypred, Ys.astype('int32'))
         print(f"Train accuracy on {self.pred_model.__repr__()}: {acc*100} %")
         return acc
 
-    def evaluate_pred_model(self, Xs, Ys):
-        Ypred = self.pred_model.predict(Xs).astype('int32')
+    def evaluate_pred_model(self, Xs, Ys, **kwargs):
+        Ypred = self.pred_model.predict(Xs, **kwargs).astype('int32')
         acc = accuracy_score(Ypred, Ys.astype('int32'))
         print(f"Test accuracy on {self.pred_model.__repr__()}: {acc*100} %")
         return acc
@@ -85,16 +85,18 @@ if __name__=='__main__':
                         './data/SVO-tensor-dataset',
                         old=True, get_paths=True)
     print(tr_fn, val_fn, test_fn)
-    evl8 = Evaluator(emb_modelfolder, whichmodel='best_')
-    x_tr, y_tr = evl8.get_triplet_embeddings(tr_fn)
-    x_te, y_te = evl8.get_triplet_embeddings(test_fn)
+    eval8 = Evaluator(emb_modelfolder, whichmodel='best_')
+    x_tr, y_tr = eval8.get_triplet_embeddings(tr_fn)
+    x_te, y_te = eval8.get_triplet_embeddings(test_fn)
     for predmodel in [Ridge, LogisticRegression, MLPClassifier]:
-        kwargs = {}
+        kwargs_dict = {'set':{}, 'train':{}, 'evaluate':{}}
         if predmodel == LogisticRegression:
-            kwargs['solver'] = 'newton-cg'
-        evl8.set_pred_model(predmodel, **kwargs)
-        evl8.train_pred_model(x_tr, y_tr)
-        evl8.evaluate_pred_model(x_te, y_te)
+            modelkwargs['solver'] = 'newton-cg'
+        elif predmodel == Ridge:
+            trainkwargs['max_iter'] = 10000
+        eval8.set_pred_model(predmodel, **kwargs_dict['set'])
+        eval8.train_pred_model(x_tr, y_tr, **kwargs_dict['train'])
+        eval8.evaluate_pred_model(x_te, y_te, **kwargs_dict['evaluate'])
 
 """
 import weboftruth as wot
