@@ -1,11 +1,13 @@
+from io import StringIO
+from numpy import concatenate
 import os
 from os.path import join
+import pandas as pd
+import re
+import sys
 import torchkge
 from torchkge import models
 import torch
-import re
-import pandas as pd
-from numpy import concatenate
 
 import weboftruth as wot
 from weboftruth._constants import *
@@ -219,22 +221,12 @@ class Embeddings():
         """
         return concatenate((s_vec, rel_vec, o_vec), axis=0)
 
-
-me = """variable    value
-----------  ------------------------------------------------------------------
-kg          <torchkge.data_structures.KnowledgeGraph object at 0x7f6fc7fedc50>
-model_type  TransE
-diss_type   L2
-emb_dim     250
-model       TransEModel(
-              (ent_emb): Embedding(30492, 250)
-              (rel_emb): Embedding(4538, 250)
-            )
-model_path  /project2/jevans/aabir/weboftruth/models/TransE_01
-logfile     /project2/jevans/aabir/weboftruth/models/TransE_01/log.txt
-lr          0.0004
-n_epochs    100
-b_size      32
-n_entities  30492
-n_relations 4538
-"""
+class Capturing(list):
+    def __enter__(self):
+        self._stdout = sys.stdout
+        sys.stdout = self._stringio = StringIO()
+        return self
+    def __exit__(self, *args):
+        self.extend(self._stringio.getvalue().splitlines())
+        del self._stringio    # free up some memory
+        sys.stdout = self._stdout

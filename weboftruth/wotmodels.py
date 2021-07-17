@@ -11,7 +11,7 @@ from torch.optim import Adam
 
 import torchkge
 from torchkge.models import Model, TransEModel
-from torchkge.sampling import BernoulliNegativeSampler
+from torchkge.sampling import *
 from torchkge.utils import MarginLoss, DataLoader
 
 from tqdm.autonotebook import tqdm
@@ -34,7 +34,6 @@ torch.manual_seed(0)
 # args.path = "/home-nfs/tenzorok/weboftruth"
 ################################################################
 
-#-p wot_path -e epochs -m model_type -small False
 parser.add_argument("-dp", "--dpath", dest="datapath",
                         help="path to data")
 parser.add_argument("-ds", "--dataset", dest="dataset",
@@ -53,14 +52,16 @@ parser.add_argument("-lr", "--learningrate", dest='lr',
 parser.add_argument("-emb", "--embdim", dest='emb_dim',
                         default=250,
                         help="embedding dimension", type=int)
-parser.add_argument("-s", "--small", dest='small', default=False,
-                        help="train small dataset", type=bool)
+parser.add_argument("-test", "--testrun", dest='test_run', default=False,
+                        help="train on (smaller) test dataset", type=bool)
 parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
                         help="truth share of dataset", type=int)
 parser.add_argument("-ve", "--valevery", dest="ve", default=10,
                         help="validate every X epochs", type=int)
 parser.add_argument("-shuffle", "--shuffle", dest="shuffle", default=False,
                         help="to shuffle data at datapath", type=bool)
+parser.add_argument("-filters", "--n_filters", dest="n_filters", default=3,
+                        help="no. of convolutional filters", type=int)
 
 args, unknown = parser.parse_known_args()
 
@@ -74,7 +75,7 @@ try:
 except:
     print("Warning: models folder may not exist")
 
-class CustomTransModel():
+class CustomKGEModel():
     """
     Class containing Translation Embedding Models (Torch-KGE) and the
     Knowledge Graph to be trained on
@@ -83,11 +84,11 @@ class CustomTransModel():
 
     Use load_WOTmodel(model_folder) after initialization to load from disc
     """
-    def __init__(self, trainkg, traints, model_type, bilinear=False, **kwargs):
+    def __init__(self, trainkg, traints, model_type, **kwargs):
         # add train_ts/truth_share parameter
         self.trainkg = trainkg
         self.traints = traints
-        self.model_type = model_type
+        self.model_type = model_type.replace("Model", '')
         self.diss_type = kwargs.pop('diss_type', 'L2')
         self.dataset_name = kwargs.pop('dataset_name', None)
         if self.dataset_name:
@@ -103,21 +104,28 @@ class CustomTransModel():
         else:
             self.emb_dim = kwargs.pop('emb_dim', args.emb_dim)
             if self.model_type is 'TransE':
-                self.model = getattr(torchkge.models, f'{model_type}Model'
+                self.model = getattr(torchkge.models, 'TransEModel'
                                 )(emb_dim=self.emb_dim,
                                     n_entities=self.trainkg.n_ent,
                                     n_relations=self.trainkg.n_rel,
                                     dissimilarity_type=self.diss_type)
-            elif bilinear:
-                self.model = getattr(torchkge.models.bilinear, self.model_type + 'Model'
+            elif any((self.model_type in x) for x in dir(
+                                                    torchkge.models.bilinear)):
+                self.model = getattr(torchkge.models.bilinear,
+                                    self.model_type + 'Model'
                                     )(emb_dim=self.emb_dim,
                                         n_entities = self.trainkg.n_ent,
                                         n_relations = self.trainkg.n_rel)
+            elif self.model_type is 'ConvKB':
+                self.n_filters = kwargs.pop('n_filters', args.n_filters)
+                self.model = getattr(torchkge.models.deep,
+                                    'ConvKBModel'
+                                    )(emb_dim=self.emb_dim,
+                                        n_filters=self.n_filters
+                                        n_entities = self.trainkg.n_ent,
+                                        n_relations = self.trainkg.n_rel)
             else:
-                self.model = getattr(torchkge.models, f'{model_type}Model'
-                                )(emb_dim=self.emb_dim,
-                                    n_entities=self.trainkg.n_ent,
-                                    n_relations=self.trainkg.n_rel)
+                raise ValueError(f'Invalid model_type: {self.model_type}')
         self.n_entities = self.trainkg.n_ent
         self.n_relations = self.trainkg.n_rel
 
@@ -138,7 +146,7 @@ class CustomTransModel():
         self.ent_vecs, self.rel_vecs = None, None
 
         # Legacy code
-        # super(CustomTransModel, self).__init__(self.emb_dim, self.trainkg.n_ent, self.trainkg.n_rel,
+        # super(CustomKGEModel, self).__init__(self.emb_dim, self.trainkg.n_ent, self.trainkg.n_rel,
         #                     dissimilarity_type=self.diss_type)
 
 
@@ -177,9 +185,11 @@ class CustomTransModel():
     def set_optimizer(self, optClass=Adam, **kwargs):
         self.optimizer = optClass(self.model.parameters(), lr=self.lr,
                                     **kwargs)
+        self.logline(f'Optimizer set: {self.optimizer}')
 
     def set_sampler(self, samplerClass=BernoulliNegativeSampler, **kwargs):
         self.sampler = samplerClass(**kwargs)
+        self.logline(f'Sampler set: {self.optimizer}')
 
     def set_loss(self, lossClass=MarginLoss, **kwargs):
         self.loss_fn = lossClass(**kwargs)
@@ -187,6 +197,7 @@ class CustomTransModel():
             self.loss_fn.cuda()
         except:
             pass
+        self.logline(f'Loss function set: {self.loss_fn}')
 
     def one_epoch(self):
         running_loss = 0.0
@@ -205,26 +216,54 @@ class CustomTransModel():
         self.tr_losses.append(epoch_loss)
         return epoch_loss
 
-    def validate(self, val_kg, istest=False, verbose=False):
+    def eval_base(self, val_kg, istest=False, verbose=False):
+        self.model.train(False)
         losses = []
         try:
             dataloader = DataLoader(val_kg, batch_size=self.b_size, use_cuda='all')
         except AssertionError:
             dataloader = DataLoader(val_kg, batch_size=self.b_size)
 
-        for batch in dataloader:
-            h, t, r = batch
-            n_h, n_t = self.sampler.corrupt_batch(h, t, r)
-            pos, neg = self.model(h, t, n_h, n_t, r)
-            loss = self.loss_fn(pos, neg)
-            losses.append(loss.item())
-            if istest:
-                self.logline(f'\t\tTest loss: {np.mean(losses)}')
+        with torch.no_grad():
+            for batch in dataloader:
+                h, t, r = batch
+                n_h, n_t = self.sampler.corrupt_batch(h, t, r)
+                pos, neg = self.model(h, t, n_h, n_t, r)
+                loss = self.loss_fn(pos, neg)
+                losses.append(loss.item())
+        self.logline('Base Evaluator results:')
+        if istest:
+            self.logline(f'\t\tTest loss: {np.mean(losses)}')
         if verbose:
             print(f'\t\tTest loss after epoch {self.epochs}: {np.mean(losses)}')
         return np.mean(losses)
 
+    def eval_link_predict(self, kg_test):
+        self.model.train(False)
+        with torch.no_grad():
+            evaluator = LinkPredictionEvaluator(self.model, kg_test)
+            evaluator.evaluate(b_size=32)
+        with utils.Capturing() as out:
+            evaluator.print_results()
+        self.logline('LinkPredictionEvaluator results:')
+        self.logline(out)
+        del out
+        return evaluator
+
+    def eval_triplet_predict(self, kg_val, kg_test):
+        self.model.train(False)
+        with torch.no_grad():
+            evaluator = TripletClassificationEvaluator(self.model, kg_val, kg_test)
+            evaluator.evaluate(b_size=32)
+        with utils.Capturing() as out:
+            evaluator.print_results()
+        self.logline('TripletClassificationEvaluator results:')
+        self.logline(out)
+        del out
+        return evaluator
+
     def train_model(self, n_epochs, val_kg, verbose=False):
+        self.model.train()
         epochs = tqdm(range(n_epochs), unit='epoch')
         if self.epochs == 0:
             dt = datetime.now().strftime("%Y-%m-%d %H:%M:%S")+' UTC'
@@ -236,7 +275,7 @@ class CustomTransModel():
                 print(f'Epoch {self.epochs} | Train loss: {mean_epoch_loss}')
             if ((epoch+1)%args.ve)==0 or epoch==0:
                 self.save_model()
-                val_loss = self.validate(val_kg)
+                val_loss = self.eval_base(val_kg)
                 if not self.val_losses or val_loss < min(self.val_losses):
                     if self.epochs>1:
                         self.save_model(best=True)
@@ -291,7 +330,7 @@ if __name__ == '__main__':
     print(f"Datapath: {args.datapath}\nGlobal modelpath: {args.modelpath}")
     print(f"Dataset: {args.dataset}\n")
     print(f"Model Type: {args.model_type}")
-    print(f"Epochs: {args.epochs}\nSmall: {args.small}")
+    print(f"Epochs: {args.epochs}\nSmall: {args.test_run}")
     print(f"Truth share: {args.ts}\nEmbedding dimension: {args.emb_dim}")
 
     # Load data
@@ -310,38 +349,25 @@ if __name__ == '__main__':
     if args.shuffle:
         print('Warning: shuffling train/val/test datasets')
         tr_kg, val_kg, test_kg = wot.utils.reshuffle_trte_split(dfs)
+        for txt, kg in zip(['train_shuffled', 'val_shuffled', 'test_shuffled'],
+                           [tr_kg, val_kg, test_kg]):
+            mod.save_kg(kg, txt)
     else:
         tr_kg, val_kg, test_kg = (wot.utils.df_to_kg(df) for df in dfs)
 
+
     # Initialize model
 
-    if args.model_type+'Model' in modelslist(torchkge.models.translation):
-        if args.small:
-            mod = CustomTransModel(trainkg=test_kg, traints=args.ts,
-                                    model_type=args.model_type,
-                                    emb_dim=args.emb_dim)
-        else:
-            mod = CustomTransModel(trainkg=tr_kg, traints=args.ts,
-                                        model_type=args.model_type,
-                                        emb_dim=args.emb_dim)
-    elif args.model_type+'Model' in modelslist(torchkge.models.bilinear):
-        if args.small:
-            mod = CustomBilinearModel(trainkg=tr_kg, traints=args.ts,
-                                model_type=args.model_type,
-                                emb_dim=args.emb_dim)
-        else:
-            mod = CustomBilinearModel(trainkg=tr_kg, traints=args.ts,
-                                    model_type=args.model_type,
-                                    emb_dim=args.emb_dim)
+    model_args = {'trainkg': test_kg, 'traints': args.ts,
+                 'model_type':args.model_type, 'emb_dim': args.emb_dim,
+                 'dataset':args.dataset}
+
+    mod = CustomKGEModel(**model_args)
     mod.set_sampler(samplerClass=BernoulliNegativeSampler, kg=tr_kg)
     mod.set_optimizer(optClass=Adam)
     mod.set_loss(lossClass=MarginLoss, margin=0.5)
 
     print(f'Model Name: {mod.model_name}\tModel Path: {mod.model_path}')
-
-    if args.shuffle:
-        # save new split as datasets were shuffled
-        mod.save_kg(tr)
 
     # corrupt training KG if required
     if args.ts != 100:
@@ -361,11 +387,7 @@ if __name__ == '__main__':
         mod.loss_fn.cuda()
     #mod.create_model_path(args.modelpath)
     mod.train_model(args.epochs, tr_kg)
-    if args.shuffle:
-        mod.save_kg(test_kg, 'test')
     print('\nTest set performance:')
-    mod.validate(test_kg, istest=True, verbose=True)
-    if args.shuffle:
-        mod.save_kg(val_kg, 'val')
+    mod.eval_base(test_kg, istest=True, verbose=True)
     print('\nValidation set performance:')
-    mod.validate(val_kg, istest=True, verbose=True)
+    mod.eval_base(val_kg, istest=True, verbose=True)
