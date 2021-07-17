@@ -6,18 +6,6 @@ from sklearn.model_selection import train_test_split
 from weboftruth.utils import load_model
 
 import sys
-import argparse
-
-parser = argparse.ArgumentParser()
-
-parser.add_argument("-dp", "--dpath", dest="datapath",
-                        help="path to data")
-parser.add_argument("-ds", "--dataset", dest="dataset",
-                        help="dataset name", type=str)
-parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
-                        help="truth share of dataset", type=int)
-parser.add_argument("-sampler", "--sampler", dest="sampler",
-                        help="sampler", default='BernoulliNegativeSampler')
 
 def corrupt_kg(input_kg, save_folder=None,
                 sampler='BernoulliNegativeSampler',

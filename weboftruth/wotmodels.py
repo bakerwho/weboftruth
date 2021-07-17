@@ -63,7 +63,7 @@ parser.add_argument("-shuffle", "--shuffle", dest="shuffle", default=False,
 parser.add_argument("-filters", "--numfilters", dest="n_filters", default=3,
                         help="no. of convolutional filters", type=int)
 
-args, unknown = parser.parse_known_args()
+args, unknown = parser.parse_known_args(args=[])
 
 #svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
 #svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 90, 80, 50]}
@@ -90,8 +90,10 @@ class CustomKGEModel():
         self.traints = traints
         self.model_type = model_type.replace("Model", '')
         self.dataset_name = kwargs.pop('dataset_name', None)
+
         if self.dataset_name:
             self.logline(f'Dataset: {self.dataset_name}')
+
         if self.model_type in ['TransR', 'TransD', 'TorusE']:
             self.ent_emb_dim = kwargs.pop('ent_emb_dim', args.emb_dim)
             self.rel_emb_dim = kwargs.pop('rel_emb_dim', args.emb_dim)
