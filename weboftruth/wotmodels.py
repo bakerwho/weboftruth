@@ -60,7 +60,7 @@ parser.add_argument("-ve", "--valevery", dest="ve", default=10,
                         help="validate every X epochs", type=int)
 parser.add_argument("-shuffle", "--shuffle", dest="shuffle", default=False,
                         help="to shuffle data at datapath", type=bool)
-parser.add_argument("-f", "--numfilters", dest="n_filters", default=3,
+parser.add_argument("-filters", "--numfilters", dest="n_filters", default=3,
                         help="no. of convolutional filters", type=int)
 
 args, unknown = parser.parse_known_args()
