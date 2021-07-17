@@ -3,7 +3,6 @@ import torchkge
 from os.path import join
 from sklearn.model_selection import train_test_split
 
-from weboftruth.wotmodels import *
 from weboftruth.utils import load_model
 
 import sys

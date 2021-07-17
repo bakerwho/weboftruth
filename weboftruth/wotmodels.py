@@ -89,7 +89,6 @@ class CustomKGEModel():
         self.trainkg = trainkg
         self.traints = traints
         self.model_type = model_type.replace("Model", '')
-        self.diss_type = kwargs.pop('diss_type', 'L2')
         self.dataset_name = kwargs.pop('dataset_name', None)
         if self.dataset_name:
             self.logline(f'Dataset: {self.dataset_name}')
@@ -104,6 +103,7 @@ class CustomKGEModel():
         else:
             self.emb_dim = kwargs.pop('emb_dim', args.emb_dim)
             if self.model_type is 'TransE':
+                self.diss_type = kwargs.pop('diss_type', 'L2')
                 self.model = getattr(torchkge.models, 'TransEModel'
                                 )(emb_dim=self.emb_dim,
                                     n_entities=self.trainkg.n_ent,
