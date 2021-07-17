@@ -121,7 +121,7 @@ class CustomKGEModel():
                 self.model = getattr(torchkge.models.deep,
                                     'ConvKBModel'
                                     )(emb_dim=self.emb_dim,
-                                        n_filters=self.n_filters
+                                        n_filters=self.n_filters,
                                         n_entities = self.trainkg.n_ent,
                                         n_relations = self.trainkg.n_rel)
             else:
