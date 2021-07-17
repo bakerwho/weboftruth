@@ -52,7 +52,7 @@ parser.add_argument("-lr", "--learningrate", dest='lr',
 parser.add_argument("-emb", "--embdim", dest='emb_dim',
                         default=250,
                         help="embedding dimension", type=int)
-parser.add_argument("-test", "--testrun", dest='test_run', default=False,
+parser.add_argument("-test", "--testrun", dest='is_test_run', default=False,
                         help="train on (smaller) test dataset", type=bool)
 parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
                         help="truth share of dataset", type=int)
@@ -60,7 +60,7 @@ parser.add_argument("-ve", "--valevery", dest="ve", default=10,
                         help="validate every X epochs", type=int)
 parser.add_argument("-shuffle", "--shuffle", dest="shuffle", default=False,
                         help="to shuffle data at datapath", type=bool)
-parser.add_argument("-filters", "--n_filters", dest="n_filters", default=3,
+parser.add_argument("-f", "--numfilters", dest="n_filters", default=3,
                         help="no. of convolutional filters", type=int)
 
 args, unknown = parser.parse_known_args()
@@ -330,7 +330,7 @@ if __name__ == '__main__':
     print(f"Datapath: {args.datapath}\nGlobal modelpath: {args.modelpath}")
     print(f"Dataset: {args.dataset}\n")
     print(f"Model Type: {args.model_type}")
-    print(f"Epochs: {args.epochs}\nSmall: {args.test_run}")
+    print(f"Epochs: {args.epochs}\nSmall: {args.is_test_run}")
     print(f"Truth share: {args.ts}\nEmbedding dimension: {args.emb_dim}")
 
     # Load data
