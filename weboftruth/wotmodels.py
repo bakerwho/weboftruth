@@ -69,7 +69,7 @@ parser.add_argument("-corrsampler", "--corruptionsamplers",
                 dest="corruption_sampler", default='BernoulliNegativeSampler',
                 help="Negative sampler for corruption", type=str)
 
-args, unknown = parser.parse_known_args()
+args, unknown = parser.parse_known_args([])
 
 #svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
 #svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 90, 80, 50]}
