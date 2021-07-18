@@ -195,7 +195,7 @@ class CustomKGEModel():
                                     **kwargs)
         self.logline(f'Optimizer set: {self.optimizer}')
 
-    def set_traintime_neg_sampler(self, samplerClass=BernoulliNegativeSampler, **kwargs):
+    def set_train_neg_sampler(self, samplerClass=BernoulliNegativeSampler, **kwargs):
         self.sampler = samplerClass(**kwargs)
         self.logline(f'Traintime sampler set: {self.optimizer}')
 
@@ -372,8 +372,8 @@ if __name__ == '__main__':
                  'dataset':args.dataset}
 
     mod = CustomKGEModel(**model_args)
-    sampler = getattr(torchkge.sampling, args.traintime_sampler)
-    mod.set_traintime_neg_sampler(samplerClass=sampler, kg=tr_kg)
+    sampler = getattr(torchkge.sampling, args.train_sampler)
+    mod.set_train_neg_sampler(samplerClass=sampler, kg=tr_kg)
     mod.set_optimizer(optClass=Adam)
     mod.set_loss(lossClass=MarginLoss, margin=0.5)
 
