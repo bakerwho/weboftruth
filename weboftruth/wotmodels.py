@@ -197,7 +197,7 @@ class CustomKGEModel():
 
     def set_train_neg_sampler(self, samplerClass=BernoulliNegativeSampler, **kwargs):
         self.sampler = samplerClass(**kwargs)
-        self.logline(f'Traintime sampler set: {self.optimizer}')
+        self.logline(f'Traintime sampler set: {self.sampler}')
 
     def set_loss(self, lossClass=MarginLoss, **kwargs):
         self.loss_fn = lossClass(**kwargs)
