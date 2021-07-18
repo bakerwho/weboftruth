@@ -62,6 +62,12 @@ parser.add_argument("-shuffle", "--shuffle", dest="shuffle", default=False,
                         help="to shuffle data at datapath", type=bool)
 parser.add_argument("-filters", "--numfilters", dest="n_filters", default=3,
                         help="no. of convolutional filters", type=int)
+parser.add_argument("-trsampler", "--train_sampler", dest="train_sampler",
+                        default='BernoulliNegativeSampler',
+                        help="Traintime negative sampler", type=str)
+parser.add_argument("-corrsampler", "--corruption_samplers",
+                dest="corruption_sampler", default='BernoulliNegativeSampler',
+                help="Negative sampler for corruption", type=str)
 
 args, unknown = parser.parse_known_args(args=[])
 
@@ -189,9 +195,9 @@ class CustomKGEModel():
                                     **kwargs)
         self.logline(f'Optimizer set: {self.optimizer}')
 
-    def set_sampler(self, samplerClass=BernoulliNegativeSampler, **kwargs):
+    def set_traintime_neg_sampler(self, samplerClass=BernoulliNegativeSampler, **kwargs):
         self.sampler = samplerClass(**kwargs)
-        self.logline(f'Sampler set: {self.optimizer}')
+        self.logline(f'Traintime sampler set: {self.optimizer}')
 
     def set_loss(self, lossClass=MarginLoss, **kwargs):
         self.loss_fn = lossClass(**kwargs)
@@ -341,7 +347,8 @@ if __name__ == '__main__':
     tr_fn, val_fn, test_fn = wot.utils.get_simonepri_filenames(args.datapath,
                                                             args.dataset,
                                                             id=as_id)
-    explode = 'FB15K' not in args.dataset
+    #explode = 'FB15K' not in args.dataset
+    explode = False
     dfs = wot.utils.read_data(tr_fn, val_fn, test_fn,
                              join(args.datapath, args.dataset),
                     explode_rels=explode, rel_sep='/',
@@ -365,7 +372,8 @@ if __name__ == '__main__':
                  'dataset':args.dataset}
 
     mod = CustomKGEModel(**model_args)
-    mod.set_sampler(samplerClass=BernoulliNegativeSampler, kg=tr_kg)
+    sampler = torchkge.sampling, args.traintime_sampler)
+    mod.set_traintime_neg_sampler(samplerClass=sampler, kg=tr_kg)
     mod.set_optimizer(optClass=Adam)
     mod.set_loss(lossClass=MarginLoss, margin=0.5)
 
@@ -374,11 +382,13 @@ if __name__ == '__main__':
     # corrupt training KG if required
     if args.ts != 100:
         tr_kg_pure = deepcopy(tr_kg)
-        shuffletxt = '_shuffle' if args.shuffle else '',
+        shuffletxt = '_shuffle' if args.shuffle else ''
+        sampler2 = sampler = getattr(torchkge.sampling, args.corruption_sampler)
         tr_kg, _ = wot.corrupt.corrupt_kg(tr_kg, save_folder=mod.model_path,
-                        sampler=torchkge.sampling.BernoulliNegativeSampler,
+                        sampler=sampler2,
                         true_share=args.ts/100, use_cuda=False,
-                        prefilename=f'corrupt_{tr_fn}{shuffletxt}')
+                        prefilename=f'ts={args.ts}_corrupt_{tr_fn}{shuffletxt}')
+        mod.save_kg(tr_kg, f'ts={args.ts}_corrupt_{tr_fn}{shuffletxt}')
 
     # Move everything to CUDA if available
     if cuda.is_available():
