@@ -372,7 +372,7 @@ if __name__ == '__main__':
                  'dataset':args.dataset}
 
     mod = CustomKGEModel(**model_args)
-    sampler = torchkge.sampling, args.traintime_sampler)
+    sampler = getattr(torchkge.sampling, args.traintime_sampler)
     mod.set_traintime_neg_sampler(samplerClass=sampler, kg=tr_kg)
     mod.set_optimizer(optClass=Adam)
     mod.set_loss(lossClass=MarginLoss, margin=0.5)
