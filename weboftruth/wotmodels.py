@@ -62,14 +62,14 @@ parser.add_argument("-shuffle", "--shuffle", dest="shuffle", default=False,
                         help="to shuffle data at datapath", type=bool)
 parser.add_argument("-filters", "--numfilters", dest="n_filters", default=3,
                         help="no. of convolutional filters", type=int)
-parser.add_argument("-trsampler", "--train_sampler", dest="train_sampler",
+parser.add_argument("-trsampler", "--trainsampler", dest="train_sampler",
                         default='BernoulliNegativeSampler',
                         help="Traintime negative sampler", type=str)
-parser.add_argument("-corrsampler", "--corruption_samplers",
+parser.add_argument("-corrsampler", "--corruptionsamplers",
                 dest="corruption_sampler", default='BernoulliNegativeSampler',
                 help="Negative sampler for corruption", type=str)
 
-args, unknown = parser.parse_known_args(args=[])
+args, unknown = parser.parse_known_args()
 
 #svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
 #svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 90, 80, 50]}
