@@ -110,7 +110,7 @@ class CustomKGEModel():
                                         n_relations=self.trainkg.n_rel)
         else:
             self.emb_dim = kwargs.pop('emb_dim', args.emb_dim)
-            if self.model_type is 'TransE':
+            if self.model_type == 'TransE':
                 self.diss_type = kwargs.pop('diss_type', 'L2')
                 self.model = getattr(torchkge.models, 'TransEModel'
                                 )(emb_dim=self.emb_dim,
@@ -124,7 +124,7 @@ class CustomKGEModel():
                                     )(emb_dim=self.emb_dim,
                                         n_entities = self.trainkg.n_ent,
                                         n_relations = self.trainkg.n_rel)
-            elif self.model_type is 'ConvKB':
+            elif self.model_type == 'ConvKB':
                 self.n_filters = kwargs.pop('n_filters', args.n_filters)
                 self.model = getattr(torchkge.models.deep,
                                     'ConvKBModel'
