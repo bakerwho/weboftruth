@@ -394,7 +394,7 @@ if __name__ == '__main__':
 
     # Initialize model
 
-    model_args = {'trainkg': test_kg, 'traints': args.ts,
+    model_args = {'trainkg': tr_kg, 'traints': args.ts,
                  'model_type':args.model_type, 'emb_dim': args.emb_dim,
                  'dataset':args.dataset}
 
