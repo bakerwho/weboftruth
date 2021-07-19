@@ -115,6 +115,9 @@ class CustomKGEModel():
         if self.dataset_name:
             self.logline(f'Dataset: {self.dataset_name}')
 
+        self.dataloader_cuda_flag = 'all' if (args.use_cuda and
+                                            cuda.is_available()) else None
+
         if self.model_type in ['TransR', 'TransD', 'TorusE']:
             self.ent_emb_dim = kwargs.pop('ent_emb_dim', args.emb_dim)
             self.rel_emb_dim = kwargs.pop('rel_emb_dim', args.emb_dim)
@@ -172,10 +175,8 @@ class CustomKGEModel():
         # super(CustomKGEModel, self).__init__(self.emb_dim, self.trainkg.n_ent, self.trainkg.n_rel,
         #                     dissimilarity_type=self.diss_type)
 
-        dataloader_cuda_flag = 'all' if (args.use_cuda and
-                                            cuda.is_available()) else None
-        self.dataloader = DataLoader(self.trainkg, batch_size=self.b_size,
-                use_cuda=dataloader_cuda_flag)
+        self.train_dataloader = DataLoader(self.trainkg, batch_size=self.b_size,
+                use_cuda=self.dataloader_cuda_flag)
 
         ## Logger
         self.epochs=0
@@ -223,7 +224,7 @@ class CustomKGEModel():
     def one_epoch(self):
         self.model.train(True)
         running_loss = 0.0
-        for i, batch in enumerate(self.dataloader):
+        for i, batch in enumerate(self.train_dataloader):
             h, t, r = batch
             n_h, n_t = self.sampler.corrupt_batch(h, t, r)
             self.optimizer.zero_grad()
@@ -242,13 +243,11 @@ class CustomKGEModel():
         self.model.train(False)
         losses = []
 
-        dataloader_cuda_flag = 'all' if (args.use_cuda and
-                                            cuda.is_available()) else None
-        self.dataloader = DataLoader(self.trainkg, batch_size=self.b_size,
-                use_cuda=dataloader_cuda_flag)
+        eval_dataloader = DataLoader(self.trainkg, batch_size=self.b_size,
+                use_cuda=self.dataloader_cuda_flag)
 
         with torch.no_grad():
-            for batch in dataloader:
+            for batch in eval_dataloader:
                 h, t, r = batch
                 n_h, n_t = self.sampler.corrupt_batch(h, t, r)
                 pos, neg = self.model(h, t, n_h, n_t, r)
@@ -325,15 +324,16 @@ class CustomKGEModel():
 
     def save_kg(self, kgdf, addtxt=''):
         # save knowledge Graph
-        if kg is None:
+        if kgdf is None:
             kg, addtxt = self.trainkg, 'train'
+            df = utils.kg_to_df(kg)
         if isinstance(kgdf, pd.DataFrame):
             df = kgdf
         elif isinstance(kgdf, torchkge.KnowledgeGraph):
             df = utils.kg_to_df(kgdf)
         else:
-            raise TypeError('Invalid argument kgdf must be \
-DataFrame or KnowledgeGraph')
+            raise TypeError("Invalid argument kgdf must be"\
+                            " DataFrame or KnowledgeGraph")
         kgdfname = f'{addtxt}_{self.model_type}_kg.csv'
         kgdfpath = join(self.model_path, kgdfname)
         if not os.path.exists(kgdfpath):
