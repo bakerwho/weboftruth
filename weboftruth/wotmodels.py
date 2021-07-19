@@ -57,14 +57,14 @@ def get_parser():
                             default=250,
                             help="embedding dimension", type=int)
     parser.add_argument("-test", "--testrun", dest='is_test_run', default=False,
-                            help="train on (smaller) test dataset", type=bool,
+                            help="train on (smaller) test dataset",
                             action='store_true')
     parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
                             help="truth share of dataset", type=int)
     parser.add_argument("-ve", "--valevery", dest="ve", default=10,
                             help="validate every X epochs", type=int)
     parser.add_argument("-shuffle", "--shuffle", dest="shuffle", default=False,
-                            help="to shuffle data at datapath", type=bool,
+                            help="to shuffle data at datapath",
                             action='store_true')
     parser.add_argument("-filters", "--numfilters", dest="n_filters", default=3,
                             help="no. of convolutional filters", type=int)
@@ -75,7 +75,7 @@ def get_parser():
                     dest="corruption_sampler", default='BernoulliNegativeSampler',
                     help="Negative sampler for corruption", type=str)
     parser.add_argument("-cuda", "--use_cuda", dest="use_cuda", default=True,
-                    help="To use cuda", type=bool, action='store_true')
+                    help="To use cuda", action='store_true')
     return parser
 
 #svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
