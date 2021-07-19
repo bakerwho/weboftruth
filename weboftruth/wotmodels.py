@@ -356,6 +356,7 @@ if __name__ == '__main__':
     print(f"Model Type: {args.model_type}")
     print(f"Epochs: {args.epochs}\nSmall: {args.is_test_run}")
     print(f"Truth share: {args.ts}\nEmbedding dimension: {args.emb_dim}")
+    print(f"Using cuda: {args.use_cuda}")
 
     # Load data
     #tr_fn, val_fn, test_fn = wot.utils.get_svo_file_names(args.ts)
