@@ -74,7 +74,7 @@ def get_parser():
     parser.add_argument("-corrsampler", "--corruptionsamplers",
                     dest="corruption_sampler", default='BernoulliNegativeSampler',
                     help="Negative sampler for corruption", type=str)
-    parser.add_argument("-cuda", "--use_cuda", dest="use_cuda", default=True,
+    parser.add_argument("-cuda", "--use_cuda", dest="use_cuda", default=False,
                     help="To use cuda", action='store_true')
     return parser
 
