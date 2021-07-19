@@ -308,7 +308,7 @@ class CustomKGEModel():
                 if verbose:
                     print(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 if ((0 < (min_val_loss - val_loss)/min_val_loss < 0.01) and
-                    early_stopping):
+                    early_stopping) and epoch>n_epochs//2:
                     print('Early stopping as validation loss decreases by'\
                     'less than 1%')
                     break
