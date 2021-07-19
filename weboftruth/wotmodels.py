@@ -57,13 +57,15 @@ def get_parser():
                             default=250,
                             help="embedding dimension", type=int)
     parser.add_argument("-test", "--testrun", dest='is_test_run', default=False,
-                            help="train on (smaller) test dataset", type=bool)
+                            help="train on (smaller) test dataset", type=bool,
+                            action='store_true')
     parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
                             help="truth share of dataset", type=int)
     parser.add_argument("-ve", "--valevery", dest="ve", default=10,
                             help="validate every X epochs", type=int)
     parser.add_argument("-shuffle", "--shuffle", dest="shuffle", default=False,
-                            help="to shuffle data at datapath", type=bool)
+                            help="to shuffle data at datapath", type=bool,
+                            action='store_true')
     parser.add_argument("-filters", "--numfilters", dest="n_filters", default=3,
                             help="no. of convolutional filters", type=int)
     parser.add_argument("-trsampler", "--trainsampler", dest="train_sampler",
@@ -72,9 +74,8 @@ def get_parser():
     parser.add_argument("-corrsampler", "--corruptionsamplers",
                     dest="corruption_sampler", default='BernoulliNegativeSampler',
                     help="Negative sampler for corruption", type=str)
-    parser.add_argument("-cuda", "--use_cuda",
-                    dest="use_cuda", default=True,
-                    help="To use cuda", type=bool)
+    parser.add_argument("-cuda", "--use_cuda", dest="use_cuda", default=True,
+                    help="To use cuda", type=bool, action='store_true')
     return parser
 
 #svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
@@ -354,7 +355,7 @@ if __name__ == '__main__':
     print(f"Datapath: {args.datapath}\nGlobal modelpath: {args.modelpath}")
     print(f"Dataset: {args.dataset}\n")
     print(f"Model Type: {args.model_type}")
-    print(f"Epochs: {args.epochs}\nSmall: {args.is_test_run}")
+    print(f"Epochs: {args.epochs}\nRun on test dataset: {args.is_test_run}")
     print(f"Truth share: {args.ts}\nEmbedding dimension: {args.emb_dim}")
     print(f"Using cuda: {args.use_cuda}")
 
