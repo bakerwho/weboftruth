@@ -355,7 +355,7 @@ if __name__ == '__main__':
     args, unknown = parser.parse_known_args()
 
     try:
-        os.makedirs(args.modelpath, exists_ok=True)
+        os.makedirs(args.modelpath, exist_ok=True)
     except:
         print("Warning: models folder may not exist")
 
