@@ -182,7 +182,7 @@ class CustomKGEModel():
                         if os.path.isdir(join(args.modelpath, d)
                         # that are directories
                         ) and f'{self.model_type}_' in d
-                        and d.split('isnumeric()]
+                        and d.split('_')[1].isnumeric()]
                         #and are of type self.model_type
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
         ds = self.dataset_name
@@ -413,7 +413,7 @@ if __name__ == '__main__':
         cuda.init()
         mod.model.cuda()
         mod.loss_fn.cuda()
-    
+
     #mod.create_model_path(args.modelpath)
     mod.train_model(args.epochs, tr_kg)
     print('\nTest set performance:')
