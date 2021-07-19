@@ -1,5 +1,7 @@
 from copy import deepcopy
 
+from easydict import EasyDict as edict
+
 import pandas as pd
 import os
 from os.path import join
@@ -24,7 +26,7 @@ from weboftruth import utils
 
 import sys
 import argparse
-parser = argparse.ArgumentParser()
+
 
 torch.manual_seed(0)
 
@@ -34,52 +36,53 @@ torch.manual_seed(0)
 # args.path = "/home-nfs/tenzorok/weboftruth"
 ################################################################
 
-parser.add_argument("-dp", "--dpath", dest="datapath",
-                        help="path to data")
-parser.add_argument("-ds", "--dataset", dest="dataset",
-                        help="dataset name", type=str)
-parser.add_argument("-mp", "--mpath", dest="modelpath",
-                        help="path to models")
-parser.add_argument("-e", "--epochs", dest="epochs",
-                        default=100,
-                        help="no. of training epochs", type=int)
-parser.add_argument("-m", "--model", dest='model_type',
-                        default='TransE',
-                        help="model type")
-parser.add_argument("-lr", "--learningrate", dest='lr',
-                            default=5e-5,
-                            help="learning rate", type=float)
-parser.add_argument("-emb", "--embdim", dest='emb_dim',
-                        default=250,
-                        help="embedding dimension", type=int)
-parser.add_argument("-test", "--testrun", dest='is_test_run', default=False,
-                        help="train on (smaller) test dataset", type=bool)
-parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
-                        help="truth share of dataset", type=int)
-parser.add_argument("-ve", "--valevery", dest="ve", default=10,
-                        help="validate every X epochs", type=int)
-parser.add_argument("-shuffle", "--shuffle", dest="shuffle", default=False,
-                        help="to shuffle data at datapath", type=bool)
-parser.add_argument("-filters", "--numfilters", dest="n_filters", default=3,
-                        help="no. of convolutional filters", type=int)
-parser.add_argument("-trsampler", "--trainsampler", dest="train_sampler",
-                        default='BernoulliNegativeSampler',
-                        help="Traintime negative sampler", type=str)
-parser.add_argument("-corrsampler", "--corruptionsamplers",
-                dest="corruption_sampler", default='BernoulliNegativeSampler',
-                help="Negative sampler for corruption", type=str)
-
-args, unknown = parser.parse_known_args([])
+def get_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-dp", "--dpath", dest="datapath",
+                            help="path to data")
+    parser.add_argument("-ds", "--dataset", dest="dataset",
+                            help="dataset name", type=str)
+    parser.add_argument("-mp", "--mpath", dest="modelpath",
+                            help="path to models")
+    parser.add_argument("-e", "--epochs", dest="epochs",
+                            default=100,
+                            help="no. of training epochs", type=int)
+    parser.add_argument("-m", "--model", dest='model_type',
+                            default='TransE',
+                            help="model type")
+    parser.add_argument("-lr", "--learningrate", dest='lr',
+                                default=5e-5,
+                                help="learning rate", type=float)
+    parser.add_argument("-emb", "--embdim", dest='emb_dim',
+                            default=250,
+                            help="embedding dimension", type=int)
+    parser.add_argument("-test", "--testrun", dest='is_test_run', default=False,
+                            help="train on (smaller) test dataset", type=bool)
+    parser.add_argument("-ts", "--truthshare", dest="ts", default=100,
+                            help="truth share of dataset", type=int)
+    parser.add_argument("-ve", "--valevery", dest="ve", default=10,
+                            help="validate every X epochs", type=int)
+    parser.add_argument("-shuffle", "--shuffle", dest="shuffle", default=False,
+                            help="to shuffle data at datapath", type=bool)
+    parser.add_argument("-filters", "--numfilters", dest="n_filters", default=3,
+                            help="no. of convolutional filters", type=int)
+    parser.add_argument("-trsampler", "--trainsampler", dest="train_sampler",
+                            default='BernoulliNegativeSampler',
+                            help="Traintime negative sampler", type=str)
+    parser.add_argument("-corrsampler", "--corruptionsamplers",
+                    dest="corruption_sampler", default='BernoulliNegativeSampler',
+                    help="Negative sampler for corruption", type=str)
+    return parser
 
 #svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
 #svo_paths = {k:join(svo_data_path, str(k)) for k in [100, 90, 80, 50]}
 
-args.modelpath = args.modelpath
-
-try:
-    os.makedirs(args.modelpath, exist_ok=True)
-except:
-    print("Warning: models folder may not exist")
+args = edict({  "epochs":100, "model_type":'TransE', "lr":5e-5,
+                "emb_dim":250, "is_test_run":False, "ve":10,
+                "shuffle":False, "n_filters":3,
+                "train_sampler":'BernoulliNegativeSampler',
+                "corruption_sampler":'BernoulliNegativeSampler'
+                })
 
 class CustomKGEModel():
     """
@@ -335,6 +338,15 @@ def modelslist(module):
     return [x for x in dir(module) if 'model' in x.lower()]
 
 if __name__ == '__main__':
+    parser = get_parser()
+
+    args, unknown = parser.parse_known_args()
+
+    try:
+        os.makedirs(args.modelpath, exist_ok=True)
+    except:
+        print("Warning: models folder may not exist")
+
     print(f"Datapath: {args.datapath}\nGlobal modelpath: {args.modelpath}")
     print(f"Dataset: {args.dataset}\n")
     print(f"Model Type: {args.model_type}")
