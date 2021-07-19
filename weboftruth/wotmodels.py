@@ -429,7 +429,10 @@ if __name__ == '__main__':
 
     #mod.create_model_path(args.modelpath)
     mod.train_model(args.epochs, tr_kg)
-    print('\nTest set performance:')
+    print('\nTest set base evaluator:')
     mod.eval_base(test_kg, istest=True, verbose=True)
-    print('\nValidation set performance:')
+    print('\nValidation set base evaluator:')
     mod.eval_base(val_kg, istest=True, verbose=True)
+    print('Torchkge evaluators:')
+    mod.eval_link_predict(test_kg)
+    mod.eval_triplet_predict(val_kg, test_kg)
