@@ -178,7 +178,8 @@ class CustomKGEModel():
                         #all items in model path
                         if os.path.isdir(join(args.modelpath, d)
                         # that are directories
-                        ) and f'{self.model_type}_' in d]
+                        ) and f'{self.model_type}_' in d
+                        and d.split('_')[1].isnumeric()]
                         #and are of type self.model_type
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
         ds = self.dataset_name
