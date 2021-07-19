@@ -72,6 +72,9 @@ def get_parser():
     parser.add_argument("-corrsampler", "--corruptionsamplers",
                     dest="corruption_sampler", default='BernoulliNegativeSampler',
                     help="Negative sampler for corruption", type=str)
+    parser.add_argument("-cuda", "--use_cuda",
+                    dest="use_cuda", default=True,
+                    help="To use cuda", type=bool)
     return parser
 
 #svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
@@ -179,7 +182,7 @@ class CustomKGEModel():
                         if os.path.isdir(join(args.modelpath, d)
                         # that are directories
                         ) and f'{self.model_type}_' in d
-                        and d.split('_')[1].isnumeric()]
+                        and d.split('isnumeric()]
                         #and are of type self.model_type
         i = [x for x in range(1, len(all_is)+2) if x not in all_is][0]
         ds = self.dataset_name
@@ -404,12 +407,13 @@ if __name__ == '__main__':
         mod.save_kg(tr_kg, f'ts={args.ts}_corrupt_{tr_fn}{shuffletxt}')
 
     # Move everything to CUDA if available
-    if cuda.is_available():
+    if cuda.is_available() and args.use_cuda:
         print("Using cuda.")
         cuda.empty_cache()
         cuda.init()
         mod.model.cuda()
         mod.loss_fn.cuda()
+    
     #mod.create_model_path(args.modelpath)
     mod.train_model(args.epochs, tr_kg)
     print('\nTest set performance:')
