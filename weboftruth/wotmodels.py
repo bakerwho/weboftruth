@@ -89,7 +89,11 @@ args = edict({  "epochs":100, "model_type":'TransE', "lr":5e-5,
                 "shuffle":False, "n_filters":3,
                 "train_sampler":'BernoulliNegativeSampler',
                 "corruption_sampler":'BernoulliNegativeSampler',
-                "use_cuda": USE_CUDA_DEFAULT
+                "use_cuda": USE_CUDA_DEFAULT,
+                "modelpath": '../../models'
+                "is_test_run": False,
+                "dataset": 'FB15K-237',
+                "ts":100
                 })
 
 class CustomKGEModel():
@@ -349,7 +353,7 @@ if __name__ == '__main__':
     args, unknown = parser.parse_known_args()
 
     try:
-        os.makedirs(args.modelpath, exist_ok=True)
+        os.makedirs(args.modelpath, exists_ok=True)
     except:
         print("Warning: models folder may not exist")
 
