@@ -36,6 +36,8 @@ torch.manual_seed(0)
 # args.path = "/home-nfs/tenzorok/weboftruth"
 ################################################################
 
+USE_CUDA_DEFAULT = False
+
 def get_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("-dp", "--dpath", dest="datapath",
@@ -74,8 +76,9 @@ def get_parser():
     parser.add_argument("-corrsampler", "--corruptionsamplers",
                     dest="corruption_sampler", default='BernoulliNegativeSampler',
                     help="Negative sampler for corruption", type=str)
-    parser.add_argument("-cuda", "--use_cuda", dest="use_cuda", default=False,
-                    help="To use cuda", action='store_true')
+    parser.add_argument("-cuda", "--use_cuda", dest="use_cuda",
+                    default=USE_CUDA_DEFAULT, help="To use cuda",
+                    action='store_true')
     return parser
 
 #svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
@@ -85,7 +88,8 @@ args = edict({  "epochs":100, "model_type":'TransE', "lr":5e-5,
                 "emb_dim":250, "is_test_run":False, "ve":10,
                 "shuffle":False, "n_filters":3,
                 "train_sampler":'BernoulliNegativeSampler',
-                "corruption_sampler":'BernoulliNegativeSampler'
+                "corruption_sampler":'BernoulliNegativeSampler',
+                "use_cuda": USE_CUDA_DEFAULT
                 })
 
 class CustomKGEModel():
@@ -164,11 +168,9 @@ class CustomKGEModel():
         # super(CustomKGEModel, self).__init__(self.emb_dim, self.trainkg.n_ent, self.trainkg.n_rel,
         #                     dissimilarity_type=self.diss_type)
 
-
-        try:
-            self.dataloader = DataLoader(self.trainkg, batch_size=self.b_size, use_cuda='all')
-        except AssertionError:
-            self.dataloader = DataLoader(self.trainkg, batch_size=self.b_size)
+        dataloader_cuda_flag = 'all' if args.use_cuda else None
+        self.dataloader = DataLoader(self.trainkg, batch_size=self.b_size,
+                use_cuda=dataloader_cuda_flag)
 
         ## Logger
         self.epochs=0
@@ -209,13 +211,12 @@ class CustomKGEModel():
 
     def set_loss(self, lossClass=MarginLoss, **kwargs):
         self.loss_fn = lossClass(**kwargs)
-        try:
+        if cuda.is_available() and args.use_cuda:
             self.loss_fn.cuda()
-        except:
-            pass
         self.logline(f'Loss function set: {self.loss_fn}')
 
     def one_epoch(self):
+        self.model.train(True)
         running_loss = 0.0
         for i, batch in enumerate(self.dataloader):
             h, t, r = batch
@@ -235,10 +236,10 @@ class CustomKGEModel():
     def eval_base(self, val_kg, istest=False, verbose=False):
         self.model.train(False)
         losses = []
-        try:
-            dataloader = DataLoader(val_kg, batch_size=self.b_size, use_cuda='all')
-        except AssertionError:
-            dataloader = DataLoader(val_kg, batch_size=self.b_size)
+
+        dataloader_cuda_flag = 'all' if args.use_cuda else None
+        self.dataloader = DataLoader(self.trainkg, batch_size=self.b_size,
+                use_cuda=dataloader_cuda_flag)
 
         with torch.no_grad():
             for batch in dataloader:
@@ -279,7 +280,7 @@ class CustomKGEModel():
         return evaluator
 
     def train_model(self, n_epochs, val_kg, verbose=False):
-        self.model.train()
+        self.model.train(True)
         epochs = tqdm(range(n_epochs), unit='epoch')
         if self.epochs == 0:
             dt = datetime.now().strftime("%Y-%m-%d %H:%M:%S")+' UTC'
@@ -359,7 +360,7 @@ if __name__ == '__main__':
     print(f"Truth share: {args.ts}\nEmbedding dimension: {args.emb_dim}")
 
     # hard code this
-    args.use_cuda = False
+    args.use_cuda = USE_CUDA_DEFAULT
 
     print(f"Using cuda: {args.use_cuda}")
 
