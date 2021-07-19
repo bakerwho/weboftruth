@@ -172,7 +172,8 @@ class CustomKGEModel():
         # super(CustomKGEModel, self).__init__(self.emb_dim, self.trainkg.n_ent, self.trainkg.n_rel,
         #                     dissimilarity_type=self.diss_type)
 
-        dataloader_cuda_flag = 'all' if args.use_cuda else None
+        dataloader_cuda_flag = 'all' if (args.use_cuda and
+                                            cuda.is_available()) else None
         self.dataloader = DataLoader(self.trainkg, batch_size=self.b_size,
                 use_cuda=dataloader_cuda_flag)
 
@@ -241,7 +242,8 @@ class CustomKGEModel():
         self.model.train(False)
         losses = []
 
-        dataloader_cuda_flag = 'all' if args.use_cuda else None
+        dataloader_cuda_flag = 'all' if (args.use_cuda and
+                                            cuda.is_available()) else None
         self.dataloader = DataLoader(self.trainkg, batch_size=self.b_size,
                 use_cuda=dataloader_cuda_flag)
 
