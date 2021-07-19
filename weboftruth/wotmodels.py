@@ -90,7 +90,7 @@ args = edict({  "epochs":100, "model_type":'TransE', "lr":5e-5,
                 "train_sampler":'BernoulliNegativeSampler',
                 "corruption_sampler":'BernoulliNegativeSampler',
                 "use_cuda": USE_CUDA_DEFAULT,
-                "modelpath": '../../models'
+                "modelpath": '../../models',
                 "is_test_run": False,
                 "dataset": 'FB15K-237',
                 "ts":100
