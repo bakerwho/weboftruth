@@ -73,7 +73,7 @@ def get_parser():
     parser.add_argument("-trsampler", "--trainsampler", dest="train_sampler",
                             default='BernoulliNegativeSampler',
                             help="Traintime negative sampler", type=str)
-    parser.add_argument("-corrsampler", "--corruptsamplers",
+    parser.add_argument("-corrsampler", "--corruptsampler",
                     dest="corruption_sampler", default='BernoulliNegativeSampler',
                     help="Negative sampler for corruption", type=str)
     parser.add_argument("-cuda", "--use_cuda", dest="use_cuda",
@@ -302,16 +302,16 @@ class CustomKGEModel():
                     if self.epochs>1:
                         self.save_model(best=True)
                 self.logline(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
-                min_val_loss = min(self.val_losses)
                 self.val_losses.append(val_loss)
                 self.val_epochs.append(self.epochs)
                 if verbose:
                     print(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
-                if ((0 < (min_val_loss - val_loss)/min_val_loss < 0.01) and
-                    early_stopping) and epoch>n_epochs//2:
-                    print('Early stopping as validation loss decreases by'\
-                    'less than 1%')
-                    break
+                if early_stopping and epoch>n_epochs//2:
+                    min_val_loss = min(self.val_losses)
+                    if (0 < (min_val_loss - val_loss)/min_val_loss < 0.01):
+                        print(f'Stopping early at epoch = {epoch} '\
+                        'as validation loss decreases by less than 1%')
+                        break
         self.logline(f"\nbest epoch: {self.best_epoch}\n")
         self.model.normalize_parameters()
 
@@ -370,9 +370,8 @@ if __name__ == '__main__':
     print(f"Model Type: {args.model_type}")
     print(f"Epochs: {args.epochs}\nRun on test dataset: {args.is_test_run}")
     print(f"Truth share: {args.ts}\nEmbedding dimension: {args.emb_dim}")
-
-    # hard code this
-    args.use_cuda = USE_CUDA_DEFAULT
+    print(f"Train sampler: {args.train_sampler}")
+    print(f"Corruption sampler: {args.corruption_sampler}")
 
     print(f"Using cuda: {args.use_cuda}")
 
@@ -418,7 +417,7 @@ if __name__ == '__main__':
     if args.ts != 100:
         tr_kg_pure = deepcopy(tr_kg)
         shuffletxt = '_shuffle' if args.shuffle else ''
-        sampler2 = sampler = getattr(torchkge.sampling, args.corruptsampler)
+        sampler2 = sampler = getattr(torchkge.sampling, args.corruption_sampler)
         tr_kg, _ = wot.corrupt.corrupt_kg(tr_kg, save_folder=mod.model_path,
                         sampler=sampler2,
                         true_share=args.ts/100, use_cuda=False,
