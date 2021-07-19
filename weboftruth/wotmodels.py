@@ -284,7 +284,7 @@ class CustomKGEModel():
         del out
         return evaluator
 
-    def train_model(self, n_epochs, val_kg, verbose=False):
+    def train_model(self, n_epochs, val_kg, early_stopping=True, verbose=False):
         self.model.train(True)
         epochs = tqdm(range(n_epochs), unit='epoch')
         if self.epochs == 0:
@@ -302,10 +302,16 @@ class CustomKGEModel():
                     if self.epochs>1:
                         self.save_model(best=True)
                 self.logline(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
+                min_val_loss = min(self.val_losses)
                 self.val_losses.append(val_loss)
                 self.val_epochs.append(self.epochs)
                 if verbose:
                     print(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
+                if ((0 < (min_val_loss - val_loss)/min_val_loss < 0.01) and
+                    early_stopping):
+                    print('Early stopping as validation loss decreases by'\
+                    'less than 1%')
+                    break
         self.logline(f"\nbest epoch: {self.best_epoch}\n")
         self.model.normalize_parameters()
 
