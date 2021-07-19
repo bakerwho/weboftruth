@@ -357,6 +357,10 @@ if __name__ == '__main__':
     print(f"Model Type: {args.model_type}")
     print(f"Epochs: {args.epochs}\nRun on test dataset: {args.is_test_run}")
     print(f"Truth share: {args.ts}\nEmbedding dimension: {args.emb_dim}")
+
+    # hard code this
+    args.use_cuda = False
+
     print(f"Using cuda: {args.use_cuda}")
 
     # Load data
@@ -393,7 +397,7 @@ if __name__ == '__main__':
     sampler = getattr(torchkge.sampling, args.train_sampler)
     mod.set_train_neg_sampler(samplerClass=sampler, kg=tr_kg)
     mod.set_optimizer(optClass=Adam)
-    mod.set_loss(lossClass=MarginLoss, margin=0.5)
+    mod.set_loss(lossClass=MarginLoss, margin=0.1)
 
     print(f'Model Name: {mod.model_name}\tModel Path: {mod.model_path}')
 
