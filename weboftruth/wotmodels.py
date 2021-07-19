@@ -36,7 +36,7 @@ torch.manual_seed(0)
 # args.path = "/home-nfs/tenzorok/weboftruth"
 ################################################################
 
-USE_CUDA_DEFAULT = False
+USE_CUDA_DEFAULT = True
 
 def get_parser():
     parser = argparse.ArgumentParser()
