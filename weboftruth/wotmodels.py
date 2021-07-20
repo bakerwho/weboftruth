@@ -269,6 +269,7 @@ class CustomKGEModel():
             evaluator.evaluate(b_size=32)
         with utils.Capturing() as out:
             evaluator.print_results()
+        out = '\n'.join(out)
         self.logline('LinkPredictionEvaluator results:')
         self.logline(out)
         del out
@@ -281,6 +282,7 @@ class CustomKGEModel():
             evaluator.evaluate(b_size=32)
         with utils.Capturing() as out:
             evaluator.print_results()
+        out = '\n'.join(out)
         self.logline('TripletClassificationEvaluator results:')
         self.logline(out)
         del out
