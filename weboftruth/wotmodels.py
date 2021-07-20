@@ -15,6 +15,8 @@ import torchkge
 from torchkge.models import Model, TransEModel
 from torchkge.sampling import *
 from torchkge.utils import MarginLoss, DataLoader
+from torchkge.evaluation.triplet_classification import TripletClassificationEvaluator
+from torchkge.evaluation.link_prediction import LinkPredictionEvaluator
 
 from tqdm.autonotebook import tqdm
 from datetime import datetime
