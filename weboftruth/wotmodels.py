@@ -279,13 +279,12 @@ class CustomKGEModel():
         self.model.train(False)
         with torch.no_grad():
             evaluator = TripletClassificationEvaluator(self.model, kg_val, kg_test)
+            evaluator.sampler = torchkge.sampling.PositionalNegativeSampler
             evaluator.evaluate(b_size=32)
-        with utils.Capturing() as out:
-            evaluator.print_results()
-        out = '\n'.join(out)
         self.logline('TripletClassificationEvaluator results:')
-        self.logline(out)
-        del out
+        self.logline(f"Triplet classification accuracy with"\
+        f"{evaluator.sampler}: {evaluator.accuracy}\n"\
+        f"\t(threshold = {evaluator.thresholds})")
         return evaluator
 
     def train_model(self, n_epochs, val_kg, early_stopping=True, verbose=False):
