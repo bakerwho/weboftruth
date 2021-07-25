@@ -220,6 +220,12 @@ class CustomKGEModel():
             self.loss_fn.cuda()
         self.logline(f'Loss function set: {self.loss_fn}')
 
+    def cleanup_modelfolder(self, remove_best=True):
+        for name in os.listdir(self.model_path):
+            if remove_best and 'best_' in name:
+                os.remove(join(self.model_path, name))
+            # more logic can be added here
+
     def one_epoch(self):
         self.model.train(True)
         running_loss = 0.0
@@ -297,8 +303,10 @@ class CustomKGEModel():
             if ((epoch+1)%args.ve)==0 or epoch==0:
                 self.save_model()
                 val_loss = self.eval_base(val_kg)
+                # if this is the best model, save it as such
                 if not self.val_losses or val_loss < min(self.val_losses):
                     if self.epochs>1:
+                        self.cleanup_modelfolder(remove_best=True)
                         self.save_model(best=True)
                 self.logline(f'\tEpoch {self.epochs} | Validation loss: {val_loss}')
                 self.val_losses.append(val_loss)
