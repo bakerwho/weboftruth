@@ -12,7 +12,6 @@ from torch import cuda
 from torch.optim import Adam
 
 import torchkge
-from torchkge.models import Model, TransEModel
 from torchkge.sampling import *
 from torchkge.utils import MarginLoss, DataLoader
 from torchkge.evaluation.triplet_classification import TripletClassificationEvaluator
@@ -146,9 +145,7 @@ class CustomKGEModel():
                                         n_relations = self.trainkg.n_rel)
             elif self.model_type == 'ConvKB':
                 self.n_filters = kwargs.pop('n_filters', args.n_filters)
-                self.model = getattr(torchkge.models.deep,
-                                    'ConvKBModel'
-                                    )(emb_dim=self.emb_dim,
+                self.model = ConvKBModel2(emb_dim=self.emb_dim,
                                         n_filters=self.n_filters,
                                         n_entities = self.trainkg.n_ent,
                                         n_relations = self.trainkg.n_rel)
@@ -356,6 +353,14 @@ class CustomKGEModel():
 
 def modelslist(module):
     return [x for x in dir(module) if 'model' in x.lower()]
+
+class ConvKBModel2(torchkge.models.ConvKBModel):
+    """
+    Written only to bypass normalize_parameters() throwing a NotImplementedError
+    for ConvKBModel
+    """
+    def normalize_parameters():
+        pass
 
 if __name__ == '__main__':
     parser = get_parser()
