@@ -359,7 +359,7 @@ class ConvKBModel2(torchkge.models.ConvKBModel):
     Written only to bypass normalize_parameters() throwing a NotImplementedError
     for ConvKBModel
     """
-    def normalize_parameters():
+    def normalize_parameters(self):
         pass
 
 if __name__ == '__main__':
