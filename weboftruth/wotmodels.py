@@ -80,9 +80,6 @@ def get_parser():
     parser.add_argument("-cuda", "--use_cuda", dest="use_cuda",
                     default=USE_CUDA_DEFAULT, help="To use cuda",
                     action='store_true')
-    parser.add_argument("-cuda", "--use_cuda", dest="use_cuda",
-                    default=USE_CUDA_DEFAULT, help="To use cuda",
-                    action='store_true')
     parser.add_argument("-preemb", "--pre_embeddings", dest="pre_embeddings",
                     default=False, help="To use pretrained embeddings",
                     action='store_true')
