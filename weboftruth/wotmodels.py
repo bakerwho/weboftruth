@@ -80,6 +80,16 @@ def get_parser():
     parser.add_argument("-cuda", "--use_cuda", dest="use_cuda",
                     default=USE_CUDA_DEFAULT, help="To use cuda",
                     action='store_true')
+    parser.add_argument("-cuda", "--use_cuda", dest="use_cuda",
+                    default=USE_CUDA_DEFAULT, help="To use cuda",
+                    action='store_true')
+    parser.add_argument("-preemb", "--pre_embeddings", dest="pre_embeddings",
+                    default=False, help="To use pretrained embeddings",
+                    action='store_true')
+    parser.add_argument("-premodelname", "--pre_modelname", dest="pre_modelname",
+                    help="Pretrained modelname")
+    parser.add_argument("-premodeldescr", "--pre_whichmodel",
+                    dest="pre_whichmodel", help="Which model in folder to use")
     return parser
 
 #svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
@@ -94,7 +104,10 @@ args = edict({  "epochs":100, "model_type":'TransE', "lr":5e-5,
                 "modelpath": '../../models',
                 "is_test_run": False,
                 "dataset": 'FB15K-237',
-                "ts":100
+                "ts":100,
+                "pre_embeddings": False,
+                "pre_modelname": None,
+                "pre_whichmodel": None
                 })
 
 class CustomKGEModel():
@@ -149,6 +162,21 @@ class CustomKGEModel():
                                         n_filters=self.n_filters,
                                         n_entities = self.trainkg.n_ent,
                                         n_relations = self.trainkg.n_rel)
+                self.pre_embeddings = kwargs.pop('pre_embeddings',
+                                                    args.pre_embeddings)
+                if self.pre_embeddings:
+                    self.pre_modelname = kwargs.pop('pre_modelname',
+                                                args.pre_modelname)
+                    self.pre_whichmodel = kwargs.pop('pre_whichmodel',
+                                                args.pre_whichmodel)
+                    temp_model = wot.utils.load_model(self.init_modelname,
+                                        which=self.init_whichmodel)
+                    self.model.ent_emb.from_pretrained(
+                                temp_model.ent_emb.weight, freeze=False)
+                    self.model.rel_emb.from_pretrained(
+                                temp_model.rel_emb.weight, freeze=False)
+                    self.logline("Setting pretrained embeddings from "\
+                                f"{self.init_modelname}")
             else:
                 raise ValueError(f'Invalid model_type: {self.model_type}')
         self.n_entities = self.trainkg.n_ent
@@ -387,6 +415,9 @@ if __name__ == '__main__':
     print(f"Truth share: {args.ts}\nEmbedding dimension: {args.emb_dim}")
     print(f"Train sampler: {args.train_sampler}")
     print(f"Corruption sampler: {args.corruption_sampler}")
+    print(f"Using pretrained embeddings? {args.pre_embeddings}")
+    if args.pre_embeddings:
+        print(f"\tmodelname={args.pre_modelname}, which={args.pre_whichmodel}")
 
     print(f"Using cuda: {args.use_cuda}")
 

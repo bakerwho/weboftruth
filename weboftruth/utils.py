@@ -135,11 +135,12 @@ def load_model(model_folder, which='best_'):
         raise ValueError("Not equipped to deal with this model")
     model_file = sorted([x for x in os.listdir(model_folder
                             ) if which in x and '.pt' in x], reverse=True)[0]
-    print(model_file)
-    print(vars['emb_dim'])
+    print(f"loading model from {model_file}\n"\
+        f"embedding dimension: {vars['emb_dim']}")
     model.load_state_dict(torch.load(join(model_folder, model_file),
                                     map_location=torch.device('cpu')))
     model.eval()
+    print(model)
     return model
 
 def load_kg(modelfolder, which=''):

@@ -7,5 +7,6 @@ setup(
    author='AAK/AM',
    author_email='aabir@uchicago.edu',
    packages=['weboftruth'],  #same as name
-   install_requires=['torchkge', 'tabulate', 'pandas', 'numpy'], #external packages as dependencies
+   install_requires=['torchkge', 'tabulate', 'pandas', 'numpy', 'easydict'],
+   #external packages as dependencies
 )
