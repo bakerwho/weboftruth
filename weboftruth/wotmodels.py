@@ -189,7 +189,6 @@ class CustomKGEModel():
         self.logfile = join(self.model_path, 'log.txt')
         ## Hyperparameters
         self.lr = kwargs.pop('lr', args.lr)
-        self.n_epochs = kwargs.pop('n_epochs', 100)
         self.b_size = kwargs.pop('b_size', 32)
         self.logline(tabulate([(k,v) for k, v in vars(self).items()],
                                     headers=['variable', 'value']))

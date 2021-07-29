@@ -40,12 +40,17 @@ class Evaluator():
     def get_triplet_embeddings(self, filepath, sovs=None, Ys=None, sep='\t'):
         Xs = []
         skipcount = 0
-        if sovs is None and Ys is None:
+        if sovs is None or Ys is None:
             sovs, Ys = self.get_triples(filepath, sep=sep)
         Ys2 = []
         for i, (s, o, v) in enumerate(sovs):
             vec = self.embeddings.get_vector_from_sov_triple(s, o, v)
             if vec is None:
+                # try swapping o and v
+                o, v = v, o
+            vec = self.embeddings.get_vector_from_sov_triple(s, o, v)
+            if vec is None:
+                skipcount += 1
                 continue
             Xs.append(vec)
             Ys2.append(Ys[i])
