@@ -48,9 +48,8 @@ def corrupt_kg(input_kg, save_folder=None,
                         ).corrupt_kg(batch_size=128, use_cuda=use_cuda,
                         which = 'main')
         corrupt_list = []
-        for i in range(kg_to_corrupt.n_facts):
-            s, o = kg_corrupted[0][i].item(), kg_corrupted[1][i].item()
-            v = kg_to_corrupt[i][2]
+        for s, o, v in zip(kg_corrupted[0], kg_corrupted[1], kg_corrupted[2]):
+            s, o, v = s.item(), o.item(), v.item()
             corrupt_list.append(fact2txt((s, o, v)))
         corrupt_df = pd.DataFrame(corrupt_list, columns =['from', 'to', 'rel'])
         corrupt_df['true_positive'] = False

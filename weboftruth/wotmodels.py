@@ -459,7 +459,7 @@ if __name__ == '__main__':
     if args.ts != 100:
         tr_kg_pure = deepcopy(tr_kg)
         shuffletxt = '_shuffle' if args.shuffle else ''
-        sampler2 = sampler = getattr(torchkge.sampling, args.corruption_sampler)
+        sampler2 = getattr(torchkge.sampling, args.corruption_sampler)
         tr_kg, _ = wot.corrupt.corrupt_kg(tr_kg, save_folder=mod.model_path,
                         sampler=sampler2,
                         true_share=args.ts/100, use_cuda=False,
