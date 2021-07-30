@@ -2,3 +2,4 @@ torchkge
 tabulate
 pandas
 numpy
+easydict
