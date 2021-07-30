@@ -44,12 +44,14 @@ def corrupt_kg(input_kg, save_folder=None,
         true_df['true_positive'] = True
 
         # setup corrupted dataframe
-        kg_corrupted = sampler(kg_to_corrupt
+        neg_heads, neg_tails = sampler(kg_to_corrupt
                         ).corrupt_kg(batch_size=128, use_cuda=use_cuda,
                         which = 'main')
         corrupt_list = []
-        for (s, o, v) in kg_corrupted:
-            corrupt_list.append(fact2txt((s, o, v)))
+        relations = kg_to_corrupt.relations.tolist()
+        for i, (nh, nt) in enumerate(zip(neg_heads.tolist(),
+                                         neg_tails.tolist())):
+            corrupt_list.append(fact2txt((nh, nt, relations[i])))
         corrupt_df = pd.DataFrame(corrupt_list, columns =['from', 'to', 'rel'])
         corrupt_df['true_positive'] = False
 
