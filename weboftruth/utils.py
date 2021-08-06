@@ -93,15 +93,28 @@ def df_to_kg(df):
         return df
     return torchkge.KnowledgeGraph(df[cols])
 
-def kg_to_df(kg):
+def kg_to_df(kg, skip_fail=True):
     i2e, i2r = ({v:k for k,v in dct.items()} for dct in (kg.ent2ix, kg.rel2ix))
     data = []
-    for hr, set_of_tails in kg.dict_of_tails.items():
-        h, r = hr
-        ent_h, rel = i2e[h], i2r[r]
-        for tail in set_of_tails:
-            ent_t = i2e[tail]
+    failcount = {'entities':0, 'relations':0}
+    for i, (h,t,r) in enumerate(kg):
+        ent_h, ent_t, rel = None, None, None
+        try:
+            ent_h, ent_t = i2e[h], i2e[t]
+        except KeyError as e:
+            failcount['entities'] += 1
+            if not skip_fail:
+                raise e
+        try:
+            rel = i2r[r]
+        except KeyError as e:
+            failcount['relations'] += 1
+            if not skip_fail:
+                raise e
+        if not any([x is None for x in [ent_h, ent_t, rel]]):
             data.append([ent_h, ent_t, rel])
+    for k in ['entities', 'relations']:
+        print(f"Could not retrieve {k} for {failcount[k]}/{i+1} facts")
     return pd.DataFrame(data, columns=['from', 'to', 'rel'])
 
 
@@ -231,3 +244,25 @@ class Capturing(list):
         self.extend(self._stringio.getvalue().splitlines())
         del self._stringio    # free up some memory
         sys.stdout = self._stdout
+
+def get_model_params_from_log(modelfolder, modelspath=modelspath):
+    if 'log.txt' in os.listdir(join(modelspath, modelfolder)):
+          with open(join(modelspath, modelfolder, 'log.txt'), 'r') as f:
+            logtxt = f.readlines()
+          sampler_line = [l for l in logtxt if 'Traintime sampler' in l][0]
+          train_sampler = 'Bernoulli' if 'Bernoulli' in sampler_line else 'Positional'
+          if any([x in modelfolder for x in ['_01', '_02', '_03']]):
+            assert train_sampler == 'Positional'
+            corrupt_sampler = 'Positional'
+          elif any([x in modelfolder for x in ['_04', '_05', '_06']]):
+            assert train_sampler == 'Bernoulli'
+            corrupt_sampler = 'Bernoulli'
+          elif any([x in modelfolder for x in ['_07', '_08', '_09']]):
+            assert train_sampler == 'Bernoulli'
+            corrupt_sampler = 'Positional'
+          ts_line = [l for l in logtxt if 'traints' in l][0]
+          ts = [int(s) for s in ts_line.split() if s.isdigit()][0]
+          return {'modelname': modelfolder, 'train_sampler': train_sampler,
+                  'corrupt_sampler': corrupt_sampler, 'truth_share': ts}
+    else:
+        raise ValueError(f'Invalid modelfolder {modelfolder}')

@@ -3,7 +3,7 @@ import torchkge
 from os.path import join
 from sklearn.model_selection import train_test_split
 
-from weboftruth.utils import load_model
+from weboftruth.utils import load_model, kg_to_df
 
 import sys
 
@@ -17,6 +17,9 @@ def corrupt_kg(input_kg, save_folder=None,
         - Pandas DF to construct corrupted KG, with 'true_positive' flag indicating if triple is corrupted or not.
     """
     assert true_share>=0 and true_share<=1, 'Invalid true_share'
+    if true_share == 1:
+        return input_kg
+
     if isinstance(sampler, str):
         sampler = getattr(torchkge.sampling, sampler)
 
@@ -24,48 +27,64 @@ def corrupt_kg(input_kg, save_folder=None,
     ix2ent = {v:k for k, v, in ent2ix.items()}
     ix2rel = {v:k for k, v, in rel2ix.items()}
 
-    def fact2txt(fact):
-        s, o, v = fact
+    def fact2txt(s, o, v):
         try:
             s_, o_ = ix2ent[s], ix2ent[o]
             v_ = ix2rel[v]
             return s_, o_, v_
         except:
             #print(s, v, o)
-            return None, None, None
+            print(f'Potential error: ix2ent or ix2rel failed for {(s, o, v)}')
+            return s, o, v
 
-    if true_share == 1:
-        return input_kg
+    input_df = kg_to_df(input_kg)
+
+    kg_true1, kg_tofalse1 = input_df.split_kg(0.5)
+    tot_ct, t_ct, f_ct = input_df.n_facts, kg_true1.n_facts, kg_tofalse1.n_facts
+
+    diff = np.abs(t_ct-f_ct)//2
+
+    if t_ct > f_ct:
+        #print(f"swap {diff} facts from true to false")
+        kg_true, kg_tofalse2 = kg_true1.split_kg(sizes=[t_ct-diff, diff])
+        df_tofalse1, df_tofalse2= kg_to_df(kg_tofalse1), kg_to_df(kg_tofalse2)
+        df_tofalse = pd.concat([df_tofalse1, df_tofalse2])
+        df_true = kg_to_df(kg_true)
     else:
-        kg_true, kg_to_corrupt = input_kg.split_kg(share = true_share)
-        # setup true dataframe
-        true_list = [fact2txt(kg_true[i]) for i in range(kg_true.n_facts)]
-        true_df = pd.DataFrame(true_list, columns =['from', 'to', 'rel'])
-        true_df['true_positive'] = True
+        #print(f"swap {diff} facts from false to true")
+        kg_tofalse, kg_true2 = kg_tofalse1.split_kg(sizes=[f_ct-diff, diff])
+        df_true1, df_true2 = (wot.utils.kg_to_df(x) for x in (kg_true1, kg_true2))
+        df_true = pd.concat([df_true1, df_true2])
+        df_tofalse = kg_to_df(kg_tofalse)
 
-        # setup corrupted dataframe
-        neg_heads, neg_tails = sampler(kg_to_corrupt
-                        ).corrupt_kg(batch_size=128, use_cuda=use_cuda,
-                        which = 'main')
-        corrupt_list = []
-        relations = kg_to_corrupt.relations.tolist()
-        for i, (nh, nt) in enumerate(zip(neg_heads.tolist(),
-                                         neg_tails.tolist())):
-            corrupt_list.append(fact2txt((nh, nt, relations[i])))
-        corrupt_df = pd.DataFrame(corrupt_list, columns =['from', 'to', 'rel'])
-        corrupt_df['true_positive'] = False
+    kg_true, kg_tofalse = [torchkge.KnowledgeGraph(x, axis='columns')
+                                for x in [df_true, df_tofalse]]
+    df_true['true_positive'] = True
+    df_tofalse['true_positive'] = False
 
-        corrupt_kg_df = pd.concat([true_df, corrupt_df])
-        corrupt_kg = torchkge.KnowledgeGraph(
-                        df=corrupt_kg_df.drop(['true_positive'],
-                        axis = 'columns'))
+    # setup corrupted dataframe
+    neg_heads, neg_tails = sampler(kg_tofalse
+                    ).corrupt_kg(batch_size=128, use_cuda=use_cuda,
+                    which = 'main')
+    corrupt_list = []
+    relations = kg_tofalse.relations.tolist()
+    for i, (nh, nt) in enumerate(zip(neg_heads.tolist(),
+                                     neg_tails.tolist())):
+        corrupt_list.append(fact2txt((nh, nt, relations[i])))
+    df_false = pd.DataFrame(corrupt_list, columns =['from', 'to', 'rel'])
+    df_false['true_positive'] = False
 
-        if save_folder is not None:
-            name = f'{prefilename}_ts={true_share}.dat'
-            outfile = join(save_folder, name)
-            corrupt_kg_df.to_csv(outfile, index=False, sep='\t')
-            print(f'Writing ts={true_share} KnowledgeGraph to {outfile}')
-        return corrupt_kg, corrupt_kg_df
+    corrupted_df = pd.concat([df_true, df_false])
+    corrupted_kg = torchkge.KnowledgeGraph(
+                    df=corrupted_df.drop(['true_positive'],
+                    axis='columns'))
+
+    if save_folder is not None:
+        name = f'{prefilename}_ts={true_share}.dat'
+        outfile = join(save_folder, name)
+        corrupted_df.to_csv(outfile, index=False, sep='\t')
+        print(f'Writing ts={true_share} KG (neg sampler: {sampler}) to {outfile}')
+    return corrupted_kg, corrupted_df
 
 if __name__=='__main__':
     pass
