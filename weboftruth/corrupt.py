@@ -62,6 +62,10 @@ def corrupt_kg(input_kg, save_folder=None,
     df_true['true_positive'] = True
     df_tofalse['true_positive'] = False
 
+    diff2 = df_true.shape[0] - df_tofalse.shape[0]
+
+    assert np.abs(diff2)<2, f'Mismatch {diff2} between true and false facts'
+
     # setup corrupted dataframe
     neg_heads, neg_tails = sampler(kg_tofalse
                     ).corrupt_kg(batch_size=128, use_cuda=use_cuda,
