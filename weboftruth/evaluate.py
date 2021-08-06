@@ -98,7 +98,7 @@ def link_prediction_evaluation(model, test_kg, b_size=1, k=10):
     return lp_results
 
 
-def binary_classifiers_evaluation(modelfolder, trainkg, modelspath=modelspath,
+def binary_classifiers_evaluation(modelfolder, trainkg, modelspath,
                                   whichmodel='best_', sampling='Positional'):
     eval8 = wot.evaluate.Evaluator(join(modelspath, modelfolder),
                                whichmodel,
