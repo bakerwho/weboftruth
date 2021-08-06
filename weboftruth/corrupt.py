@@ -72,7 +72,7 @@ def corrupt_kg(input_kg, save_folder=None,
     relations = kg_tofalse.relations.tolist()
     for i, (nh, nt) in enumerate(zip(neg_heads.tolist(),
                                      neg_tails.tolist())):
-        corrupt_list.append(fact2txt((nh, nt, relations[i])))
+        corrupt_list.append(fact2txt(s=nh, o=nt, v=relations[i]))
     df_false = pd.DataFrame(corrupt_list, columns =['from', 'to', 'rel'])
     df_false['true_positive'] = False
 
