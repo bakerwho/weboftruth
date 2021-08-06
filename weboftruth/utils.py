@@ -245,7 +245,7 @@ class Capturing(list):
         del self._stringio    # free up some memory
         sys.stdout = self._stdout
 
-def get_model_params_from_log(modelfolder, modelspath=modelspath):
+def get_model_params_from_log(modelfolder, modelspath):
     if 'log.txt' in os.listdir(join(modelspath, modelfolder)):
           with open(join(modelspath, modelfolder, 'log.txt'), 'r') as f:
             logtxt = f.readlines()
