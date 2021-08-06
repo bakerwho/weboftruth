@@ -40,7 +40,7 @@ def corrupt_kg(input_kg, save_folder=None,
     kg_true1, kg_tofalse1 = input_kg.split_kg(0.5)
     tot_ct, t_ct, f_ct = input_kg.n_facts, kg_true1.n_facts, kg_tofalse1.n_facts
 
-    diff = np.abs(t_ct-f_ct)//2
+    diff = abs(t_ct-f_ct)//2
 
     if t_ct > f_ct:
         #print(f"swap {diff} facts from true to false")
@@ -62,7 +62,7 @@ def corrupt_kg(input_kg, save_folder=None,
 
     diff2 = df_true.shape[0] - df_tofalse.shape[0]
 
-    assert np.abs(diff2)<2, f'Mismatch {diff2} between true and false facts'
+    assert abs(diff2)<2, f'Mismatch {diff2} between true and false facts'
 
     # setup corrupted dataframe
     neg_heads, neg_tails = sampler(kg_tofalse
