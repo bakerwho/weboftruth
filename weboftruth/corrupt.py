@@ -55,7 +55,7 @@ def corrupt_kg(input_kg, save_folder=None,
         df_true = pd.concat([df_true1, df_true2])
         df_tofalse = kg_to_df(kg_tofalse)
 
-    kg_true, kg_tofalse = [torchkge.KnowledgeGraph(x, axis='columns')
+    kg_true, kg_tofalse = [torchkge.KnowledgeGraph(df=x)
                                 for x in [df_true, df_tofalse]]
     df_true['true_positive'] = True
     df_tofalse['true_positive'] = False
