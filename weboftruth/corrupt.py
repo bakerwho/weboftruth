@@ -37,10 +37,8 @@ def corrupt_kg(input_kg, save_folder=None,
             print(f'Potential error: ix2ent or ix2rel failed for {(s, o, v)}')
             return s, o, v
 
-    input_df = kg_to_df(input_kg)
-
-    kg_true1, kg_tofalse1 = input_df.split_kg(0.5)
-    tot_ct, t_ct, f_ct = input_df.n_facts, kg_true1.n_facts, kg_tofalse1.n_facts
+    kg_true1, kg_tofalse1 = input_kg.split_kg(0.5)
+    tot_ct, t_ct, f_ct = input_kg.n_facts, kg_true1.n_facts, kg_tofalse1.n_facts
 
     diff = np.abs(t_ct-f_ct)//2
 
