@@ -245,6 +245,33 @@ class Capturing(list):
         del self._stringio    # free up some memory
         sys.stdout = self._stdout
 
+
+def get_pos_eval_data(eval8, index=1,
+            evaldatapath='/content/gdrive/MyDrive/thesiscode/evaldata/'):
+  x_tr, y_tr = eval8.get_triplet_embeddings(
+      f'{evaldatapath}/{index}_Positional_test_ts=0.5.dat')
+
+  x_te, y_te = eval8.get_triplet_embeddings(
+      f'{evaldatapath}/{index}_Positional_val_ts=0.5.dat')
+
+  y_tr, y_te = np.array(y_tr), np.array(y_te)
+
+  return x_tr, y_tr, x_te, y_te
+
+def get_bern_eval_data(eval8, index=1,
+            evaldatapath='/content/gdrive/MyDrive/thesiscode/evaldata/'):
+  x_tr, y_tr = eval8.get_triplet_embeddings(
+      f'{evaldatapath}/{index}_Bernoulli_test_ts=0.5.dat')
+
+  x_te, y_te = eval8.get_triplet_embeddings(
+      f'{evaldatapath}/{index}_Bernoulli_val_ts=0.5.dat')
+
+  y_tr, y_te = np.array(y_tr), np.array(y_te)
+
+  return x_tr, y_tr, x_te, y_te
+
+
+
 def get_model_params_from_log(modelfolder, modelspath):
     if 'log.txt' in os.listdir(join(modelspath, modelfolder)):
           with open(join(modelspath, modelfolder, 'log.txt'), 'r') as f:

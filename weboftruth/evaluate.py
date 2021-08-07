@@ -111,9 +111,9 @@ def binary_classifiers_evaluation(modelfolder, trainkg, modelspath,
                                whichmodel,
                                trainkg=trainkg)
     if sampling == 'Positional':
-      x_tr, y_tr, x_te, y_te = get_pos_eval_data(eval8)
+      x_tr, y_tr, x_te, y_te = wot.utils.get_pos_eval_data(eval8)
     elif sampling == 'Bernoulli':
-      x_tr, y_tr, x_te, y_te = get_bern_eval_data(eval8)
+      x_tr, y_tr, x_te, y_te = wot.utils.get_bern_eval_data(eval8)
     else:
       raise ValueError(f'Invalid sampling: {sampling}')
 
