@@ -1,3 +1,9 @@
+from collections import defaultdict
+
+import os
+from os.path import join
+import numpy as np
+
 import numpy as np
 from weboftruth.utils import load_model
 from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge
@@ -5,7 +11,7 @@ from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 from sklearn.neural_network import MLPClassifier
 
-from os.path import join
+
 import pandas as pd
 
 import weboftruth as wot
