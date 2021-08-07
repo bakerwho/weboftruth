@@ -134,27 +134,6 @@ def binary_classifiers_evaluation(modelfolder, trainkg, modelspath,
         results_dict[f'{name}_test_acc'] = test_acc
     return results_dict
 
-if __name__=='__main__':
-    ts=50
-    w_model = 'best_'
-    emb_modelfolder = './models/TransE_01'
-    tr_fn, val_fn, test_fn = wot.utils.get_file_names(ts,
-                        './data/SVO-tensor-dataset',
-                        old=True, get_paths=True)
-    print(tr_fn, val_fn, test_fn)
-    eval8 = Evaluator(emb_modelfolder, whichmodel='best_')
-    x_tr, y_tr = eval8.get_triplet_embeddings(tr_fn)
-    x_te, y_te = eval8.get_triplet_embeddings(test_fn)
-    for predmodel in [Ridge, LogisticRegression, MLPClassifier]:
-        kwargs_dict = {'set':{}, 'train':{}, 'evaluate':{}}
-        if predmodel == LogisticRegression:
-            modelkwargs['solver'] = 'newton-cg'
-        elif predmodel == Ridge:
-            trainkwargs['max_iter'] = 10000
-        eval8.set_pred_model(predmodel, **kwargs_dict['set'])
-        eval8.train_pred_model(x_tr, y_tr, **kwargs_dict['train'])
-        eval8.evaluate_pred_model(x_te, y_te, **kwargs_dict['evaluate'])
-
 
 def triplet_classification_evaluation(model, tr_kg, val_kg, test_kg, b_size=1):
     tc_eval8 = TripletClassificationEvaluator(model, val_kg, test_kg)
@@ -221,7 +200,7 @@ def eval_all_models_at_path(modelspath, train_kg, val_kg, test_kg):
 
         print('#'*80+f'\nModelname: {modelname}\tmodelspath={modelspath}')
 
-        model_params_dict = wot.utils.get_model_params(modelname, modelspath=modelspath)
+        model_params_dict = get_model_params(modelname, modelspath=modelspath)
 
         model = wot.utils.load_model(join(modelspath, modelname), which='best_')
         if cuda.is_available():
@@ -255,6 +234,29 @@ def update_results_dict(results_dict, **kwargs):
     for k, v in kwargs.items():
         results_dict[k].append(v)
     return results_dict
+
+
+if __name__=='__main__':
+    ts=50
+    w_model = 'best_'
+    emb_modelfolder = './models/TransE_01'
+    tr_fn, val_fn, test_fn = wot.utils.get_file_names(ts,
+                        './data/SVO-tensor-dataset',
+                        old=True, get_paths=True)
+    print(tr_fn, val_fn, test_fn)
+    eval8 = Evaluator(emb_modelfolder, whichmodel='best_')
+    x_tr, y_tr = eval8.get_triplet_embeddings(tr_fn)
+    x_te, y_te = eval8.get_triplet_embeddings(test_fn)
+    for predmodel in [Ridge, LogisticRegression, MLPClassifier]:
+        kwargs_dict = {'set':{}, 'train':{}, 'evaluate':{}}
+        if predmodel == LogisticRegression:
+            modelkwargs['solver'] = 'newton-cg'
+        elif predmodel == Ridge:
+            trainkwargs['max_iter'] = 10000
+        eval8.set_pred_model(predmodel, **kwargs_dict['set'])
+        eval8.train_pred_model(x_tr, y_tr, **kwargs_dict['train'])
+        eval8.evaluate_pred_model(x_te, y_te, **kwargs_dict['evaluate'])
+
 
 """
 import weboftruth as wot
