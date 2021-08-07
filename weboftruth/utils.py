@@ -2,6 +2,7 @@ from io import StringIO
 from numpy import concatenate
 import os
 from os.path import join
+import numpy as np
 import pandas as pd
 import re
 import sys
