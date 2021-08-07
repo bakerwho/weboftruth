@@ -200,7 +200,7 @@ def eval_all_models_at_path(modelspath, train_kg, val_kg, test_kg):
 
         print('#'*80+f'\nModelname: {modelname}\tmodelspath={modelspath}')
 
-        model_params_dict = get_model_params(modelname, modelspath=modelspath)
+        model_params_dict = get_model_params_from_log(modelname, modelspath=modelspath)
 
         model = wot.utils.load_model(join(modelspath, modelname), which='best_')
         if cuda.is_available():
