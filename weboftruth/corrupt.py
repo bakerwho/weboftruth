@@ -22,6 +22,8 @@ def corrupt_kg(input_kg, save_folder=None,
 
     if isinstance(sampler, str):
         sampler = getattr(torchkge.sampling, sampler)
+    else:
+        assert isinstance(sampler, torchkge.sampling.NegativeSampler)
 
     ent2ix, rel2ix = input_kg.ent2ix, input_kg.rel2ix
     ix2ent = {v:k for k, v, in ent2ix.items()}
