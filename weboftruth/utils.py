@@ -275,22 +275,15 @@ def get_bern_eval_data(eval8, index=1,
 
 def get_model_params_from_log(modelfolder, modelspath):
     if 'log.txt' in os.listdir(join(modelspath, modelfolder)):
-          with open(join(modelspath, modelfolder, 'log.txt'), 'r') as f:
-            logtxt = f.readlines()
-          sampler_line = [l for l in logtxt if 'Traintime sampler' in l][0]
-          train_sampler = 'Bernoulli' if 'Bernoulli' in sampler_line else 'Positional'
-          if any([x in modelfolder for x in ['_01', '_02', '_03']]):
-            #assert train_sampler == 'Positional'
-            corrupt_sampler = 'Positional'
-          elif any([x in modelfolder for x in ['_04', '_05', '_06']]):
-            #assert train_sampler == 'Bernoulli'
-            corrupt_sampler = 'Bernoulli'
-          elif any([x in modelfolder for x in ['_07', '_08', '_09']]):
-            #assert train_sampler == 'Bernoulli'
-            corrupt_sampler = 'Positional'
-          ts_line = [l for l in logtxt if 'traints' in l][0]
-          ts = [int(s) for s in ts_line.split() if s.isdigit()][0]
-          return {'modelname': modelfolder, 'train_sampler': train_sampler,
-                  'corrupt_sampler': corrupt_sampler, 'truth_share': ts}
+        with open(join(modelspath, modelfolder, 'log.txt'), 'r') as f:
+        logtxt = f.readlines()
+        tr_sampler_line = [l for l in logtxt if 'Traintime sampler' in l][0]
+        train_sampler = tr_sampler_line.split(':')[1].strip()
+        c_sampler_line = [l for l in logtxt if 'Corruption sampler' in l][0]
+        corrupt_sampler = c_sampler_line.split(':')[1].strip()
+        ts_line = [l for l in logtxt if 'traints' in l][0]
+        ts = [int(s) for s in ts_line.split() if s.isdigit()][0]
+        return {'modelname': modelfolder, 'train_sampler': train_sampler,
+              'corrupt_sampler': corrupt_sampler, 'truth_share': ts}
     else:
         raise ValueError(f'Invalid modelfolder {modelfolder}')

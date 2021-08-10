@@ -468,6 +468,7 @@ if __name__ == '__main__':
                         sampler=args.corruption_sampler,
                         true_share=args.ts/100, use_cuda=False,
                         prefilename=f'ts={args.ts}_corrupt_{tr_fn}{shuffletxt}')
+        mod.logline(f'Corruption sampler: {args.corruption_sampler}')
         mod.save_kg(tr_kg, f'ts={args.ts}_corrupt_{tr_fn}{shuffletxt}')
 
     # Move everything to CUDA if available
