@@ -88,7 +88,7 @@ def get_parser():
     parser.add_argument("-premodeldescr", "--pre_whichmodel",
                     dest="pre_whichmodel", help="Which model in folder to use")
     parser.add_argument("-n_neg", "--n_negatives",
-                dest="n_neg",
+                dest="n_neg", default=1,
                 help="How many negatives sampled per positive at train time")
     return parser
 
