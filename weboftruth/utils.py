@@ -280,13 +280,13 @@ def get_model_params_from_log(modelfolder, modelspath):
           sampler_line = [l for l in logtxt if 'Traintime sampler' in l][0]
           train_sampler = 'Bernoulli' if 'Bernoulli' in sampler_line else 'Positional'
           if any([x in modelfolder for x in ['_01', '_02', '_03']]):
-            assert train_sampler == 'Positional'
+            #assert train_sampler == 'Positional'
             corrupt_sampler = 'Positional'
           elif any([x in modelfolder for x in ['_04', '_05', '_06']]):
-            assert train_sampler == 'Bernoulli'
+            #assert train_sampler == 'Bernoulli'
             corrupt_sampler = 'Bernoulli'
           elif any([x in modelfolder for x in ['_07', '_08', '_09']]):
-            assert train_sampler == 'Bernoulli'
+            #assert train_sampler == 'Bernoulli'
             corrupt_sampler = 'Positional'
           ts_line = [l for l in logtxt if 'traints' in l][0]
           ts = [int(s) for s in ts_line.split() if s.isdigit()][0]
