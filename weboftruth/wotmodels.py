@@ -465,7 +465,7 @@ if __name__ == '__main__':
         tr_kg_pure = deepcopy(tr_kg)
         shuffletxt = '_shuffle' if args.shuffle else ''
         tr_kg, _ = wot.corrupt.corrupt_kg(tr_kg, save_folder=mod.model_path,
-                        sampler=sampler2,
+                        sampler=args.corruption_sampler,
                         true_share=args.ts/100, use_cuda=False,
                         prefilename=f'ts={args.ts}_corrupt_{tr_fn}{shuffletxt}')
         mod.save_kg(tr_kg, f'ts={args.ts}_corrupt_{tr_fn}{shuffletxt}')
