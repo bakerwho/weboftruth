@@ -194,6 +194,7 @@ def eval_all_models_at_path(modelspath, train_kg, val_kg, test_kg):
     lp_result_dict = defaultdict(list)
     classifier_result_dict = defaultdict(list)
     for modelname in os.listdir(modelspath):
+        # TODO fix runs for other model types
         if not any(modeltype in modelname for modeltype in ['TransE', 'DistMult']):
             continue
         if not os.path.isdir(join(modelspath, modelname)):

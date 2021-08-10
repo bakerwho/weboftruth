@@ -87,6 +87,9 @@ def get_parser():
                     help="Pretrained modelname")
     parser.add_argument("-premodeldescr", "--pre_whichmodel",
                     dest="pre_whichmodel", help="Which model in folder to use")
+    parser.add_argument("-n_neg", "--n_negatives",
+                dest="n_neg",
+                help="How many negatives sampled per positive at train time")
     return parser
 
 #svo_data_path = join(args.path, 'data', 'SVO-tensor-dataset')
@@ -104,7 +107,8 @@ args = edict({  "epochs":100, "model_type":'TransE', "lr":5e-5,
                 "ts":100,
                 "pre_embeddings": False,
                 "pre_modelname": None,
-                "pre_whichmodel": None
+                "pre_whichmodel": None,
+                "n_neg":1
                 })
 
 class CustomKGEModel():
@@ -449,7 +453,8 @@ if __name__ == '__main__':
 
     mod = CustomKGEModel(**model_args)
     sampler = getattr(torchkge.sampling, args.train_sampler)
-    mod.set_train_neg_sampler(samplerClass=sampler, kg=tr_kg)
+    mod.set_train_neg_sampler(samplerClass=sampler, kg=tr_kg,
+                            n_neg=args.n_neg)
     mod.set_optimizer(optClass=Adam)
     mod.set_loss(lossClass=MarginLoss, margin=0.1)
 
