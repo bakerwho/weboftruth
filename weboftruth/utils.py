@@ -272,11 +272,10 @@ def get_bern_eval_data(eval8, index=1,
   return x_tr, y_tr, x_te, y_te
 
 
-
 def get_model_params_from_log(modelfolder, modelspath):
     if 'log.txt' in os.listdir(join(modelspath, modelfolder)):
         with open(join(modelspath, modelfolder, 'log.txt'), 'r') as f:
-        logtxt = f.readlines()
+            logtxt = f.readlines()
         tr_sampler_line = [l for l in logtxt if 'Traintime sampler' in l][0]
         train_sampler = tr_sampler_line.split(':')[1].strip()
         c_sampler_line = [l for l in logtxt if 'Corruption sampler' in l][0]
