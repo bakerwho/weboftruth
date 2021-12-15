@@ -1,12 +1,18 @@
 # weboftruth
 
-**weboftruth** is a project to use deep representation learning to ascertain the credibility of a statement given past context. It is a proof-of-concept for one approach to algorithmic fake news detection.
+**weboftruth** is a project to use deep representation learning to learn fact embeddings, with applications to social science and disinformation.
 
-This repo contains Python and bash scripts for training Knowledge Graph embeddings using Subject-Verb-Object triples.
+Formally, a Knowledge Graph consists of a number of **facts** where each fact is a `relation` edge connecting a `head` entity and a `tail` entity. Existing packages like `torch-kge` allow you to learn vector representations for entities and relationships given their context in the training data.
+
+**weboftruth** adds value by:
+- letting you easily corrupt your training data to examine the effects on the resulting embeddings
+- evaluating a 'truth prediction task' on unseen facts
+
+This repo contains Python and bash scripts for training Knowledge Graph embeddings using head-relation-tail triples.
 
 Two embedding spaces are created (one for Entities (Subjects/Objects) and one for Relationships/Verbs). Extensive use is made of the package `torchkge` that implements KGE algorithms like TransE. It is built on PyTorch.
 
-## How to use
+## How to use **weboftruth**
 
 1. Clone [this repo](https://github.com/simonepri/datasets-knowledge-embedding) - a useful set of standard Knowledge Graph datasets compiled by Github user `simonepri` (many thanks)
 
@@ -17,7 +23,7 @@ Two embedding spaces are created (one for Entities (Subjects/Objects) and one fo
         - Format: `head\trelation\ttail`
         - Example line: `India\tlocatedIn\tAsia`
         - DO NOT include a header line
-     - Create a folder `{dataset_name}` at a location `{datapath}` (the datapath)
+     - Create a folder `{dataset_name}` at a location `{datapath}`
      - Split your KG into `train`, `test`, and `validation` sets
      - Write them to `{datapath}/{dataset_name}/edges_as_text_train.tsv`, `edges_as_text_test.tsv` and `edges_as_text_valid.tsv` respectively
 4. Run a command such as the one below. Customize as required.
