@@ -44,17 +44,17 @@ def get_filenames(datapath, dataset):
     return tr_fn, val_fn, test_fn
 
 def read_data(tr_fn, val_fn, test_fn, path, explode_rels=False, rel_sep=None,
-                colnames=['head', 'rel', 'tail']):
+                colnames=['from', 'rel', 'to']):
     # consider deleting
     tr_df = pd.read_csv(join(path, tr_fn),
-                       sep='\t', names=colnames, dtype={"head": str, "rel": str,
-                                                        "tail":str})
+                       sep='\t', names=colnames, dtype={"from": str, "rel": str,
+                                                        "to":str})
     val_df = pd.read_csv(join(path, val_fn),
-                       sep='\t', names=colnames, dtype={"head": str, "rel": str,
-                                                        "tail":str})
+                       sep='\t', names=colnames, dtype={"from": str, "rel": str,
+                                                        "to":str})
     test_df = pd.read_csv(join(path, test_fn),
-                       sep='\t', names=colnames, dtype={"head": str, "rel": str,
-                                                        "tail":str})
+                       sep='\t', names=colnames, dtype={"from": str, "rel": str,
+                                                        "to":str})
     if explode_rels:
         if rel_sep is None:
             print("Using default separator: '/'")
@@ -97,7 +97,7 @@ def reshuffle_trte_split(dfs):
 
 
 def df_to_kg(df):
-    cols = ['head', 'rel', 'tail']
+    cols = ['from', 'rel', 'to']
     assert set(df.columns)==set(cols), f"DataFrame does not contain columns {cols}"
     if isinstance(df, torchkge.KnowledgeGraph):
         print("Warning: input to utils.df_to_kg() was a KG")
@@ -126,7 +126,7 @@ def kg_to_df(kg, skip_fail=True):
             data.append([ent_h, ent_t, rel])
     for k in ['entities', 'relations']:
         print(f"Could not retrieve {k} for {failcount[k]}/{i+1} facts")
-    return pd.DataFrame(data, columns=['head', 'tail', 'rel'])
+    return pd.DataFrame(data, columns=['from', 'to', 'rel'])
 
 
 def load_model(model_folder, which='best_'):
@@ -205,12 +205,12 @@ def read_evaluation_sov_triples(filepath, sep='\t'):
     """
     with open(filepath, 'r') as f:
         l = f.readline()
-        if all(w in l for w in ('head', 'rel', 'tail', 'true_positive')):
+        if all(w in l for w in ('from', 'rel', 'to', 'true_positive')):
             df = pd.read_csv(filepath, sep=sep)
         else:
             df = pd.read_csv(filepath,
-                names=['head', 'tail', 'rel', 'true_positive'], sep=sep)
-    return df[['head', 'tail', 'rel']].to_numpy(), df['true_positive'].to_numpy()
+                names=['from', 'to', 'rel', 'true_positive'], sep=sep)
+    return df[['from', 'to', 'rel']].to_numpy(), df['true_positive'].to_numpy()
 
 class Embeddings():
     def __init__(self, model, kg):
