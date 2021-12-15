@@ -14,8 +14,8 @@ Two embedding spaces are created (one for Entities (Subjects/Objects) and one fo
    
 2. If using your own dataset, organize it as follows:
      - Ensure your Knowledge Graph dataset has a finite set of discrete entities and a finite set of discrete relationships as a Tab-Separated-Value file.
-        - Format: `head relation        tail`
-        - Example line: `India  locatedIn       Asia`
+        - Format: `head\trelation\ttail`
+        - Example line: `India\tlocatedIn\tAsia`
         - DO NOT include a header line
      - Create a folder `{dataset_name}` at a location `{datapath}` (the datapath)
      - Split your KG into `train`, `test`, and `validation` sets
