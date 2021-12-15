@@ -44,14 +44,17 @@ def get_filenames(datapath, dataset):
     return tr_fn, val_fn, test_fn
 
 def read_data(tr_fn, val_fn, test_fn, path, explode_rels=False, rel_sep=None,
-                colnames=['from', 'rel', 'to']):
+                colnames=['head', 'rel', 'tail']):
     # consider deleting
     tr_df = pd.read_csv(join(path, tr_fn),
-                       sep='\t', names=colnames)
+                       sep='\t', names=colnames, dtype={"head": str, "rel": str,
+                                                        "tail":str})
     val_df = pd.read_csv(join(path, val_fn),
-                       sep='\t', names=colnames)
+                       sep='\t', names=colnames, dtype={"head": str, "rel": str,
+                                                        "tail":str})
     test_df = pd.read_csv(join(path, test_fn),
-                       sep='\t', names=colnames)
+                       sep='\t', names=colnames, dtype={"head": str, "rel": str,
+                                                        "tail":str})
     if explode_rels:
         if rel_sep is None:
             print("Using default separator: '/'")
