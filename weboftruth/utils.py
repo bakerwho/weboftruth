@@ -36,6 +36,13 @@ def get_simonepri_filenames(datapath, dataset, id=False):
         if id_str+'test' in f: test_fn = f
     return tr_fn, val_fn, test_fn
 
+def get_filenames(datapath, dataset):
+    for f in sorted(os.listdir(join(datapath, dataset))):
+        if 'train' in f: tr_fn = f
+        if 'valid' in f: val_fn = f
+        if 'test' in f: test_fn = f
+    return tr_fn, val_fn, test_fn
+
 def read_data(tr_fn, val_fn, test_fn, path, explode_rels=False, rel_sep=None,
                 colnames=['from', 'rel', 'to']):
     # consider deleting

@@ -1,4 +1,4 @@
-Metadata-Version: 1.0
+Metadata-Version: 2.1
 Name: weboftruth
 Version: 0.1
 Summary: context-aware truth detection using knowledge graph embeddings
@@ -6,5 +6,7 @@ Home-page: UNKNOWN
 Author: AAK/AM
 Author-email: aabir@uchicago.edu
 License: UNKNOWN
-Description: UNKNOWN
 Platform: UNKNOWN
+
+UNKNOWN
+

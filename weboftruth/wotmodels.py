@@ -424,9 +424,8 @@ if __name__ == '__main__':
     # Load data
     #tr_fn, val_fn, test_fn = wot.utils.get_svo_file_names(args.ts)
     as_id = 'FB15K' not in args.dataset
-    tr_fn, val_fn, test_fn = wot.utils.get_simonepri_filenames(args.datapath,
-                                                            args.dataset,
-                                                            id=as_id)
+    tr_fn, val_fn, test_fn = wot.utils.get_filenames(args.datapath,
+                                                            args.dataset)
     #explode = 'FB15K' not in args.dataset
     explode = False
     dfs = wot.utils.read_data(tr_fn, val_fn, test_fn,
