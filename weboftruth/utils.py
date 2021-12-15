@@ -28,7 +28,7 @@ def get_svo_file_names(ts=100, path='.', old=False, get_paths=False):
             if 'test' in f: test_fn = f
     return tr_fn, val_fn, test_fn
 
-def get_simonepri_filenames(datapath, dataset, id=True):
+def get_simonepri_filenames(datapath, dataset, id=False):
     id_str = 'as_id_' if id else 'as_text_'
     for f in os.listdir(join(datapath, dataset)):
         if id_str+'train' in f: tr_fn = f
