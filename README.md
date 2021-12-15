@@ -9,7 +9,18 @@ Two embedding spaces are created (one for Entities (Subjects/Objects) and one fo
 ## How to use
 
 1. Clone [this repo](https://github.com/simonepri/datasets-knowledge-embedding) - a useful set of standard Knowledge Graph datasets compiled by Github user `simonepri` (many thanks)
-2. Run a command such as the one below. Customize as required.
+
+   OR
+   
+2. If using your own dataset, organize it as follows:
+     - Ensure your Knowledge Graph dataset has a finite set of discrete entities and a finite set of discrete relationships as a Tab-Separated-Value file.
+        - Format: `head relation        tail`
+        - Example line: `India  locatedIn       Asia`
+        - DO NOT include a header line
+     - Create a folder `{dataset_name}` at a location `{datapath}` (the datapath)
+     - Split your KG into `train`, `test`, and `validation` sets
+     - Write them to `{datapath}/{dataset_name}/edges_as_text_train.tsv`, `edges_as_text_test.tsv` and `edges_as_text_valid.tsv` respectively
+4. Run a command such as the one below. Customize as required.
 ```
 python ./weboftruth/weboftruth/wotmodels.py \
         -e 200 \
@@ -26,7 +37,7 @@ Flag meanings:
 - `m`: model name, as 'TransE', 'DistMult' or any of the others provided by [torchkge](https://torchkge.readthedocs.io/en/latest/reference/models.html)
 - `lr`: learning rate
 - `dp`: datapath, path to the directory containing your datasets
-- `ds`: dataset name, this should be a subdirectory of `dp` containing files like `edges_as_text_{name}.tsv` where `name` can be 'train', 'test', 'val', or 'all'
+- `ds`: dataset name, this should be a subdirectory of `dp`
 - `mp`: modelpath, path to the directory containing your saved models
 - `ts`: truth-share, a parameter which causes `(100-ts)`% of the training set is corrupted before learning begins
 
