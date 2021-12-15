@@ -8,8 +8,8 @@ Two embedding spaces are created (one for Entities (Subjects/Objects) and one fo
 
 ## How to use
 
-1. Clone (this repo)[https://github.com/simonepri/datasets-knowledge-embedding] - it is useful set of standard Knowledge Graph datasets compiled by user `simonepri`
-2. Run a command such as the one below. Customize your run as required.
+1. Clone [this repo](https://github.com/simonepri/datasets-knowledge-embedding) - a useful set of standard Knowledge Graph datasets compiled by Github user `simonepri` (many thanks)
+2. Run a command such as the one below. Customize as required.
 ```
 python ./weboftruth/weboftruth/wotmodels.py \
         -e 200 \
@@ -18,7 +18,7 @@ python ./weboftruth/weboftruth/wotmodels.py \
         -dp ./datasets-knowledge-embedding \
         -ds 'KINSHIP' \
         -mp ./weboftruth/models \
-        -ts $ts
+        -ts 80
 ```
 
 Flag meanings:
@@ -28,7 +28,7 @@ Flag meanings:
 - `dp`: datapath, path to the directory containing your datasets
 - `ds`: dataset name, this should be a subdirectory of `dp` containing files like `edges_as_text_{name}.tsv` where `name` can be 'train', 'test', 'val', or 'all'
 - `mp`: modelpath, path to the directory containing your saved models
-- `ts`: truth-share, a parameter which causes (100-`ts`)% of the training set is corrupted before learning begins
+- `ts`: truth-share, a parameter which causes `(100-ts)`% of the training set is corrupted before learning begins
 
 ## Experiment results:
 - We trained Entity and Relationship embeddings for a cleaned dataset of SVO triples constructed from Wikipedia sentences.
