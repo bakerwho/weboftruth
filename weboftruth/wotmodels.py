@@ -108,7 +108,7 @@ args = edict({  "epochs":100, "model_type":'TransE', "lr":5e-5,
                 "pre_embeddings": False,
                 "pre_modelname": None,
                 "pre_whichmodel": None,
-                "n_neg":1
+                "n_neg":10
                 })
 
 class CustomKGEModel():
@@ -239,6 +239,8 @@ class CustomKGEModel():
         self.logline(f'Optimizer set: {self.optimizer}')
 
     def set_train_neg_sampler(self, samplerClass=BernoulliNegativeSampler, **kwargs):
+        if samplerClass == PositionalNegativeSampler and 'n_neg' in kwargs:
+            kwargs.pop('n_neg')
         self.sampler = samplerClass(**kwargs)
         self.logline(f'Traintime sampler set: {self.sampler}')
 
