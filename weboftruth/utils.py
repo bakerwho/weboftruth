@@ -66,10 +66,10 @@ def read_data(tr_fn, val_fn, test_fn, path, explode_rels=False, rel_sep=None,
         if rel_sep is None:
             print("Using default separator: '/'")
             rel_sep = '/'
-        tr_df, val_df, test_df = [explode_rel_column(df, colnames[1], rel_sep)
-                                    for df in (tr_df, val_df, test_df)]
+        tr_df, val_df, te_df = [explode_rel_column(df, colnames[1], rel_sep)
+                                    for df in (tr_df, val_df, te_df)]
 
-    return tr_df, val_df, test_df
+    return tr_df, val_df, te_df
 
 def explode_rel_column(df, rel_colname='rel', rel_sep='/'):
     assert rel_colname in df.columns, f"'{rel_colname}' not in column names"
