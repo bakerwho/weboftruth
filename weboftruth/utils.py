@@ -52,13 +52,13 @@ def read_data(tr_fn, val_fn, test_fn, path, explode_rels=False, rel_sep=None,
     val_df = pd.read_csv(join(path, val_fn),
                        sep='\t', names=colnames, dtype={"from": str, "rel": str,
                                                         "to":str})
-    test_df = pd.read_csv(join(path, test_fn),
+    te_df = pd.read_csv(join(path, test_fn),
                        sep='\t', names=colnames, dtype={"from": str, "rel": str,
                                                         "to":str})
-    tr_n, val_n, test_n = tr_df.shape[0], val_df.shape[0], test_df.shape[0]
+    tr_n, val_n, te_n = tr_df.shape[0], val_df.shape[0], te_df.shape[0]
     tr_df.dropna(axis=0, inplace=True)
     val_df.dropna(axis=0, inplace=True)
-    test_df.dropna(axis=0, inplace=True)
+    te_df.dropna(axis=0, inplace=True)
 
     print(f'Forcefully dropping null values:\ntrain: {tr_n - tr_df.shape[0]} rows')
     print(f'test: {te_n - te_df.shape[0]} rows\nval: {val_n - val_df.shape[0]} rows')
